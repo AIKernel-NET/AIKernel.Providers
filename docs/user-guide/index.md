@@ -5,6 +5,14 @@
 This guide explains how to consume AIKernel.Providers from .NET hosts, CLI
 provider directories, and Python wrappers.
 
+Providers are the AIOS SDK driver model layer. Use them when a distribution
+needs concrete OS-style drivers, external model providers, local runtimes,
+standard host services, or dynamically loaded provider manifests.
+
+AIKernel.Monolith is the official AIOS distribution now in development. It will
+serve as the standard reference distribution that integrates official provider
+drivers with the rest of the SDK after the 0.1.x line stabilizes.
+
 ## Install Packages
 
 ```bash

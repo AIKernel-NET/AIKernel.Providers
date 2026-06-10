@@ -14,6 +14,16 @@ runtimes, native modules, or moved provider implementations.
 This keeps provider-specific endpoint, credential, runtime, and native-driver
 logic out of Core and Tools.
 
+In the AIOS SDK, AIKernel.Providers is the driver model layer. It lets users
+assemble concrete OS-style drivers, external model providers, local runtimes,
+and standard host services without moving provider-specific logic into the
+kernel runtime.
+
+AIKernel also provides an official AIOS distribution, codenamed
+**AIKernel.Monolith**. Monolith has begun development as the standard AIOS that
+will integrate the SDK layers, including official provider drivers, after the
+0.1.x line stabilizes.
+
 ## Repository Role
 
 AIKernel.Providers contains official extension providers for the AIKernel
@@ -32,14 +42,48 @@ standard file systems, logging drivers, process supervisor drivers, network
 drivers, schedulers, and profilers.
 
 AIKernel.Providers participates in the 0.1.1 public release scheduled
-for 2026-06-09. Version `0.1.1` is the first public release of this repository.
-During development before publication, packages use `0.1.1-dev1` style
-pre-release versions.
+for 2026-06-10. Version `0.1.1` is the first public release of this repository.
+Development builds may be used for local validation, but user-facing package
+history is written only for public releases; development changes are merged
+into the next public release note.
 
 Release notes:
 
 - [English](RELEASE_NOTES.md)
 - [日本語](RELEASE_NOTES-ja.md)
+
+## Quick Start
+
+Install only the provider family your host needs. Start with descriptor and
+manifest validation before enabling live endpoints, credentials, local model
+runtimes, or native drivers.
+
+```bash
+dotnet add package AIKernel.Providers.Standard --version 0.1.1
+dotnet add package AIKernel.Providers.ChatOpenAI --version 0.1.1
+dotnet add package AIKernel.Providers.MicrosoftAI --version 0.1.1
+```
+
+For Python hosts:
+
+```bash
+pip install aikernel-providers
+```
+
+Use `AIKernel.Providers.Standard` for OS driver surfaces. Add LLM, chat,
+pipeline, CUDA, or MicrosoftAI provider packages only when that capability is
+actually part of the host.
+
+## Which Provider Should I Choose?
+
+- Local-only model runtime -> `AIKernel.Providers.LocalLlm`
+- OpenAI-compatible API -> `AIKernel.Providers.ChatOpenAI`
+- Microsoft.Extensions.AI / Azure AI style integration -> `AIKernel.Providers.MicrosoftAI`
+- Lightweight history-backed chat surface -> `AIKernel.Providers.ChatHistory`
+
+Use `AIKernel.Providers.Standard` alongside these when the host needs OS driver
+surfaces such as file system, logging, event bus, network, process supervisor,
+scheduler, profiler, or CPU compute.
 
 ## Providers
 

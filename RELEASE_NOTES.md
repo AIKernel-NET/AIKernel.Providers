@@ -2,6 +2,13 @@
 
 ## 0.1.1
 
+**June 10th, 2026 - Converging provider capabilities.**
+**2026年6月10日--プロバイダ能力を収束する。**
+
+Converging provider capabilities: descriptors, manifests, and invokers
+stabilize across the 0.1.1 capability graph. プロバイダ能力の収束--Descriptor・
+Manifest・Invoker が 0.1.1 能力グラフ全体で安定化する。
+
 Initial public release of AIKernel.Providers, the official extension provider
 workspace for AIKernel.NET.
 
@@ -34,8 +41,9 @@ drivers.
   a pure instrumentation layer.
 - Move MicrosoftAI provider ownership out of AIKernel.Core so Core no longer
   manages external provider implementation packaging.
-- Align provider packages on `0.1.1` public release semantics, with
-  `0.1.1-dev1` used for pre-release development builds.
+- Align provider packages on the `0.1.1` public release semantics. Development
+  build changes are folded into this public release note instead of being listed
+  as separate package history entries.
 
 ### Validation
 

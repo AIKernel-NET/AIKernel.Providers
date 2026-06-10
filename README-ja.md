@@ -13,6 +13,14 @@ Provider 実装へ接続する外部 Provider driver を所有します。
 これにより、Provider 固有の endpoint、credential、runtime、native driver
 logic を Core と Tools から分離します。
 
+AIOS SDK において、AIKernel.Providers は driver model layer です。具体的な
+OS-style driver、外部 model Provider、local runtime、標準 host service を組み合わせ、
+Provider 固有の logic を kernel runtime に戻さずに独自の AIOS を構築できます。
+
+AIKernel には、公式 AIOS ディストリビューションである **AIKernel.Monolith** もあります。
+Monolith は 0.1.x 系の安定化後に、公式 Provider driver を含む SDK layer を
+統合する標準 AIOS として開発が開始されています。
+
 ## リポジトリの役割
 
 AIKernel.Providers は、AIKernel Semantic Runtime 向けの公式拡張 Provider を
@@ -24,14 +32,48 @@ module として読み込まれることを想定しています。AIKernel.Core
 AIKernel.Abstractions が定義する contract boundary を維持しながら、capability
 descriptor と invocation surface を公開します。
 
-AIKernel.Providers は、2026-06-09 に予定している 0.1.1 公開に参加します。
-`0.1.1` はこの repository の初版公開です。公開前の開発中 package は
-`0.1.1-dev1` のような prerelease version を使用します。
+AIKernel.Providers は、2026-06-10 に予定している 0.1.1 公開に参加します。
+`0.1.1` はこの repository の初版公開です。local validation で development build
+を使う場合がありますが、利用者向けの package history は公開 release のみを単位とし、
+開発中の変更は次の公開 release note に統合して記載します。
 
 リリースノート:
 
 - [English](RELEASE_NOTES.md)
 - [日本語](RELEASE_NOTES-ja.md)
+
+## クイックスタート
+
+host が必要とする Provider family だけを導入してください。live endpoint、
+credential、local model runtime、native driver を有効化する前に、まず descriptor と
+manifest の検証から始めます。
+
+```bash
+dotnet add package AIKernel.Providers.Standard --version 0.1.1
+dotnet add package AIKernel.Providers.ChatOpenAI --version 0.1.1
+dotnet add package AIKernel.Providers.MicrosoftAI --version 0.1.1
+```
+
+Python host:
+
+```bash
+pip install aikernel-providers
+```
+
+OS driver surface が必要な場合は `AIKernel.Providers.Standard` を使用します。LLM、
+chat、pipeline、CUDA、MicrosoftAI の Provider package は、その capability が host に
+必要な場合だけ追加してください。
+
+## どの Provider を選ぶべきか
+
+- ローカルだけで model runtime を動かしたい -> `AIKernel.Providers.LocalLlm`
+- OpenAI-compatible API を使いたい -> `AIKernel.Providers.ChatOpenAI`
+- Microsoft.Extensions.AI / Azure AI 系 integration を使いたい -> `AIKernel.Providers.MicrosoftAI`
+- 履歴ベースの軽量 chat surface を使いたい -> `AIKernel.Providers.ChatHistory`
+
+file system、logging、event bus、network、process supervisor、scheduler、
+profiler、CPU compute などの OS driver surface が必要な host では、
+これらに加えて `AIKernel.Providers.Standard` を使用してください。
 
 ## Provider 構成
 
