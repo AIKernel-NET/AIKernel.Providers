@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<doc>
+  <members>
+    <member name="M:AIKernel.Providers.MicrosoftAI.DependencyInjection.OpenAIHostingExtensions.WithOpenAI&lt;TBuilder&gt;">
+      <summary>[EN] Executes the WithOpenAI&lt;TBuilder&gt; operation as part of the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスとしてWithOpenAI&lt;TBuilder&gt;操作を実行します。</summary>
+    </member>
+    <member name="T:AIKernel.Providers.MicrosoftAI.DependencyInjection.OpenAIHostingExtensions">
+      <summary>[EN] Represents the OpenAIHostingExtensions public reference surface for AIKernel package consumers. [JA] AIKernelパッケージ利用者に公開されるOpenAIHostingExtensionsの参照サーフェスを表します。</summary>
+    </member>
+  </members>
+</doc>

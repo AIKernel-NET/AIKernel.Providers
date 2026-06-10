@@ -1,0 +1,38 @@
+<Project>
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+
+    <Version>0.1.1</Version>
+    <PackageVersion>0.1.1</PackageVersion>
+    <AssemblyVersion>0.1.1.0</AssemblyVersion>
+    <FileVersion>0.1.1.0</FileVersion>
+    <InformationalVersion>0.1.1</InformationalVersion>
+    <AIKernelPackageVersion>[0.1.1]</AIKernelPackageVersion>
+    <AIKernelCorePackageVersion>0.1.1</AIKernelCorePackageVersion>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+    <Authors>Takuya Sogawa</Authors>
+    <Company>AIKernel-NET</Company>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageProjectUrl>https://www.nuget.org/profiles/AIKernel-NET</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/AIKernel-NET/AIKernel.Providers</RepositoryUrl>
+    <Copyright>Copyright © 2026 Takuya Sogawa of AIKernel-NET</Copyright>
+    <PackageTags>aikernel;providers;official-provider-set;openai;microsoft-ai;cuda;cpu-compute;filesystem;logging;process-supervisor;event-bus;network;scheduler;profiler;local-llm;chat-history;pipeline-compiler;semantic-runtime</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>aikernel-logo128x128.png</PackageIcon>
+    <Description>AIKernel.Providers official extension provider set v0.1.1. Provides external provider drivers for AIKernel semantic runtime workflows without coupling provider-specific logic into Core or Tools.</Description>
+    <PackageReleaseNotes>
+      AIKernel.Providers v0.1.1 - Official extension provider set aligned with AIKernel.NET, AIKernel.Core, AIKernel.Control, and AIKernel.Cuda13.0 v0.1.1. Adds ChatOpenAIProvider, ChatHistoryProvider, CudaComputeProvider, AIKernel.Providers.Standard OS driver providers, DynamicPipelineCompilerProvider, LocalLlmProvider, and AIKernel.Providers.MicrosoftAI. MicrosoftAI provider ownership moved from AIKernel.Core to AIKernel.Providers. Includes dynamic provider manifests, bilingual reference documentation, and Python wrapper support.
+    </PackageReleaseNotes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)README.md" Pack="true" PackagePath="\" />
+    <None Include="$(MSBuildThisFileDirectory)README-ja.md" Pack="true" PackagePath="\" />
+    <None Include="$(MSBuildThisFileDirectory)RELEASE_NOTES.md" Pack="true" PackagePath="\" />
+    <None Include="$(MSBuildThisFileDirectory)LICENSE" Pack="true" PackagePath="\" />
+    <None Include="$(MSBuildThisFileDirectory)assets\aikernel-logo128x128.png" Pack="true" PackagePath="\" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,275 @@
+<?xml version='1.0' encoding='utf-8'?>
+<doc>
+  <members>
+    <member name="F:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderCapabilities.EmbeddingDimensions">
+      <summary>[EN] Provides the EmbeddingDimensions value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるEmbeddingDimensions値を提供します。</summary>
+    </member>
+    <member name="F:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderCapabilities.MaxConcurrentConnections">
+      <summary>[EN] Provides the MaxConcurrentConnections value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるMaxConcurrentConnections値を提供します。</summary>
+    </member>
+    <member name="F:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderCapabilities.MaxQueryParts">
+      <summary>[EN] Provides the MaxQueryParts value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるMaxQueryParts値を提供します。</summary>
+    </member>
+    <member name="F:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderCapabilities.RateLimit">
+      <summary>[EN] Provides the RateLimit value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるRateLimit値を提供します。</summary>
+    </member>
+    <member name="F:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderCapabilities.SupportedDataTypes">
+      <summary>[EN] Provides the SupportedDataTypes value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるSupportedDataTypes値を提供します。</summary>
+    </member>
+    <member name="F:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderCapabilities.SupportedEmbeddingModels">
+      <summary>[EN] Provides the SupportedEmbeddingModels value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるSupportedEmbeddingModels値を提供します。</summary>
+    </member>
+    <member name="F:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderCapabilities.SupportedOperations">
+      <summary>[EN] Provides the SupportedOperations value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるSupportedOperations値を提供します。</summary>
+    </member>
+    <member name="F:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderCapabilities.SupportedQueryProcessingOperations">
+      <summary>[EN] Provides the SupportedQueryProcessingOperations value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるSupportedQueryProcessingOperations値を提供します。</summary>
+    </member>
+    <member name="F:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderCapabilities.SupportsEmbedding">
+      <summary>[EN] Provides the SupportsEmbedding value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるSupportsEmbedding値を提供します。</summary>
+    </member>
+    <member name="F:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderCapabilities.SupportsQueryAugmentation">
+      <summary>[EN] Provides the SupportsQueryAugmentation value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるSupportsQueryAugmentation値を提供します。</summary>
+    </member>
+    <member name="F:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderCapabilities.SupportsQueryDecomposition">
+      <summary>[EN] Provides the SupportsQueryDecomposition value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるSupportsQueryDecomposition値を提供します。</summary>
+    </member>
+    <member name="F:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderCapabilities.SupportsQueryRouting">
+      <summary>[EN] Provides the SupportsQueryRouting value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるSupportsQueryRouting値を提供します。</summary>
+    </member>
+    <member name="F:AIKernel.Providers.MicrosoftAI.ProviderApiException.ErrorCode">
+      <summary>[EN] Provides the ErrorCode value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるErrorCode値を提供します。</summary>
+    </member>
+    <member name="F:AIKernel.Providers.MicrosoftAI.ProviderCapabilityMismatchException.ErrorCode">
+      <summary>[EN] Provides the ErrorCode value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるErrorCode値を提供します。</summary>
+    </member>
+    <member name="F:AIKernel.Providers.MicrosoftAI.ProviderExecutionTimeoutException.ErrorCode">
+      <summary>[EN] Provides the ErrorCode value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるErrorCode値を提供します。</summary>
+    </member>
+    <member name="F:AIKernel.Providers.MicrosoftAI.ProviderInvalidResponseException.ErrorCode">
+      <summary>[EN] Provides the ErrorCode value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるErrorCode値を提供します。</summary>
+    </member>
+    <member name="F:AIKernel.Providers.MicrosoftAI.ProviderRateLimitException.ErrorCode">
+      <summary>[EN] Provides the ErrorCode value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるErrorCode値を提供します。</summary>
+    </member>
+    <member name="M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleCredential.Create">
+      <summary>[EN] Executes the Create operation as part of the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスとしてCreate操作を実行します。</summary>
+    </member>
+    <member name="M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleCredential.ToString">
+      <summary>[EN] Executes the ToString operation as part of the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスとしてToString操作を実行します。</summary>
+    </member>
+    <member name="M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProvider.#ctor">
+      <summary>[EN] Executes the #ctor operation as part of the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスとして#ctor操作を実行します。</summary>
+    </member>
+    <member name="M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProvider.AnswerAsync">
+      <summary>[EN] Executes the AnswerAsync operation as part of the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスとしてAnswerAsync操作を実行します。</summary>
+    </member>
+    <member name="M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProvider.GenerateAsync">
+      <summary>[EN] Executes the GenerateAsync operation as part of the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスとしてGenerateAsync操作を実行します。</summary>
+    </member>
+    <member name="M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProvider.GetCapabilities">
+      <summary>[EN] Executes the GetCapabilities operation as part of the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスとしてGetCapabilities操作を実行します。</summary>
+    </member>
+    <member name="M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProvider.GetHealthAsync">
+      <summary>[EN] Executes the GetHealthAsync operation as part of the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスとしてGetHealthAsync操作を実行します。</summary>
+    </member>
+    <member name="M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProvider.InitializeAsync">
+      <summary>[EN] Executes the InitializeAsync operation as part of the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスとしてInitializeAsync操作を実行します。</summary>
+    </member>
+    <member name="M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProvider.IsAvailableAsync">
+      <summary>[EN] Executes the IsAvailableAsync operation as part of the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスとしてIsAvailableAsync操作を実行します。</summary>
+    </member>
+    <member name="M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProvider.ShutdownAsync">
+      <summary>[EN] Executes the ShutdownAsync operation as part of the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスとしてShutdownAsync操作を実行します。</summary>
+    </member>
+    <member name="M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProvider.StreamGenerateAsync">
+      <summary>[EN] Executes the StreamGenerateAsync operation as part of the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスとしてStreamGenerateAsync操作を実行します。</summary>
+    </member>
+    <member name="M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderCapabilities.GetCapabilityProfile">
+      <summary>[EN] Executes the GetCapabilityProfile operation as part of the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスとしてGetCapabilityProfile操作を実行します。</summary>
+    </member>
+    <member name="M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderCapabilities.GetDynamicCapacities">
+      <summary>[EN] Executes the GetDynamicCapacities operation as part of the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスとしてGetDynamicCapacities操作を実行します。</summary>
+    </member>
+    <member name="M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderCapabilities.SupportsDataType">
+      <summary>[EN] Executes the SupportsDataType operation as part of the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスとしてSupportsDataType操作を実行します。</summary>
+    </member>
+    <member name="M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderCapabilities.SupportsOperation">
+      <summary>[EN] Executes the SupportsOperation operation as part of the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスとしてSupportsOperation操作を実行します。</summary>
+    </member>
+    <member name="M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderCapabilities.SupportsQuantization">
+      <summary>[EN] Executes the SupportsQuantization operation as part of the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスとしてSupportsQuantization操作を実行します。</summary>
+    </member>
+    <member name="M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderCapabilities.SupportsQueryProcessingOperation">
+      <summary>[EN] Executes the SupportsQueryProcessingOperation operation as part of the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスとしてSupportsQueryProcessingOperation操作を実行します。</summary>
+    </member>
+    <member name="M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderCapabilities.new">
+      <summary>[EN] Executes the new operation as part of the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスとしてnew操作を実行します。</summary>
+    </member>
+    <member name="M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderOptions.ToString">
+      <summary>[EN] Executes the ToString operation as part of the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスとしてToString操作を実行します。</summary>
+    </member>
+    <member name="M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderOptionsValidator.Validate">
+      <summary>[EN] Executes the Validate operation as part of the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスとしてValidate操作を実行します。</summary>
+    </member>
+    <member name="M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleResponseMapper.CreateProjection">
+      <summary>[EN] Executes the CreateProjection operation as part of the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスとしてCreateProjection操作を実行します。</summary>
+    </member>
+    <member name="M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleResponseMapper.GetPrimaryText">
+      <summary>[EN] Executes the GetPrimaryText operation as part of the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスとしてGetPrimaryText操作を実行します。</summary>
+    </member>
+    <member name="M:AIKernel.Providers.MicrosoftAI.ProviderInvalidResponseException.#ctor">
+      <summary>[EN] Executes the #ctor operation as part of the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスとして#ctor操作を実行します。</summary>
+    </member>
+    <member name="P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleCredential.ApiKey">
+      <summary>[EN] Gets or sets the ApiKey value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるApiKey値を取得または設定します。</summary>
+    </member>
+    <member name="P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleCredential.ExpiresAtUtc">
+      <summary>[EN] Gets or sets the ExpiresAtUtc value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるExpiresAtUtc値を取得または設定します。</summary>
+    </member>
+    <member name="P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProvider.Name">
+      <summary>[EN] Gets or sets the Name value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるName値を取得または設定します。</summary>
+    </member>
+    <member name="P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProvider.ProviderId">
+      <summary>[EN] Gets or sets the ProviderId value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるProviderId値を取得または設定します。</summary>
+    </member>
+    <member name="P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProvider.Version">
+      <summary>[EN] Gets or sets the Version value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるVersion値を取得または設定します。</summary>
+    </member>
+    <member name="P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderHealthContext.CheckedAtUtc">
+      <summary>[EN] Gets or sets the CheckedAtUtc value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるCheckedAtUtc値を取得または設定します。</summary>
+    </member>
+    <member name="P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderHealthContext.IsInitialized">
+      <summary>[EN] Gets or sets the IsInitialized value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるIsInitialized値を取得または設定します。</summary>
+    </member>
+    <member name="P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderHealthContext.ModelId">
+      <summary>[EN] Gets or sets the ModelId value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるModelId値を取得または設定します。</summary>
+    </member>
+    <member name="P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderHealthContext.Name">
+      <summary>[EN] Gets or sets the Name value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるName値を取得または設定します。</summary>
+    </member>
+    <member name="P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderHealthContext.ProviderId">
+      <summary>[EN] Gets or sets the ProviderId value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるProviderId値を取得または設定します。</summary>
+    </member>
+    <member name="P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderHealthContext.Version">
+      <summary>[EN] Gets or sets the Version value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるVersion値を取得または設定します。</summary>
+    </member>
+    <member name="P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderOptions.ApiKey">
+      <summary>[EN] Gets or sets the ApiKey value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるApiKey値を取得または設定します。</summary>
+    </member>
+    <member name="P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderOptions.Endpoint">
+      <summary>[EN] Gets or sets the Endpoint value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるEndpoint値を取得または設定します。</summary>
+    </member>
+    <member name="P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderOptions.MaxInputTokens">
+      <summary>[EN] Gets or sets the MaxInputTokens value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるMaxInputTokens値を取得または設定します。</summary>
+    </member>
+    <member name="P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderOptions.MaxOutputTokens">
+      <summary>[EN] Gets or sets the MaxOutputTokens value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるMaxOutputTokens値を取得または設定します。</summary>
+    </member>
+    <member name="P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderOptions.ModelId">
+      <summary>[EN] Gets or sets the ModelId value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるModelId値を取得または設定します。</summary>
+    </member>
+    <member name="P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderOptions.Name">
+      <summary>[EN] Gets or sets the Name value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるName値を取得または設定します。</summary>
+    </member>
+    <member name="P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderOptions.ProviderHealthStatus">
+      <summary>[EN] Gets or sets the ProviderHealthStatus value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるProviderHealthStatus値を取得または設定します。</summary>
+    </member>
+    <member name="P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderOptions.ProviderId">
+      <summary>[EN] Gets or sets the ProviderId value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるProviderId値を取得または設定します。</summary>
+    </member>
+    <member name="P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderOptions.SecretKeyName">
+      <summary>[EN] Gets or sets the SecretKeyName value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるSecretKeyName値を取得または設定します。</summary>
+    </member>
+    <member name="P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderOptions.StopSequences">
+      <summary>[EN] Gets or sets the StopSequences value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるStopSequences値を取得または設定します。</summary>
+    </member>
+    <member name="P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderOptions.SupportsAssistantRole">
+      <summary>[EN] Gets or sets the SupportsAssistantRole value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるSupportsAssistantRole値を取得または設定します。</summary>
+    </member>
+    <member name="P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderOptions.SupportsStreaming">
+      <summary>[EN] Gets or sets the SupportsStreaming value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるSupportsStreaming値を取得または設定します。</summary>
+    </member>
+    <member name="P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderOptions.SupportsSystemRole">
+      <summary>[EN] Gets or sets the SupportsSystemRole value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるSupportsSystemRole値を取得または設定します。</summary>
+    </member>
+    <member name="P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderOptions.SupportsToolRole">
+      <summary>[EN] Gets or sets the SupportsToolRole value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるSupportsToolRole値を取得または設定します。</summary>
+    </member>
+    <member name="P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderOptions.Temperature">
+      <summary>[EN] Gets or sets the Temperature value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるTemperature値を取得または設定します。</summary>
+    </member>
+    <member name="P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderOptions.TopP">
+      <summary>[EN] Gets or sets the TopP value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるTopP値を取得または設定します。</summary>
+    </member>
+    <member name="P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderOptions.Version">
+      <summary>[EN] Gets or sets the Version value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるVersion値を取得または設定します。</summary>
+    </member>
+    <member name="P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleResponseProjection.IsTruncated">
+      <summary>[EN] Gets or sets the IsTruncated value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるIsTruncated値を取得または設定します。</summary>
+    </member>
+    <member name="P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleResponseProjection.ModelId">
+      <summary>[EN] Gets or sets the ModelId value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるModelId値を取得または設定します。</summary>
+    </member>
+    <member name="P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleResponseProjection.ObservedAtUtc">
+      <summary>[EN] Gets or sets the ObservedAtUtc value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるObservedAtUtc値を取得または設定します。</summary>
+    </member>
+    <member name="P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleResponseProjection.PrimaryText">
+      <summary>[EN] Gets or sets the PrimaryText value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるPrimaryText値を取得または設定します。</summary>
+    </member>
+    <member name="P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleResponseProjection.RawResponse">
+      <summary>[EN] Gets or sets the RawResponse value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるRawResponse値を取得または設定します。</summary>
+    </member>
+    <member name="P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleResponseProjection.string">
+      <summary>[EN] Gets or sets the string value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるstring値を取得または設定します。</summary>
+    </member>
+    <member name="P:AIKernel.Providers.MicrosoftAI.ProviderExecutionException.string">
+      <summary>[EN] Gets or sets the string value exposed by the AIKernel public reference surface. [JA] AIKernelの公開参照サーフェスで公開されるstring値を取得または設定します。</summary>
+    </member>
+    <member name="T:AIKernel.Providers.MicrosoftAI.IOpenAICompatibleResponseMapper">
+      <summary>[EN] Represents the IOpenAICompatibleResponseMapper public reference surface for AIKernel package consumers. [JA] AIKernelパッケージ利用者に公開されるIOpenAICompatibleResponseMapperの参照サーフェスを表します。</summary>
+    </member>
+    <member name="T:AIKernel.Providers.MicrosoftAI.OpenAICompatibleCredential">
+      <summary>[EN] Represents the OpenAICompatibleCredential public reference surface for AIKernel package consumers. [JA] AIKernelパッケージ利用者に公開されるOpenAICompatibleCredentialの参照サーフェスを表します。</summary>
+    </member>
+    <member name="T:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProvider">
+      <summary>[EN] Represents the OpenAICompatibleProvider public reference surface for AIKernel package consumers. [JA] AIKernelパッケージ利用者に公開されるOpenAICompatibleProviderの参照サーフェスを表します。</summary>
+    </member>
+    <member name="T:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderCapabilities">
+      <summary>[EN] Represents the OpenAICompatibleProviderCapabilities public reference surface for AIKernel package consumers. [JA] AIKernelパッケージ利用者に公開されるOpenAICompatibleProviderCapabilitiesの参照サーフェスを表します。</summary>
+    </member>
+    <member name="T:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderHealthContext">
+      <summary>[EN] Represents the OpenAICompatibleProviderHealthContext public reference surface for AIKernel package consumers. [JA] AIKernelパッケージ利用者に公開されるOpenAICompatibleProviderHealthContextの参照サーフェスを表します。</summary>
+    </member>
+    <member name="T:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderOptions">
+      <summary>[EN] Represents the OpenAICompatibleProviderOptions public reference surface for AIKernel package consumers. [JA] AIKernelパッケージ利用者に公開されるOpenAICompatibleProviderOptionsの参照サーフェスを表します。</summary>
+    </member>
+    <member name="T:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderOptionsValidator">
+      <summary>[EN] Represents the OpenAICompatibleProviderOptionsValidator public reference surface for AIKernel package consumers. [JA] AIKernelパッケージ利用者に公開されるOpenAICompatibleProviderOptionsValidatorの参照サーフェスを表します。</summary>
+    </member>
+    <member name="T:AIKernel.Providers.MicrosoftAI.OpenAICompatibleResponseMapper">
+      <summary>[EN] Represents the OpenAICompatibleResponseMapper public reference surface for AIKernel package consumers. [JA] AIKernelパッケージ利用者に公開されるOpenAICompatibleResponseMapperの参照サーフェスを表します。</summary>
+    </member>
+    <member name="T:AIKernel.Providers.MicrosoftAI.OpenAICompatibleResponseProjection">
+      <summary>[EN] Represents the OpenAICompatibleResponseProjection public reference surface for AIKernel package consumers. [JA] AIKernelパッケージ利用者に公開されるOpenAICompatibleResponseProjectionの参照サーフェスを表します。</summary>
+    </member>
+    <member name="T:AIKernel.Providers.MicrosoftAI.ProviderApiException">
+      <summary>[EN] Represents the ProviderApiException public reference surface for AIKernel package consumers. [JA] AIKernelパッケージ利用者に公開されるProviderApiExceptionの参照サーフェスを表します。</summary>
+    </member>
+    <member name="T:AIKernel.Providers.MicrosoftAI.ProviderCapabilityMismatchException">
+      <summary>[EN] Represents the ProviderCapabilityMismatchException public reference surface for AIKernel package consumers. [JA] AIKernelパッケージ利用者に公開されるProviderCapabilityMismatchExceptionの参照サーフェスを表します。</summary>
+    </member>
+    <member name="T:AIKernel.Providers.MicrosoftAI.ProviderExecutionException">
+      <summary>[EN] Represents the ProviderExecutionException public reference surface for AIKernel package consumers. [JA] AIKernelパッケージ利用者に公開されるProviderExecutionExceptionの参照サーフェスを表します。</summary>
+    </member>
+    <member name="T:AIKernel.Providers.MicrosoftAI.ProviderExecutionTimeoutException">
+      <summary>[EN] Represents the ProviderExecutionTimeoutException public reference surface for AIKernel package consumers. [JA] AIKernelパッケージ利用者に公開されるProviderExecutionTimeoutExceptionの参照サーフェスを表します。</summary>
+    </member>
+    <member name="T:AIKernel.Providers.MicrosoftAI.ProviderInvalidResponseException">
+      <summary>[EN] Represents the ProviderInvalidResponseException public reference surface for AIKernel package consumers. [JA] AIKernelパッケージ利用者に公開されるProviderInvalidResponseExceptionの参照サーフェスを表します。</summary>
+    </member>
+    <member name="T:AIKernel.Providers.MicrosoftAI.ProviderRateLimitException">
+      <summary>[EN] Represents the ProviderRateLimitException public reference surface for AIKernel package consumers. [JA] AIKernelパッケージ利用者に公開されるProviderRateLimitExceptionの参照サーフェスを表します。</summary>
+    </member>
+  </members>
+</doc>

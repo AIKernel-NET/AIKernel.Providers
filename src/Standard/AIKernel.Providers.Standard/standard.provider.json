@@ -1,0 +1,34 @@
+{
+  "providerId": "providers.standard",
+  "name": "AIKernel Standard OS Providers",
+  "version": "0.1.1",
+  "assembly": "AIKernel.Providers.Standard.dll",
+  "capabilities": [
+    "compute.cpu",
+    "filesystem.memory",
+    "filesystem.physical",
+    "filesystem.zip",
+    "logging.console",
+    "logging.file",
+    "process.supervisor",
+    "eventbus.memory",
+    "network.standard",
+    "scheduler.standard",
+    "profiler.standard"
+  ],
+  "metadata": {
+    "providerSet": "standard-os-drivers",
+    "scope": "providers",
+    "wasm": "excluded"
+  },
+  "cli": {
+    "commands": [
+      "aik ps",
+      "aik kill",
+      "aik restart",
+      "aik logs",
+      "aik top",
+      "aik schedule"
+    ]
+  }
+}

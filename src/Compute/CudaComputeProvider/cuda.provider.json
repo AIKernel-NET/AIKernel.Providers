@@ -1,0 +1,30 @@
+{
+  "providerId": "cuda.compute",
+  "name": "CUDA Compute",
+  "version": "0.1.1",
+  "assembly": "CudaComputeProvider.dll",
+  "capabilities": [
+    "tensor.matmul",
+    "tensor.softmax",
+    "tensor.conv2d",
+    "tensor.layernorm"
+  ],
+  "metadata": {
+    "deviceProfile": "cuda13",
+    "entryPoint": "libtorch_bridge",
+    "loaderJson": "rom://providers/cuda/loader.json",
+    "providerType": "AIKernel.Providers.CudaCompute.CudaComputeProvider",
+    "invokerType": "AIKernel.Providers.CudaCompute.CudaComputeInvoker"
+  },
+  "cli": {
+    "command": "cuda",
+    "defaultOperation": "tensor.matmul",
+    "configKeys": [
+      "deviceProfile",
+      "entryPoint",
+      "loaderJson",
+      "artifactHash"
+    ],
+    "requiredEnvironment": []
+  }
+}
