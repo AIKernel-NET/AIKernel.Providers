@@ -1,0 +1,25 @@
+{
+  "providerId": "chat-history",
+  "name": "Chat History",
+  "version": "0.1.1",
+  "assembly": "ChatHistoryProvider.dll",
+  "capabilities": [
+    "chat.history.read",
+    "chat.history.filter",
+    "chat.history.latest"
+  ],
+  "metadata": {
+    "sourceUri": "rom://providers/chat-history/history.json",
+    "providerType": "AIKernel.Providers.ChatHistory.ChatHistoryProvider",
+    "invokerType": "AIKernel.Providers.ChatHistory.ChatHistoryInvoker"
+  },
+  "cli": {
+    "command": "chat-history",
+    "defaultOperation": "chat.history.read",
+    "configKeys": [
+      "sourceUri",
+      "artifactHash"
+    ],
+    "requiredEnvironment": []
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "providerId": "openai.chat",
+  "name": "Chat OpenAI",
+  "version": "0.1.1",
+  "assembly": "ChatOpenAIProvider.dll",
+  "capabilities": [
+    "chat.completion",
+    "embedding",
+    "moderation"
+  ],
+  "metadata": {
+    "endpoint": "https://api.openai.com/v1",
+    "model": "gpt-4o",
+    "providerType": "AIKernel.Providers.ChatOpenAI.ChatOpenAIProvider",
+    "invokerType": "AIKernel.Providers.ChatOpenAI.ChatOpenAIInvoker"
+  },
+  "cli": {
+    "command": "openai",
+    "defaultOperation": "chat.completion",
+    "configKeys": [
+      "endpoint",
+      "model",
+      "apiKeyEnvironmentVariable"
+    ],
+    "requiredEnvironment": [
+      "OPENAI_API_KEY"
+    ]
+  }
+}

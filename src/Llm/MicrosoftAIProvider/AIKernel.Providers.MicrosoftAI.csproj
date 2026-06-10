@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Title>AIKernel.Providers.MicrosoftAI</Title>
+    <PackageId>AIKernel.Providers.MicrosoftAI</PackageId>
+    <Description>EN: Microsoft.Extensions.AI based provider implementation for AIKernel.NET. Enables OpenAI-compatible model execution while preserving AIKernel's capability-based provider model.
+
+JA: Microsoft.Extensions.AI を利用した AIKernel.NET 向け Provider 実装です。AIKernel の Capability ベース Provider モデルを維持しながら、OpenAI 互換モデル実行を可能にします。</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AIKernel.Common" Version="[$(AIKernelCorePackageVersion)]" />
+    <PackageReference Include="AIKernel.Core" Version="[$(AIKernelCorePackageVersion)]" />
+    <PackageReference Include="AIKernel.Abstractions" Version="$(AIKernelPackageVersion)" />
+    <PackageReference Include="AIKernel.Dtos" Version="$(AIKernelPackageVersion)" />
+    <PackageReference Include="AIKernel.Enums" Version="$(AIKernelPackageVersion)" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.8" />
+    <PackageReference Include="Microsoft.Extensions.AI.Abstractions" Version="10.6.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="10.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.8" />
+  </ItemGroup>
+
+</Project>

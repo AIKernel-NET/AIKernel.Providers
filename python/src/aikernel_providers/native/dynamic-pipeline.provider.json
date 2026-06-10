@@ -1,0 +1,26 @@
+{
+  "providerId": "dynamic-pipeline",
+  "name": "Dynamic Pipeline Compiler",
+  "version": "0.1.1",
+  "assembly": "DynamicPipelineCompilerProvider.dll",
+  "capabilities": [
+    "pipeline.compile",
+    "pipeline.execute",
+    "pipeline.validate"
+  ],
+  "metadata": {
+    "dslSchemaVersion": "0.1",
+    "dslSchemaUri": "rom://providers/dynamic-pipeline/schema.json",
+    "providerType": "AIKernel.Providers.DynamicPipelineCompiler.DynamicPipelineCompilerProvider",
+    "invokerType": "AIKernel.Providers.DynamicPipelineCompiler.DynamicPipelineCompilerInvoker"
+  },
+  "cli": {
+    "command": "dynamic-pipeline",
+    "defaultOperation": "pipeline.compile",
+    "configKeys": [
+      "dslSchemaVersion",
+      "dslSchemaUri"
+    ],
+    "requiredEnvironment": []
+  }
+}
