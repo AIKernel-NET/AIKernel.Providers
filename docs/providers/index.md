@@ -30,7 +30,7 @@ instrumentation-only.
 
 Manifest:
 
-- `src/Llm/ChatOpenAIProvider/openai.provider.json`
+- `src/Chat/ChatOpenAIProvider/openai.provider.json`
 
 ## ChatHistoryProvider
 

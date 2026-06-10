@@ -120,7 +120,7 @@ Provider projects are grouped by category under `src/`:
 Each external provider includes a JSON manifest that can be copied into a host
 provider directory and loaded dynamically:
 
-- `src/Llm/ChatOpenAIProvider/openai.provider.json`
+- `src/Chat/ChatOpenAIProvider/openai.provider.json`
 - `src/Chat/ChatHistoryProvider/chat-history.provider.json`
 - `src/Compute/CudaComputeProvider/cuda.provider.json`
 - `src/Pipeline/DynamicPipelineCompilerProvider/dynamic-pipeline.provider.json`

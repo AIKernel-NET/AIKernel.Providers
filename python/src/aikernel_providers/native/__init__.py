@@ -179,7 +179,7 @@ def _source_build_roots() -> tuple[Path, ...]:
             repository_root / "src" / "Standard" / "AIKernel.Providers.Standard" / "bin" / "Release" / "net10.0",
             repository_root / "src" / "Chat" / "ChatHistoryProvider" / "bin" / "Release" / "net10.0",
             repository_root / "src" / "Compute" / "CudaComputeProvider" / "bin" / "Release" / "net10.0",
-            repository_root / "src" / "Llm" / "ChatOpenAIProvider" / "bin" / "Release" / "net10.0",
+            repository_root / "src" / "Chat" / "ChatOpenAIProvider" / "bin" / "Release" / "net10.0",
             repository_root / "src" / "Llm" / "LocalLlmProvider" / "bin" / "Release" / "net10.0",
             repository_root / "src" / "Llm" / "MicrosoftAIProvider" / "bin" / "Release" / "net10.0",
             repository_root / "src" / "Pipeline" / "DynamicPipelineCompilerProvider" / "bin" / "Release" / "net10.0",

@@ -1,12 +1,12 @@
 <Solution>
   <Folder Name="/src/Chat/">
+    <Project Path="src/Chat/ChatOpenAIProvider/ChatOpenAIProvider.csproj" />
     <Project Path="src/Chat/ChatHistoryProvider/ChatHistoryProvider.csproj" />
   </Folder>
   <Folder Name="/src/Compute/">
     <Project Path="src/Compute/CudaComputeProvider/CudaComputeProvider.csproj" />
   </Folder>
   <Folder Name="/src/Llm/">
-    <Project Path="src/Llm/ChatOpenAIProvider/ChatOpenAIProvider.csproj" />
     <Project Path="src/Llm/LocalLlmProvider/LocalLlmProvider.csproj" />
     <Project Path="src/Llm/MicrosoftAIProvider/AIKernel.Providers.MicrosoftAI.csproj" />
   </Folder>
@@ -16,13 +16,21 @@
   <Folder Name="/src/Standard/">
     <Project Path="src/Standard/AIKernel.Providers.Standard/AIKernel.Providers.Standard.csproj" />
   </Folder>
-  <Folder Name="/tests/">
-    <Project Path="tests/CudaComputeProvider.Tests/CudaComputeProvider.Tests.csproj" />
-    <Project Path="tests/StandardProviders.Tests/StandardProviders.Tests.csproj" />
-    <Project Path="tests/DynamicPipelineCompilerProvider.Tests/DynamicPipelineCompilerProvider.Tests.csproj" />
-    <Project Path="tests/LocalLlmProvider.Tests/LocalLlmProvider.Tests.csproj" />
-    <Project Path="tests/ChatOpenAIProvider.Tests/ChatOpenAIProvider.Tests.csproj" />
-    <Project Path="tests/ChatHistoryProvider.Tests/ChatHistoryProvider.Tests.csproj" />
-    <Project Path="tests/MicrosoftAIProvider.Tests/MicrosoftAIProvider.Tests.csproj" />
+  <Folder Name="/tests/Chat/">
+    <Project Path="tests/Chat/ChatOpenAIProvider.Tests/ChatOpenAIProvider.Tests.csproj" />
+    <Project Path="tests/Chat/ChatHistoryProvider.Tests/ChatHistoryProvider.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tests/Compute/">
+    <Project Path="tests/Compute/CudaComputeProvider.Tests/CudaComputeProvider.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tests/Llm/">
+    <Project Path="tests/Llm/LocalLlmProvider.Tests/LocalLlmProvider.Tests.csproj" />
+    <Project Path="tests/Llm/MicrosoftAIProvider.Tests/MicrosoftAIProvider.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tests/Pipeline/">
+    <Project Path="tests/Pipeline/DynamicPipelineCompilerProvider.Tests/DynamicPipelineCompilerProvider.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tests/Standard/">
+    <Project Path="tests/Standard/StandardProviders.Tests/StandardProviders.Tests.csproj" />
   </Folder>
 </Solution>

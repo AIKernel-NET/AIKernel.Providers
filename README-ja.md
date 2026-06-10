@@ -110,7 +110,7 @@ Provider project は `src/` 配下で category ごとに整理します。
 各外部 Provider は、host の provider directory へコピーして動的ロードできる
 JSON manifest を持ちます。
 
-- `src/Llm/ChatOpenAIProvider/openai.provider.json`
+- `src/Chat/ChatOpenAIProvider/openai.provider.json`
 - `src/Chat/ChatHistoryProvider/chat-history.provider.json`
 - `src/Compute/CudaComputeProvider/cuda.provider.json`
 - `src/Pipeline/DynamicPipelineCompilerProvider/dynamic-pipeline.provider.json`

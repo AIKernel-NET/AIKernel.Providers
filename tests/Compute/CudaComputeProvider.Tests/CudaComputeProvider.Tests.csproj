@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Llm\LocalLlmProvider\LocalLlmProvider.csproj" />
+    <ProjectReference Include="..\..\..\src\Compute\CudaComputeProvider\CudaComputeProvider.csproj" />
   </ItemGroup>
 
   <ItemGroup>

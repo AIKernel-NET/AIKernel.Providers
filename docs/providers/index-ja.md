@@ -30,7 +30,7 @@ instrumentation 専用に保たれます。
 
 Manifest:
 
-- `src/Llm/ChatOpenAIProvider/openai.provider.json`
+- `src/Chat/ChatOpenAIProvider/openai.provider.json`
 
 ## ChatHistoryProvider
 

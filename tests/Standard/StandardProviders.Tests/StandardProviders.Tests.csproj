@@ -8,8 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AIKernel.Dtos" Version="$(AIKernelPackageVersion)" />
-    <PackageReference Include="AIKernel.Enums" Version="$(AIKernelPackageVersion)" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.8" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.6.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
       <PrivateAssets>all</PrivateAssets>
@@ -19,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Chat\ChatHistoryProvider\ChatHistoryProvider.csproj" />
+    <ProjectReference Include="..\..\..\src\Standard\AIKernel.Providers.Standard\AIKernel.Providers.Standard.csproj" />
   </ItemGroup>
 
   <ItemGroup>
