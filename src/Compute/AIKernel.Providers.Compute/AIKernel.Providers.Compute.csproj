@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Title>AIKernel.Providers.Compute</Title>
+    <PackageId>AIKernel.Providers.Compute</PackageId>
+    <Description>EN: Pure managed compute provider substrate with backend-neutral buffer metadata descriptors.
+
+JA: backend-neutral な buffer metadata descriptor を含む pure managed compute provider substrate です。</Description>
+  </PropertyGroup>
+</Project>

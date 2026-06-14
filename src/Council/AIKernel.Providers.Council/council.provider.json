@@ -1,0 +1,16 @@
+{
+  "providerId": "ctg.council",
+  "name": "CTG Council Semantic Providers",
+  "version": "0.1.1.1",
+  "assembly": "AIKernel.Providers.Council.dll",
+  "capabilities": [
+    "ctg.council.logos",
+    "ctg.council.ethos",
+    "ctg.council.pathos"
+  ],
+  "metadata": {
+    "providerType": "AIKernel.Providers.Council.Providers.CouncilSemanticEvaluationProviderBase",
+    "scope": "semantic-material-only",
+    "gateDecision": "excluded"
+  }
+}

@@ -30,8 +30,8 @@ Control, Wasm, GPU backends, and Tools after the 0.1.x line stabilizes.
 - Read the User Guide when you want install commands and the safe dry-run path
   for official Providers.
 - Read Provider Catalog when choosing a package such as ChatOpenAI,
-  ChatHistory, MicrosoftAI, LocalLlm, DynamicPipelineCompiler, CudaCompute, or
-  Standard.
+  ChatHistory, MicrosoftAI, LocalLlm, DynamicPipelineCompiler, CudaCompute,
+  Substrate, Council, Audio, Compute, or Standard.
 - Read Architecture when you need to confirm dependency direction: Providers
   implement drivers and must not move endpoint/native-driver behavior into Core
   or Tools.
@@ -61,6 +61,10 @@ contains:
 - Chat/OpenAI-compatible providers
 - chat history provider
 - CUDA compute provider metadata surface
+- provider substrate package
+- council semantic provider package
+- audio substrate package
+- compute metadata substrate package
 - dynamic pipeline compiler provider
 - local LLM provider
 - MicrosoftAI provider moved under Providers ownership

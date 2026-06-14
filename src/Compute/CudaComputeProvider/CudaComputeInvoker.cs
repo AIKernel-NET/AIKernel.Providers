@@ -1,6 +1,6 @@
 using AIKernel.Abstractions.Capabilities;
-using AIKernel.Common.Results;
 using AIKernel.Dtos.Capabilities;
+using AIKernel.Providers.Compute;
 
 namespace AIKernel.Providers.CudaCompute;
 
@@ -21,7 +21,7 @@ public sealed class CudaComputeInvoker : ICapabilityModuleInvoker
         cancellationToken.ThrowIfCancellationRequested();
         ArgumentNullException.ThrowIfNull(request);
 
-        var supported = request.Operation is
+        var recognized = request.Operation is
             "tensor.matmul" or
             "tensor.softmax" or
             "tensor.conv2d" or
@@ -34,22 +34,33 @@ public sealed class CudaComputeInvoker : ICapabilityModuleInvoker
 
         metadata["provider"] = "CudaComputeProvider";
         metadata["operation"] = request.Operation;
-        var unsupported = UnsupportedOperation(supported, request.Operation);
+        var failure = ResolveFailure(recognized, request.Operation);
+        metadata["compute.availability_reason"] = failure.AvailabilityReason.ToString();
 
         return ValueTask.FromResult(new CapabilityInvocationResult(
             request.InvocationId,
             request.CapabilityId,
-            Succeeded: supported,
+            Succeeded: false,
             OutputHash: null,
-            ErrorCode: unsupported.Match<string?>(() => null, error => error.Code),
-            ErrorMessage: unsupported.Match<string?>(() => null, error => error.Message),
+            ErrorCode: failure.Code,
+            ErrorMessage: failure.Message,
             ReplayLogHash: request.ReplayLogHash,
             Metadata: metadata));
     }
 
-    private static Option<MonadicError> UnsupportedOperation(bool supported, string operation)
-        => MonadicDecision.ErrorUnless(
-            supported,
-            "CUDA_OPERATION_NOT_SUPPORTED",
-            $"Unsupported CUDA compute operation: {operation}.");
+    private static CudaInvocationFailure ResolveFailure(bool recognized, string operation)
+        => recognized
+            ? new CudaInvocationFailure(
+                "CUDA_BACKEND_NOT_BOUND",
+                "CUDA compute operation is recognized, but no descriptor-resolved backend is bound in this provider package.",
+                ComputeAvailabilityReason.BackendNotInstalled)
+            : new CudaInvocationFailure(
+                "CUDA_OPERATION_NOT_SUPPORTED",
+                $"Unsupported CUDA compute operation: {operation}.",
+                ComputeAvailabilityReason.UnsupportedOperation);
+
+    private sealed record CudaInvocationFailure(
+        string Code,
+        string Message,
+        ComputeAvailabilityReason AvailabilityReason);
 }

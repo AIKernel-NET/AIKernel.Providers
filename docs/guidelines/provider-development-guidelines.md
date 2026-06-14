@@ -43,6 +43,43 @@ LLM / SLM providers may propose candidates, evidence, diagnostics, and capabilit
 material. AIKernel Core / Governance decides. Provider output must not become
 execution authority by itself.
 
+Council semantic providers must keep semantic dimensions separate from Gate
+input. `ProviderSemanticResult.Dimensions` has a stable minimum key set so
+Control can normalize provider output deterministically, but those values are
+not copied into `GateInput`.
+
+| Council | Minimum dimension keys |
+| --- | --- |
+| Logos | `logos.logical_consistency`, `logos.evidence_grounding`, `logos.causal_coherence` |
+| Ethos | `ethos.safety_alignment`, `ethos.permission_alignment`, `ethos.reversibility` |
+| Pathos | `pathos.context_alignment`, `pathos.user_intent_alignment`, `pathos.impact_alignment` |
+
+Providers may emit additional dimension keys, evidence, diagnostics, and
+metadata. Additional keys remain semantic material unless a Control adapter
+explicitly consumes them during normalization.
+
+Manifest fields that affect routing, registry construction, and dependency
+boundary checks must be strongly typed. Provider-specific and vendor-specific
+fields must stay in loose metadata or raw extension JSON so future manifest
+versions remain non-breaking.
+
+Manifest loader and validator services should be consumed through
+`IProviderManifestLoader` and `IProviderManifestValidator` when hosts need to
+replace parsing or validation behavior. Concrete providers should not bypass
+the descriptor boundary by reading vendor SDK configuration directly.
+
+Manifest validation failures should expose both `ProviderDiagnostic` entries
+and `ProviderManifestValidationError` DTOs. Diagnostics are optimized for
+operator visibility, while validation errors are stable carrier records for
+strict host policy, CI checks, and future schema migration.
+
+Control integration must treat Provider output as semantic material only.
+`ProviderVoteAdapter` is responsible for converting `ProviderSemanticResult`
+into Control-side council votes. Providers may return `ProposedVoteValue`,
+`Status`, evidence, dimensions, diagnostics, confidence, and risk score, but
+they must not create `GateInput` or emit Gate decisions. Confidence and risk
+score remain diagnostics and are not copied into `GateInput`.
+
 The following provider substrate may live in AIKernel.Providers:
 
 - Provider interface
@@ -160,7 +197,7 @@ backend selection metadata, but not the native CUDA implementation.
 
 ```yaml
 backend: "cuda13.0"
-nativeModuleRef: "aikernel-cuda13://modules/vector_add"
+nativeModuleRef: "aikernel-cuda://cuda13.0/modules/vector_add"
 deviceProfile: "auto"
 ```
 

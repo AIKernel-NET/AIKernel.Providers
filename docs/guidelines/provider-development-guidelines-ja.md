@@ -40,6 +40,43 @@ LLM / SLM provider は候補、evidence、diagnostics、capability material を�
 最終判断は AIKernel Core / Governance が行います。Provider output 自体を execution
 authority にしてはいけません。
 
+Council semantic Provider は semantic dimension と Gate input を分離します。
+`ProviderSemanticResult.Dimensions` は Control が Provider output を deterministic
+に normalize するための安定した最低 key set を持ちますが、これらの値は
+`GateInput` へコピーしてはいけません。
+
+| Council | 最低 dimension key |
+| --- | --- |
+| Logos | `logos.logical_consistency`, `logos.evidence_grounding`, `logos.causal_coherence` |
+| Ethos | `ethos.safety_alignment`, `ethos.permission_alignment`, `ethos.reversibility` |
+| Pathos | `pathos.context_alignment`, `pathos.user_intent_alignment`, `pathos.impact_alignment` |
+
+Provider は追加の dimension key、evidence、diagnostics、metadata を出力できます。
+追加 key は、Control adapter が normalization 時に明示的に消費しない限り、
+semantic material のまま扱います。
+
+routing、registry construction、dependency boundary check に影響する manifest
+field は strong type として扱います。Provider-specific / vendor-specific な field は、
+future manifest version が non-breaking であり続けるよう loose metadata または
+raw extension JSON に逃がします。
+
+host が parsing / validation behavior を差し替える必要がある場合、manifest loader /
+validator service は `IProviderManifestLoader` と `IProviderManifestValidator`
+経由で利用します。concrete Provider は vendor SDK configuration を直接読んで
+descriptor boundary を迂回してはいけません。
+
+Manifest validation failure は `ProviderDiagnostic` と
+`ProviderManifestValidationError` DTO の両方で公開します。Diagnostics は operator
+向けの可視性、validation error DTO は strict host policy、CI check、将来の schema
+migration 向けの安定 carrier です。
+
+Control integration では Provider output を semantic material としてのみ扱います。
+`ProviderVoteAdapter` が `ProviderSemanticResult` を Control 側の council vote へ
+変換します。Provider は `ProposedVoteValue`、`Status`、evidence、dimensions、
+diagnostics、confidence、risk score を返せますが、`GateInput` を生成したり Gate
+decision を emit してはいけません。Confidence / risk score は diagnostics に留まり、
+`GateInput` へコピーしません。
+
 AIKernel.Providers に置いてよい provider substrate:
 
 - Provider interface
@@ -155,7 +192,7 @@ metadata を置けます。ただし native CUDA implementation は置けませ�
 
 ```yaml
 backend: "cuda13.0"
-nativeModuleRef: "aikernel-cuda13://modules/vector_add"
+nativeModuleRef: "aikernel-cuda://cuda13.0/modules/vector_add"
 deviceProfile: "auto"
 ```
 

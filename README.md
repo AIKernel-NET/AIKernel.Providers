@@ -82,6 +82,9 @@ scheduler, profiler, or CPU compute.
 
 Provider projects are grouped by category under `src/`:
 
+- `src/ProviderSubstrate` - provider manifests, registries, deterministic routing, diagnostics, and evidence references.
+- `src/Council` - CTG council semantic providers that emit semantic material and diagnostics only.
+- `src/Audio` - backend-independent audio substrate for playback and recording providers.
 - `src/Llm` - LLM and model-hosting providers.
 - `src/Chat` - chat-domain storage and history providers.
 - `src/Compute` - native and accelerator compute providers.
@@ -107,6 +110,16 @@ Provider projects are grouped by category under `src/`:
   implementation moved under AIKernel.Providers management from AIKernel.Core.
   This repository now owns its packaging, tests, documentation, and Python
   wrapper inclusion.
+- `AIKernel.Providers.Substrate` - pure managed manifest, registry, and router
+  substrate with forward-compatible raw JSON extensions.
+- `AIKernel.Providers.Council` - Logos / Ethos / Pathos semantic material
+  providers for downstream CTG orchestration. Council dimensions use stable
+  `logos.*`, `ethos.*`, and `pathos.*` keys for Control normalization and are
+  never Gate input.
+- `AIKernel.Providers.Audio` - pure managed audio substrate that avoids native,
+  OS SDK, browser, and WASM dependencies.
+- `AIKernel.Providers.Compute` - backend-neutral compute metadata substrate for
+  tensor-like buffer references.
 
 ## Provider Manifests
 
@@ -206,6 +219,10 @@ For .NET hosts during public release:
 ```bash
 dotnet add package AIKernel.Providers.ChatOpenAI --version 0.1.1.1
 dotnet add package AIKernel.Providers.ChatHistory --version 0.1.1.1
+dotnet add package AIKernel.Providers.Substrate --version 0.1.1.1
+dotnet add package AIKernel.Providers.Council --version 0.1.1.1
+dotnet add package AIKernel.Providers.Audio --version 0.1.1.1
+dotnet add package AIKernel.Providers.Compute --version 0.1.1.1
 dotnet add package AIKernel.Providers.CudaCompute --version 0.1.1.1
 dotnet add package AIKernel.Providers.DynamicPipelineCompiler --version 0.1.1.1
 dotnet add package AIKernel.Providers.LocalLlm --version 0.1.1.1

@@ -98,6 +98,29 @@ and CLI hints.
 Hosts can copy manifests into a provider directory, resolve the corresponding
 assembly, and register the provider through AIKernel's capability registry.
 
+`AIKernel.Providers.Substrate` supplies the shared manifest loader, validator,
+registry, and deterministic router used by this flow. Resolution returns
+structured results for missing providers, duplicate providers, and explicit
+fallback selection.
+
+Forward-compatible manifests may add optional `capabilities`, `metadata`,
+`backendMetadata`, `vendorMetadata`, `cli`, and unknown JSON blocks. Unknown
+JSON is preserved as raw extension JSON so future schema versions can add
+fields without breaking older loaders.
+
+## Council, Audio, And Compute Substrates
+
+Council providers emit semantic material and diagnostics only. They do not own
+downstream decision or control-state semantics.
+
+Audio substrate types model audio formats, frames, playback requests, recording
+requests, capability descriptors, and validation without backend dependencies.
+Dedicated packages own NAudio, SDL, WebAudio, WASM, or OS-specific audio stacks.
+
+Compute substrate types model tensor-like buffer references with standardized
+dtype strings, comma-separated shape and stride strings, optional layout, and a
+metadata map for backend-specific details.
+
 ## MicrosoftAI Migration
 
 `AIKernel.Providers.MicrosoftAI` is managed by this repository starting with the

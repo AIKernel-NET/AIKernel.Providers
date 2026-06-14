@@ -29,8 +29,8 @@ Tools を統合する標準 reference distribution として位置づけられ�
 - install command と公式 Provider の安全な dry-run path を確認する場合は
   User Guide を読んでください。
 - ChatOpenAI、ChatHistory、MicrosoftAI、LocalLlm、DynamicPipelineCompiler、
-  CudaCompute、Standard など、どの package を選ぶか確認する場合は Provider Catalog を
-  読んでください。
+  CudaCompute、Substrate、Council、Audio、Compute、Standard など、どの package を
+  選ぶか確認する場合は Provider Catalog を読んでください。
 - dependency direction を確認する場合は Architecture を読んでください。Providers は
   driver を実装する層であり、endpoint / native-driver behavior を Core や Tools に
   戻しません。
@@ -59,6 +59,10 @@ Version 0.1.1 は AIKernel.Providers の初回公開 release line です。次�
 - Chat / OpenAI-compatible Provider
 - chat history Provider
 - CUDA compute Provider metadata surface
+- Provider substrate package
+- council semantic Provider package
+- audio substrate package
+- compute metadata substrate package
 - dynamic pipeline compiler Provider
 - local LLM Provider
 - Core から Providers 管理へ移管された MicrosoftAI Provider

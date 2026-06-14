@@ -1,10 +1,18 @@
 <Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/src/Audio/">
+    <Project Path="src/Audio/AIKernel.Providers.Audio/AIKernel.Providers.Audio.csproj" />
+  </Folder>
   <Folder Name="/src/Chat/">
     <Project Path="src/Chat/ChatOpenAIProvider/ChatOpenAIProvider.csproj" />
     <Project Path="src/Chat/ChatHistoryProvider/ChatHistoryProvider.csproj" />
   </Folder>
   <Folder Name="/src/Compute/">
+    <Project Path="src/Compute/AIKernel.Providers.Compute/AIKernel.Providers.Compute.csproj" />
     <Project Path="src/Compute/CudaComputeProvider/CudaComputeProvider.csproj" />
+  </Folder>
+  <Folder Name="/src/Council/">
+    <Project Path="src/Council/AIKernel.Providers.Council/AIKernel.Providers.Council.csproj" />
   </Folder>
   <Folder Name="/src/Llm/">
     <Project Path="src/Llm/LocalLlmProvider/LocalLlmProvider.csproj" />
@@ -13,15 +21,29 @@
   <Folder Name="/src/Pipeline/">
     <Project Path="src/Pipeline/DynamicPipelineCompilerProvider/DynamicPipelineCompilerProvider.csproj" />
   </Folder>
+  <Folder Name="/src/ProviderSubstrate/">
+    <Project Path="src/ProviderSubstrate/AIKernel.Providers.Substrate/AIKernel.Providers.Substrate.csproj" />
+  </Folder>
   <Folder Name="/src/Standard/">
     <Project Path="src/Standard/AIKernel.Providers.Standard/AIKernel.Providers.Standard.csproj" />
+  </Folder>
+  <Folder Name="/tests/" />
+  <Folder Name="/tests/Audio/">
+    <Project Path="tests/Audio/AIKernel.Providers.Audio.Tests/AIKernel.Providers.Audio.Tests.csproj" />
   </Folder>
   <Folder Name="/tests/Chat/">
     <Project Path="tests/Chat/ChatOpenAIProvider.Tests/ChatOpenAIProvider.Tests.csproj" />
     <Project Path="tests/Chat/ChatHistoryProvider.Tests/ChatHistoryProvider.Tests.csproj" />
   </Folder>
   <Folder Name="/tests/Compute/">
+    <Project Path="tests/Compute/AIKernel.Providers.Compute.Tests/AIKernel.Providers.Compute.Tests.csproj" />
     <Project Path="tests/Compute/CudaComputeProvider.Tests/CudaComputeProvider.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tests/Council/">
+    <Project Path="tests/Council/AIKernel.Providers.Council.Tests/AIKernel.Providers.Council.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tests/Dependency/">
+    <Project Path="tests/Dependency/AIKernel.Providers.DependencyGuard.Tests/AIKernel.Providers.DependencyGuard.Tests.csproj" />
   </Folder>
   <Folder Name="/tests/Llm/">
     <Project Path="tests/Llm/LocalLlmProvider.Tests/LocalLlmProvider.Tests.csproj" />
@@ -29,6 +51,9 @@
   </Folder>
   <Folder Name="/tests/Pipeline/">
     <Project Path="tests/Pipeline/DynamicPipelineCompilerProvider.Tests/DynamicPipelineCompilerProvider.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tests/ProviderSubstrate/">
+    <Project Path="tests/ProviderSubstrate/AIKernel.Providers.Substrate.Tests/AIKernel.Providers.Substrate.Tests.csproj" />
   </Folder>
   <Folder Name="/tests/Standard/">
     <Project Path="tests/Standard/StandardProviders.Tests/StandardProviders.Tests.csproj" />

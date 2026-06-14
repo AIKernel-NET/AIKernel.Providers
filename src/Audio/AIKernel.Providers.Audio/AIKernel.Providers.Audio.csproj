@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Title>AIKernel.Providers.Audio</Title>
+    <PackageId>AIKernel.Providers.Audio</PackageId>
+    <Description>EN: Pure managed audio provider substrate with format validation, capability descriptors, and backend-independent base classes.
+
+JA: format validation、capability descriptor、backend 非依存 base class を含む pure managed audio provider substrate です。</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.8" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\ProviderSubstrate\AIKernel.Providers.Substrate\AIKernel.Providers.Substrate.csproj" />
+  </ItemGroup>
+</Project>

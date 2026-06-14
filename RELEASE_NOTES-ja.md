@@ -20,10 +20,38 @@ AIKernel.Providers は AIKernel.Core / AIKernel.Control 0.1.1.1 と同じ開発�
 - この update line では PyPI publishing を無効化しました。Providers 0.1.1.1 は
   NuGet-only であり、Python wrapper 関連資料は reference-only です。
 
+### 追加
+
+- forward-compatible manifest loading、validation、registry、deterministic routing、
+  missing-provider result、duplicate diagnostic、fallback policy、diagnostics、
+  evidence reference、CLI hint、loose extension merge rule 向けに
+  `AIKernel.Providers.Substrate` を追加しました。
+  host 側で差し替えられるよう、manifest loader / validator interface、
+  dependency descriptor、compatibility descriptor、deterministic resolution request
+  も追加しました。
+- Logos / Ethos / Pathos semantic provider envelope 向けに
+  `AIKernel.Providers.Council` を追加しました。Council Provider は semantic
+  material と diagnostics のみを出力します。
+  `ProviderSemanticResult.Dimensions` は council ごとの安定した最低 key を定義し、
+  `GateInput` の外側に留まります。
+- `AudioFormat`、`AudioFrame`、format validation、playback base、recording
+  base、`AudioRecordFrame`、diagnostics、routing helper を持つ pure managed audio substrate として
+  `AIKernel.Providers.Audio` を追加しました。
+- standardized dtype string、shape / stride string metadata、`HashMetadata` を持つ
+  `ComputeBufferRef`、compute entry point descriptor、compute availability reason
+  のために `AIKernel.Providers.Compute` を追加しました。
+- `CudaComputeProvider` に descriptor-driven backend metadata、
+  `NativeModuleDescriptor`、`CudaBackendDescriptor`、structured backend resolution
+  を追加しました。認識済み operation は dedicated backend が install / bind されるまで
+  `CUDA_BACKEND_NOT_BOUND` で fail closed します。
+- forbidden package / project reference を検出する dependency guard test を追加しました。
+
 ### 検証
 
 - repository configuration は `../artifacts/local-packages` を優先して restore し、
   必要に応じて nuget.org に fallback する構成にしました。
+- 新しい substrate、council、audio、compute、CUDA descriptor、dependency boundary
+  test が deterministic routing と Provider boundary rule を検証します。
 
 ## 0.1.1
 

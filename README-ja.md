@@ -72,6 +72,9 @@ profiler、CPU compute などの OS driver surface が必要な host では、
 
 Provider project は `src/` 配下で category ごとに整理します。
 
+- `src/ProviderSubstrate` - Provider manifest、registry、deterministic routing、diagnostics、evidence reference。
+- `src/Council` - semantic material と diagnostics のみを出力する CTG council semantic Provider。
+- `src/Audio` - playback / recording Provider 向けの backend-independent audio substrate。
 - `src/Llm` - LLM / model hosting 系 Provider。
 - `src/Chat` - chat domain の storage / history 系 Provider。
 - `src/Compute` - native / accelerator compute 系 Provider。
@@ -97,6 +100,16 @@ Provider project は `src/` 配下で category ごとに整理します。
   Provider 実装です。これは AIKernel.Core から AIKernel.Providers 管理へ
   移管されました。今後はこの repository が packaging、test、documentation、
   Python wrapper への同梱を所有します。
+- `AIKernel.Providers.Substrate` - forward-compatible raw JSON extension を持つ
+  pure managed manifest / registry / router substrate です。
+- `AIKernel.Providers.Council` - downstream CTG orchestration 向けの Logos /
+  Ethos / Pathos semantic material Provider です。Council dimension は Control
+  normalization 向けに安定した `logos.*`、`ethos.*`、`pathos.*` key を使い、
+  Gate input にはなりません。
+- `AIKernel.Providers.Audio` - native、OS SDK、browser、WASM dependency を避ける
+  pure managed audio substrate です。
+- `AIKernel.Providers.Compute` - tensor-like buffer reference 向けの backend-neutral
+  compute metadata substrate です。
 
 ## Provider Manifest
 
@@ -193,6 +206,10 @@ dotnet test AIKernel.Providers.slnx
 ```bash
 dotnet add package AIKernel.Providers.ChatOpenAI --version 0.1.1.1
 dotnet add package AIKernel.Providers.ChatHistory --version 0.1.1.1
+dotnet add package AIKernel.Providers.Substrate --version 0.1.1.1
+dotnet add package AIKernel.Providers.Council --version 0.1.1.1
+dotnet add package AIKernel.Providers.Audio --version 0.1.1.1
+dotnet add package AIKernel.Providers.Compute --version 0.1.1.1
 dotnet add package AIKernel.Providers.CudaCompute --version 0.1.1.1
 dotnet add package AIKernel.Providers.DynamicPipelineCompiler --version 0.1.1.1
 dotnet add package AIKernel.Providers.LocalLlm --version 0.1.1.1

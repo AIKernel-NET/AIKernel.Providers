@@ -20,10 +20,37 @@ development policy.
 - Disable PyPI publishing for this update line. Providers 0.1.1.1 is
   NuGet-only; Python wrapper materials remain reference-only.
 
+### Added
+
+- Add `AIKernel.Providers.Substrate` for forward-compatible manifest loading,
+  validation, registry, deterministic routing, missing-provider results,
+  duplicate diagnostics, fallback policy, diagnostics, evidence references,
+  CLI hints, and loose extension merge rules.
+  Manifest loader / validator interfaces, dependency descriptors,
+  compatibility descriptors, and deterministic resolution requests support
+  host-side substitution.
+- Add `AIKernel.Providers.Council` for Logos / Ethos / Pathos semantic provider
+  envelopes. Council providers emit semantic material and diagnostics only.
+  `ProviderSemanticResult.Dimensions` defines stable minimum keys for each
+  council and remains outside `GateInput`.
+- Add `AIKernel.Providers.Audio` as a pure managed audio substrate with
+  `AudioFormat`, `AudioFrame`, format validation, playback base, recording
+  base, `AudioRecordFrame`, diagnostics, and routing helpers.
+- Add `AIKernel.Providers.Compute` with `ComputeBufferRef`, standardized dtype
+  strings, shape / stride string metadata, `HashMetadata`, compute entry point
+  descriptors, and compute availability reasons.
+- Extend `CudaComputeProvider` with descriptor-driven backend metadata,
+  `NativeModuleDescriptor`, `CudaBackendDescriptor`, and structured backend
+  resolution. Recognized operations fail closed with `CUDA_BACKEND_NOT_BOUND`
+  until a dedicated backend is installed and bound.
+- Add dependency guard tests for forbidden package and project references.
+
 ### Validation
 
 - Repository configuration is prepared to restore from `../artifacts/local-packages`
   before falling back to nuget.org.
+- New substrate, council, audio, compute, CUDA descriptor, and dependency
+  boundary tests cover deterministic routing and provider boundary rules.
 
 ## 0.1.1
 
