@@ -16,20 +16,17 @@ drivers with the rest of the SDK after the 0.1.x line stabilizes.
 ## Install Packages
 
 ```bash
-dotnet add package AIKernel.Providers.ChatOpenAI --version 0.1.1
-dotnet add package AIKernel.Providers.ChatHistory --version 0.1.1
-dotnet add package AIKernel.Providers.CudaCompute --version 0.1.1
-dotnet add package AIKernel.Providers.DynamicPipelineCompiler --version 0.1.1
-dotnet add package AIKernel.Providers.LocalLlm --version 0.1.1
-dotnet add package AIKernel.Providers.MicrosoftAI --version 0.1.1
-dotnet add package AIKernel.Providers.Standard --version 0.1.1
+dotnet add package AIKernel.Providers.ChatOpenAI --version 0.1.1.1
+dotnet add package AIKernel.Providers.ChatHistory --version 0.1.1.1
+dotnet add package AIKernel.Providers.CudaCompute --version 0.1.1.1
+dotnet add package AIKernel.Providers.DynamicPipelineCompiler --version 0.1.1.1
+dotnet add package AIKernel.Providers.LocalLlm --version 0.1.1.1
+dotnet add package AIKernel.Providers.MicrosoftAI --version 0.1.1.1
+dotnet add package AIKernel.Providers.Standard --version 0.1.1.1
 ```
 
-Python:
-
-```bash
-pip install aikernel-providers
-```
+The 0.1.1.1 line is NuGet-only. Do not build, install, or publish a PyPI
+package for this line.
 
 ## Choose a Provider
 
@@ -97,7 +94,7 @@ var compute = new CpuComputeProvider();
 var sum = compute.AddVectors([1.0f, 2.0f], [3.0f, 4.0f]);
 ```
 
-## Use Python Wrappers
+## Python Wrapper Reference
 
 ```python
 from aikernel_providers import (
@@ -113,8 +110,9 @@ for driver in standard_driver_contracts():
     print(driver.provider_id, driver.name)
 ```
 
-The Python package is a managed wrapper over the C# surface. It does not
-re-implement provider behavior in Python.
+Python wrapper materials are reference-only for 0.1.1.1. They describe a future
+managed wrapper over the C# surface and must not re-implement provider behavior
+in Python.
 
 ## Failure Behavior
 
@@ -130,4 +128,5 @@ Providers should fail closed:
 - Read the [Provider Catalog](../providers/index.md) for per-provider scope.
 - Read [Architecture](../architecture/index.md) before changing dependency
   direction.
-- Read [Python Wrapper](../python/index.md) before publishing wheels.
+- Read [Python Wrapper](../python/index.md) for the reference-only Python
+  wrapper boundary.

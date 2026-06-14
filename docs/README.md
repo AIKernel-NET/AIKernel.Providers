@@ -3,8 +3,9 @@
 [日本語](README-ja.md)
 
 AIKernel.Providers is the official provider driver workspace for AIKernel. It
-contains external providers, standard OS drivers, manifests, and Python wrappers
-that bind AIKernel contracts to concrete services or host-side drivers.
+contains external providers, standard OS drivers, manifests, and reference
+Python wrapper materials that bind AIKernel contracts to concrete services or
+host-side drivers.
 
 These docs describe Providers as the AIOS SDK driver model layer. Providers let
 users assemble concrete host services, external model providers, local runtimes,
@@ -19,6 +20,8 @@ Control, Wasm, GPU backends, and Tools after the 0.1.x line stabilizes.
 - [User Guide](user-guide/index.md)
 - [Architecture](architecture/index.md)
 - [Provider Catalog](providers/index.md)
+- [Provider Development Guidelines](guidelines/provider-development-guidelines.md)
+- [Dependency Boundary Checklist](guidelines/dependency-boundary-checklist.md)
 - [Python Wrapper](python/index.md)
 - [Licensing](licensing/index.md)
 
@@ -32,7 +35,10 @@ Control, Wasm, GPU backends, and Tools after the 0.1.x line stabilizes.
 - Read Architecture when you need to confirm dependency direction: Providers
   implement drivers and must not move endpoint/native-driver behavior into Core
   or Tools.
-- Read Python Wrapper when consuming the same provider surface from Python.
+- Read Provider Development Guidelines when deciding whether a provider belongs
+  in AIKernel.Providers or needs a dedicated package / repository.
+- Read Python Wrapper when reviewing the reference-only Python boundary. The
+  0.1.1.1 line is NuGet-only and does not build or publish a PyPI package.
 
 ## Safe First Validation
 
@@ -46,6 +52,9 @@ dotnet test AIKernel.Providers.slnx -c Release --no-build
 
 ## Release Scope
 
+Version 0.1.1.1 is the current NuGet-only development line. Use
+`0.1.1.1-dev{build-number}` for local package references.
+
 Version 0.1.1 is the first public release line for AIKernel.Providers. It
 contains:
 
@@ -56,4 +65,4 @@ contains:
 - local LLM provider
 - MicrosoftAI provider moved under Providers ownership
 - Standard OS driver providers
-- `aikernel-providers` Python wrapper
+- `aikernel-providers` Python wrapper reference materials

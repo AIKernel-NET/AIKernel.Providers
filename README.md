@@ -41,11 +41,10 @@ repository keeps only driver implementations such as CPU/CUDA compute,
 standard file systems, logging drivers, process supervisor drivers, network
 drivers, schedulers, and profilers.
 
-AIKernel.Providers participates in the 0.1.1 public release scheduled
-for 2026-06-10. Version `0.1.1` is the first public release of this repository.
-Development builds may be used for local validation, but user-facing package
-history is written only for public releases; development changes are merged
-into the next public release note.
+AIKernel.Providers 0.1.1.1 follows the same development policy as
+AIKernel.Core and AIKernel.Control 0.1.1.1. The line is NuGet-only, uses
+`0.1.1.1-dev{build-number}` for local development packages, and does not create
+or publish a PyPI package.
 
 Release notes:
 
@@ -59,15 +58,9 @@ manifest validation before enabling live endpoints, credentials, local model
 runtimes, or native drivers.
 
 ```bash
-dotnet add package AIKernel.Providers.Standard --version 0.1.1
-dotnet add package AIKernel.Providers.ChatOpenAI --version 0.1.1
-dotnet add package AIKernel.Providers.MicrosoftAI --version 0.1.1
-```
-
-For Python hosts:
-
-```bash
-pip install aikernel-providers
+dotnet add package AIKernel.Providers.Standard --version 0.1.1.1
+dotnet add package AIKernel.Providers.ChatOpenAI --version 0.1.1.1
+dotnet add package AIKernel.Providers.MicrosoftAI --version 0.1.1.1
 ```
 
 Use `AIKernel.Providers.Standard` for OS driver surfaces. Add LLM, chat,
@@ -139,10 +132,14 @@ The manifest records:
 MicrosoftAIProvider is consumed as a managed package and dependency-injection
 extension surface; it does not currently ship a separate manifest file.
 
-## Python Package
+## Python Wrapper Reference
 
-`aikernel-providers` is the Python wrapper package for the official extension
-provider set.
+`aikernel-providers` is the reserved Python wrapper name for the official
+extension provider set.
+
+The 0.1.1.1 development line does not build or publish a PyPI package. Existing
+Python materials remain in the repository for reference and future scheduled
+Python releases only.
 
 It exposes the C# provider contract boundary as Python objects and helper
 functions:
@@ -153,14 +150,27 @@ functions:
 - provider-specific wrapper modules
 - bundled provider assemblies and manifest JSON files
 
-The Python package does not reimplement provider behavior. It bundles the C#
-assemblies under `aikernel_providers/native` and delegates to the managed
-contract surface.
+The Python wrapper design does not reimplement provider behavior. It remains a
+thin wrapper over the managed contract surface.
 
 See:
 
 - [Python provider wrapper](docs/python/index.md)
 - [Python provider wrapper 日本語](docs/python/index-ja.md)
+
+## Provider Inclusion Rule
+
+AIKernel.Providers contains provider substrate and runtime-configurable
+providers. External dependencies are allowed here only when they are expressed
+through configuration, manifests, descriptors, endpoints, or pure managed
+multi-platform .NET libraries.
+
+Providers that require build-time fixed native runtimes, OS SDKs, browser/WASM
+runtimes, vendor SDKs, scenario state, or another top-level AIKernel
+implementation repository must live in a dedicated package or repository.
+
+See [Provider development guidelines](docs/guidelines/provider-development-guidelines.md)
+and [Dependency boundary checklist](docs/guidelines/dependency-boundary-checklist.md).
 
 ## Dependency Direction
 
@@ -194,36 +204,16 @@ Common package metadata is centralized in `Directory.Build.props`.
 For .NET hosts during public release:
 
 ```bash
-dotnet add package AIKernel.Providers.ChatOpenAI --version 0.1.1
-dotnet add package AIKernel.Providers.ChatHistory --version 0.1.1
-dotnet add package AIKernel.Providers.CudaCompute --version 0.1.1
-dotnet add package AIKernel.Providers.DynamicPipelineCompiler --version 0.1.1
-dotnet add package AIKernel.Providers.LocalLlm --version 0.1.1
-dotnet add package AIKernel.Providers.MicrosoftAI --version 0.1.1
+dotnet add package AIKernel.Providers.ChatOpenAI --version 0.1.1.1
+dotnet add package AIKernel.Providers.ChatHistory --version 0.1.1.1
+dotnet add package AIKernel.Providers.CudaCompute --version 0.1.1.1
+dotnet add package AIKernel.Providers.DynamicPipelineCompiler --version 0.1.1.1
+dotnet add package AIKernel.Providers.LocalLlm --version 0.1.1.1
+dotnet add package AIKernel.Providers.MicrosoftAI --version 0.1.1.1
 ```
 
-For Python hosts:
-
-```bash
-pip install aikernel-providers
-```
-
-Import the Python module as `aikernel_providers`:
-
-```python
-from aikernel_providers import (
-    ChatOpenAICapability,
-    ChatHistoryCapability,
-    CudaComputeCapability,
-    DynamicPipelineCompilerCapability,
-    LocalLlmCapability,
-    MicrosoftAIProviderOptions,
-)
-```
-
-The wheel bundles managed provider assemblies under
-`aikernel_providers/native`. It is a wrapper over the public C# provider
-surface, not a separate Python implementation of provider semantics.
+Python materials are reference-only in the 0.1.1.1 update line. Do not build,
+publish, or install a PyPI package for this line.
 
 ## Documentation
 
@@ -231,6 +221,8 @@ surface, not a separate Python implementation of provider semantics.
 - [User Guide](docs/user-guide/index.md)
 - [Architecture](docs/architecture/index.md)
 - [Provider catalog](docs/providers/index.md)
+- [Provider development guidelines](docs/guidelines/provider-development-guidelines.md)
+- [Dependency boundary checklist](docs/guidelines/dependency-boundary-checklist.md)
 - [Python wrapper](docs/python/index.md)
 - [Licensing](docs/licensing/index.md)
 

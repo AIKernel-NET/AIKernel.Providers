@@ -26,6 +26,19 @@ outside AIKernel.Core and AIKernel.Tools.
 This repository must not become a second Core runtime. Providers expose
 capabilities and invokers; Core keeps the contract model.
 
+## Inclusion Boundary
+
+AIKernel.Providers may contain provider substrate, manifests, registries,
+routers, deterministic fallback policy, runtime-configurable providers, and
+pure managed multi-platform .NET dependencies.
+
+Providers that require build-time fixed native runtimes, OS SDKs, browser/WASM
+runtimes, vendor SDKs, scenario runtime, or another top-level AIKernel
+implementation repository must move to a dedicated package or repository.
+
+See [Provider development guidelines](../guidelines/provider-development-guidelines.md)
+and [Dependency boundary checklist](../guidelines/dependency-boundary-checklist.md).
+
 ## Provider Types
 
 AIKernel.Providers currently contains these provider categories:
@@ -97,7 +110,7 @@ ownership location:
 
 - Core keeps abstractions and runtime contracts.
 - AIKernel.Providers owns MicrosoftAI provider implementation, tests, package
-  metadata, documentation, and Python wrapper inclusion.
+  metadata, documentation, and Python wrapper reference materials.
 
 ## Dependency Rules
 
@@ -109,9 +122,10 @@ ownership location:
 
 ## Python Boundary
 
-The Python package `aikernel-providers` exposes the same provider boundary for
-Python hosts. It bundles managed assemblies and manifest JSON files, loads them
-through pythonnet, and exposes thin wrapper objects.
+`aikernel-providers` is the reserved Python wrapper name for the same provider
+boundary. The 0.1.1.1 line is NuGet-only and does not build or publish a PyPI
+package. Future Python packaging should load managed assemblies and manifest
+JSON files through pythonnet and expose thin wrapper objects.
 
 Python code must not reimplement provider semantics. It delegates to the public
 C# package surface.

@@ -2,12 +2,15 @@
 
 [English](index.md)
 
-`aikernel-providers` は、AIKernel 公式拡張 Provider 向けの Python distribution
-です。
+`aikernel-providers` は、AIKernel 公式拡張 Provider 向けに設計された Python
+distribution です。
 
-C# Provider package の wrapper であり、Provider logic を Python で再実装する
-ものではありません。wheel は managed assembly を同梱し、統一された Python
-import surface を公開します。
+0.1.1.1 update line では AIKernel.Providers は NuGet-only です。この line では
+PyPI package を build / install / publish しません。このページは、将来明示的に
+予定される Python release のための reference documentation として残します。
+
+将来の wrapper design は C# Provider package の上に置き、Provider logic を Python
+で再実装するものではありません。統一された Python import surface を公開する想定です。
 
 ```python
 from aikernel_providers import (
@@ -35,16 +38,13 @@ from aikernel_providers import (
 
 ## Install
 
-```bash
-pip install aikernel-providers
-```
-
-distribution 名は `aikernel-providers` です。import 名は `aikernel_providers`
-です。
+0.1.1.1 でサポートされる install command はありません。予約している
+distribution 名は `aikernel-providers` です。想定 import 名は
+`aikernel_providers` です。
 
 ## Scope
 
-package は public Provider wrapper と helper object を公開します。
+過去の package design は public Provider wrapper と helper object を公開する想定です。
 
 - `CapabilityContract`
 - `ChatOpenAICapability`, `ChatOpenAIProvider`, `ChatOpenAIInvoker`,
@@ -70,8 +70,8 @@ internal provider helper、private runtime state、public C# package surface に
 
 ## Managed Assemblies
 
-wheel は provider assembly と manifest file を `aikernel_providers/native` に
-同梱します。
+過去の wheel design では provider assembly と manifest file を
+`aikernel_providers/native` に同梱します。
 
 - `ChatOpenAIProvider.dll`
 - `ChatHistoryProvider.dll`
@@ -83,24 +83,21 @@ wheel は provider assembly と manifest file を `aikernel_providers/native` �
 
 `provider_assemblies()` は、まず bundled assembly、次に
 `AIKERNEL_PROVIDERS_ASSEMBLY_PATH`、最後に global packages cache の matching
-NuGet package を解決します。
+NuGet package を解決する想定です。
 
-`load_provider_runtime()` は、解決済み assembly を pythonnet で読み込みます。
+`load_provider_runtime()` は、解決済み assembly を pythonnet で読み込む想定です。
 
 ## MicrosoftAI Provider
 
-MicrosoftAI support は `MicrosoftAIProviderOptions`、
+MicrosoftAI support は reference Python wrapper で `MicrosoftAIProviderOptions`、
 `MicrosoftAIProviderCapabilities`、response mapping wrapper、および同梱された
-`AIKernel.Providers.MicrosoftAI.dll` を通じて Python package に含まれます。
+`AIKernel.Providers.MicrosoftAI.dll` を通じて表現します。
 
 この Provider は 0.1.1 release で AIKernel.Core から AIKernel.Providers 管理へ
-移管されました。Python packaging もこの所有変更に従い、公式拡張 Provider
-セットとして同梱します。
+移管されました。将来の Python packaging もこの所有変更に従い、managed provider
+surface の薄い wrapper に留めます。
 
 hosting / dependency-injection 固有の extension method は C# API として残します。
-Python wheel には必要な Microsoft.Extensions dependency assembly も同梱し、
-Windows / Linux / macOS 上で pythonnet が managed provider surface を一貫して
-解決できるようにします。
 
 ## Build
 
@@ -108,10 +105,10 @@ Windows / Linux / macOS 上で pythonnet が managed provider surface を一貫�
 cd AIKernel.Providers
 dotnet build AIKernel.Providers.slnx -c Release
 dotnet test AIKernel.Providers.slnx -c Release --no-build
-cd python
-py -m pytest
-py -m build
+dotnet pack AIKernel.Providers.slnx -c Release --no-build --no-restore -p:UseLocalPackageVersion=true -p:LocalPackageBuildNumber=1 -o ..\artifacts\local-packages
 ```
+
+0.1.1.1 では Python build / publish command を実行しません。
 
 ## API Example
 
@@ -126,6 +123,6 @@ assemblies = provider_assemblies()
 print(assemblies.is_complete())
 ```
 
-Python wrapper は C# contract mapper と managed Provider object へ委譲します。
-host application は得られた contract object を AIKernel capability registry
-への Provider 登録に利用します。
+将来の Python wrapper は C# contract mapper と managed Provider object へ委譲します。
+host application は得られた contract object を AIKernel capability registry への
+Provider 登録に利用します。

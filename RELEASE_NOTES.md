@@ -1,5 +1,30 @@
 # Release Notes
 
+## 0.1.1.1
+
+**June 2026 - Local development alignment.**
+**2026年6月--ローカル開発ラインの整合。**
+
+AIKernel.Providers now follows the AIKernel.Core and AIKernel.Control 0.1.1.1
+development policy.
+
+### Changed
+
+- Set the Providers package family to `0.1.1.1`.
+- Add local development package versioning through
+  `0.1.1.1-dev{build-number}`.
+- Resolve AIKernel.NET contract packages from `0.1.1.1`.
+- Resolve AIKernel.Core from the local `0.1.1.1-dev1` package family.
+- Reserve AIKernel.Control local references through `0.1.1.1-dev4` for future
+  provider integrations that need the Control surface.
+- Disable PyPI publishing for this update line. Providers 0.1.1.1 is
+  NuGet-only; Python wrapper materials remain reference-only.
+
+### Validation
+
+- Repository configuration is prepared to restore from `../artifacts/local-packages`
+  before falling back to nuget.org.
+
 ## 0.1.1
 
 **June 10th, 2026 - Converging provider capabilities.**

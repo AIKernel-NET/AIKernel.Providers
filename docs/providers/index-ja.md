@@ -13,6 +13,25 @@ Provider project は `src/` 配下で category ごとに整理します。
 - `Pipeline` - semantic pipeline compiler / pipeline orchestration 系 Provider。
 - `Standard` - OS 標準 driver Provider。
 
+## Inclusion Rule Summary
+
+外部依存が runtime-configurable、manifest-driven、descriptor-driven、
+endpoint-driven、または pure managed multi-platform .NET dependency として表現できる
+Provider は AIKernel.Providers に残せます。
+
+ビルド時に native runtime、OS SDK、browser/WASM runtime、vendor SDK、scenario
+runtime、または別 top-level AIKernel implementation repository へ固定依存する
+Provider は dedicated package / repository に分離します。
+
+ここに置ける例は `LocalLlmProvider`、generic OpenAI-compatible HTTP provider、
+`ChatHistoryProvider`、`DynamicPipelineCompilerProvider`、`CudaComputeProvider`
+descriptor / invoker boundary です。generic Providers に置けない例は
+`NAudioProvider`、`SdlAudioProvider`、`WebAudioProvider`、`WasmAudioProvider`、
+WebGPU provider、`WindowsAIProvider`、CUDA native implementation、OpenAI / Azure
+SDK-specific provider です。
+
+[Provider development guidelines](../guidelines/provider-development-guidelines-ja.md) を参照してください。
+
 ## ChatOpenAIProvider
 
 `ChatOpenAIProvider` は、公式 OpenAI 互換外部 Provider です。
@@ -122,8 +141,8 @@ execution を AIKernel Provider implementation として wrap します。
 
 この Provider は 0.1.1 release で AIKernel.Core から AIKernel.Providers 管理へ
 移管されました。Core は contract を定義し続け、この repository が
-implementation、package metadata、test、documentation、Python wrapper への
-同梱を所有します。
+implementation、package metadata、test、documentation、Python wrapper 参照資料を
+所有します。
 
 package には以下が含まれます。
 

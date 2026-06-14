@@ -2,12 +2,16 @@
 
 [日本語](index-ja.md)
 
-`aikernel-providers` is the Python distribution for official AIKernel extension
-providers.
+`aikernel-providers` was designed as the Python distribution for official
+AIKernel extension providers.
 
-It is a wrapper over C# provider packages, not a Python reimplementation of
-provider logic. The wheel bundles managed assemblies and exposes a unified
-Python import surface:
+For the 0.1.1.1 update line, AIKernel.Providers is NuGet-only. Do not build,
+install, or publish a PyPI package for this line. This page is retained as
+reference documentation for a future explicitly scheduled Python release.
+
+The future wrapper design sits over C# provider packages; it is not a Python
+reimplementation of provider logic. It should expose a unified Python import
+surface:
 
 ```python
 from aikernel_providers import (
@@ -35,16 +39,14 @@ from aikernel_providers import (
 
 ## Install
 
-```bash
-pip install aikernel-providers
-```
-
-The distribution name is `aikernel-providers`. The import name is
+There is no supported install command for 0.1.1.1. The reserved distribution
+name is `aikernel-providers`. The intended import name is
 `aikernel_providers`.
 
 ## Scope
 
-The package exposes public provider wrappers and helper objects:
+The archived package design exposes public provider wrappers and helper
+objects:
 
 - `CapabilityContract`
 - `ChatOpenAICapability`, `ChatOpenAIProvider`, `ChatOpenAIInvoker`,
@@ -71,7 +73,7 @@ package surface.
 
 ## Managed Assemblies
 
-The wheel bundles provider assemblies and manifest files under
+The archived wheel design bundles provider assemblies and manifest files under
 `aikernel_providers/native`:
 
 - `ChatOpenAIProvider.dll`
@@ -82,26 +84,24 @@ The wheel bundles provider assemblies and manifest files under
 - `AIKernel.Providers.MicrosoftAI.dll`
 - provider manifest JSON files
 
-`provider_assemblies()` resolves bundled assemblies first, then paths from
-`AIKERNEL_PROVIDERS_ASSEMBLY_PATH`, then matching NuGet packages from the global
-packages cache.
+`provider_assemblies()` is intended to resolve bundled assemblies first, then
+paths from `AIKERNEL_PROVIDERS_ASSEMBLY_PATH`, then matching NuGet packages
+from the global packages cache.
 
-`load_provider_runtime()` loads the resolved assemblies through pythonnet.
+`load_provider_runtime()` is intended to load the resolved assemblies through
+pythonnet.
 
 ## MicrosoftAI Provider
 
-MicrosoftAI support is included in the Python package through
+MicrosoftAI support is represented in the reference Python wrapper through
 `MicrosoftAIProviderOptions`, `MicrosoftAIProviderCapabilities`, response
 mapping wrappers, and the bundled `AIKernel.Providers.MicrosoftAI.dll`.
 
 This provider was moved from AIKernel.Core into AIKernel.Providers management
-for the 0.1.1 release. Python packaging follows that ownership change and
-bundles the provider with the official extension provider set.
+for the 0.1.1 release. Future Python packaging should follow that ownership
+change and keep the wrapper thin over the managed provider surface.
 
-Hosting and dependency-injection extension methods remain C# APIs. The Python
-wheel still bundles the required Microsoft.Extensions dependency assemblies so
-pythonnet can resolve the managed provider surface consistently on Windows,
-Linux, and macOS.
+Hosting and dependency-injection extension methods remain C# APIs.
 
 ## Build
 
@@ -109,10 +109,10 @@ Linux, and macOS.
 cd AIKernel.Providers
 dotnet build AIKernel.Providers.slnx -c Release
 dotnet test AIKernel.Providers.slnx -c Release --no-build
-cd python
-py -m pytest
-py -m build
+dotnet pack AIKernel.Providers.slnx -c Release --no-build --no-restore -p:UseLocalPackageVersion=true -p:LocalPackageBuildNumber=1 -o ..\artifacts\local-packages
 ```
+
+Do not run Python build or publish commands for 0.1.1.1.
 
 ## API Example
 
@@ -127,6 +127,6 @@ assemblies = provider_assemblies()
 print(assemblies.is_complete())
 ```
 
-The Python wrapper delegates to C# contract mappers and managed provider
-objects. Host applications should use the resulting contract objects to
+The future Python wrapper must delegate to C# contract mappers and managed
+provider objects. Host applications should use the resulting contract objects to
 register providers with their AIKernel capability registry.

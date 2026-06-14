@@ -16,20 +16,17 @@ Monolith は 0.1.x 系の安定化後に公式 Provider driver と他の SDK lay
 ## Install Packages
 
 ```bash
-dotnet add package AIKernel.Providers.ChatOpenAI --version 0.1.1
-dotnet add package AIKernel.Providers.ChatHistory --version 0.1.1
-dotnet add package AIKernel.Providers.CudaCompute --version 0.1.1
-dotnet add package AIKernel.Providers.DynamicPipelineCompiler --version 0.1.1
-dotnet add package AIKernel.Providers.LocalLlm --version 0.1.1
-dotnet add package AIKernel.Providers.MicrosoftAI --version 0.1.1
-dotnet add package AIKernel.Providers.Standard --version 0.1.1
+dotnet add package AIKernel.Providers.ChatOpenAI --version 0.1.1.1
+dotnet add package AIKernel.Providers.ChatHistory --version 0.1.1.1
+dotnet add package AIKernel.Providers.CudaCompute --version 0.1.1.1
+dotnet add package AIKernel.Providers.DynamicPipelineCompiler --version 0.1.1.1
+dotnet add package AIKernel.Providers.LocalLlm --version 0.1.1.1
+dotnet add package AIKernel.Providers.MicrosoftAI --version 0.1.1.1
+dotnet add package AIKernel.Providers.Standard --version 0.1.1.1
 ```
 
-Python:
-
-```bash
-pip install aikernel-providers
-```
+0.1.1.1 line は NuGet-only です。この line では PyPI package を build / install /
+publish しません。
 
 ## Choose a Provider
 
@@ -97,7 +94,7 @@ var compute = new CpuComputeProvider();
 var sum = compute.AddVectors([1.0f, 2.0f], [3.0f, 4.0f]);
 ```
 
-## Use Python Wrappers
+## Python Wrapper 参照
 
 ```python
 from aikernel_providers import (
@@ -113,8 +110,9 @@ for driver in standard_driver_contracts():
     print(driver.provider_id, driver.name)
 ```
 
-Python package は C# surface の managed wrapper です。Provider behavior は Python
-側で再実装しません。
+Python wrapper 関連資料は 0.1.1.1 では reference-only です。将来の C# surface
+向け managed wrapper boundary を説明するものであり、Provider behavior を Python
+側で再実装してはいけません。
 
 ## Failure Behavior
 
@@ -129,4 +127,5 @@ Provider は fail-closed します。
 
 - Provider ごとの scope は [Provider Catalog](../providers/index-ja.md) を参照してください。
 - dependency direction を変更する前に [Architecture](../architecture/index-ja.md) を確認してください。
-- wheel 公開前に [Python Wrapper](../python/index-ja.md) を確認してください。
+- Python wrapper の reference-only boundary は [Python Wrapper](../python/index-ja.md)
+  を確認してください。

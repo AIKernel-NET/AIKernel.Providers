@@ -13,6 +13,26 @@ Provider projects are grouped under `src/` by category:
 - `Pipeline` - semantic pipeline compiler and pipeline orchestration providers.
 - `Standard` - OS standard driver providers.
 
+## Inclusion Rule Summary
+
+Providers may stay in AIKernel.Providers when external dependencies are
+runtime-configurable, manifest-driven, descriptor-driven, endpoint-driven, or
+pure managed multi-platform .NET dependencies.
+
+Providers must move to a dedicated package or repository when they require a
+build-time fixed native runtime, OS SDK, browser/WASM runtime, vendor SDK,
+scenario runtime, or another top-level AIKernel implementation repository.
+
+Examples that belong here include `LocalLlmProvider`, generic
+OpenAI-compatible HTTP providers, `ChatHistoryProvider`,
+`DynamicPipelineCompilerProvider`, and `CudaComputeProvider` descriptor /
+invoker boundaries. Examples that do not belong in generic Providers include
+`NAudioProvider`, `SdlAudioProvider`, `WebAudioProvider`, `WasmAudioProvider`,
+WebGPU providers, `WindowsAIProvider`, CUDA native implementations, and
+SDK-specific OpenAI / Azure providers.
+
+See [Provider development guidelines](../guidelines/provider-development-guidelines.md).
+
 ## ChatOpenAIProvider
 
 `ChatOpenAIProvider` is the official OpenAI-compatible external provider.
@@ -125,7 +145,7 @@ execution as an AIKernel provider implementation.
 This provider was moved from AIKernel.Core into AIKernel.Providers management
 for the 0.1.1 release. Core continues to define contracts; this repository now
 owns the implementation, package metadata, tests, documentation, and Python
-wrapper inclusion.
+wrapper reference materials.
 
 The package includes:
 

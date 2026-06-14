@@ -32,10 +32,9 @@ module として読み込まれることを想定しています。AIKernel.Core
 AIKernel.Abstractions が定義する contract boundary を維持しながら、capability
 descriptor と invocation surface を公開します。
 
-AIKernel.Providers は、2026-06-10 に予定している 0.1.1 公開に参加します。
-`0.1.1` はこの repository の初版公開です。local validation で development build
-を使う場合がありますが、利用者向けの package history は公開 release のみを単位とし、
-開発中の変更は次の公開 release note に統合して記載します。
+AIKernel.Providers 0.1.1.1 は AIKernel.Core / AIKernel.Control 0.1.1.1 と同じ
+開発方針に従います。この line は NuGet-only であり、local development package には
+`0.1.1.1-dev{build-number}` を使います。PyPI package は作成・公開しません。
 
 リリースノート:
 
@@ -49,15 +48,9 @@ credential、local model runtime、native driver を有効化する前に、ま�
 manifest の検証から始めます。
 
 ```bash
-dotnet add package AIKernel.Providers.Standard --version 0.1.1
-dotnet add package AIKernel.Providers.ChatOpenAI --version 0.1.1
-dotnet add package AIKernel.Providers.MicrosoftAI --version 0.1.1
-```
-
-Python host:
-
-```bash
-pip install aikernel-providers
+dotnet add package AIKernel.Providers.Standard --version 0.1.1.1
+dotnet add package AIKernel.Providers.ChatOpenAI --version 0.1.1.1
+dotnet add package AIKernel.Providers.MicrosoftAI --version 0.1.1.1
 ```
 
 OS driver surface が必要な場合は `AIKernel.Providers.Standard` を使用します。LLM、
@@ -129,9 +122,13 @@ manifest には以下を記録します。
 MicrosoftAIProvider は managed package と dependency-injection extension surface
 として利用されます。現時点では個別の manifest file は同梱しません。
 
-## Python Package
+## Python Wrapper 参照
 
-`aikernel-providers` は、公式拡張 Provider セットの Python wrapper package です。
+`aikernel-providers` は、公式拡張 Provider セット向けに予約している Python
+wrapper 名です。
+
+0.1.1.1 development line では PyPI package を build / publish しません。既存の
+Python 関連資料は、参考および将来明示的に予定される Python release のために残します。
 
 C# Provider contract boundary を Python object と helper function として公開します。
 
@@ -141,13 +138,26 @@ C# Provider contract boundary を Python object と helper function として公
 - provider-specific wrapper module
 - 同梱 provider assembly と manifest JSON file
 
-Python package は Provider behavior を再実装しません。C# assembly を
-`aikernel_providers/native` に同梱し、managed contract surface へ委譲します。
+Python wrapper design は Provider behavior を再実装しません。managed contract
+surface の上に置く薄い wrapper として扱います。
 
 関連ドキュメント:
 
 - [Python provider wrapper](docs/python/index.md)
 - [Python provider wrapper 日本語](docs/python/index-ja.md)
+
+## Provider Inclusion Rule
+
+AIKernel.Providers は provider substrate と runtime-configurable provider を保持します。
+外部依存が設定、manifest、descriptor、endpoint、または pure managed
+multi-platform .NET library として表現できる場合だけ、この repository に含められます。
+
+ビルド時に native runtime、OS SDK、browser/WASM runtime、vendor SDK、scenario
+state、または別の top-level AIKernel 実装 repository へ固定依存する Provider は、
+専用 package / repository に分離します。
+
+[Provider development guidelines](docs/guidelines/provider-development-guidelines-ja.md) と
+[Dependency boundary checklist](docs/guidelines/dependency-boundary-checklist-ja.md) を参照してください。
 
 ## 依存関係の方向
 
@@ -181,36 +191,16 @@ dotnet test AIKernel.Providers.slnx
 .NET host では、公開後に NuGet package を使用します。
 
 ```bash
-dotnet add package AIKernel.Providers.ChatOpenAI --version 0.1.1
-dotnet add package AIKernel.Providers.ChatHistory --version 0.1.1
-dotnet add package AIKernel.Providers.CudaCompute --version 0.1.1
-dotnet add package AIKernel.Providers.DynamicPipelineCompiler --version 0.1.1
-dotnet add package AIKernel.Providers.LocalLlm --version 0.1.1
-dotnet add package AIKernel.Providers.MicrosoftAI --version 0.1.1
+dotnet add package AIKernel.Providers.ChatOpenAI --version 0.1.1.1
+dotnet add package AIKernel.Providers.ChatHistory --version 0.1.1.1
+dotnet add package AIKernel.Providers.CudaCompute --version 0.1.1.1
+dotnet add package AIKernel.Providers.DynamicPipelineCompiler --version 0.1.1.1
+dotnet add package AIKernel.Providers.LocalLlm --version 0.1.1.1
+dotnet add package AIKernel.Providers.MicrosoftAI --version 0.1.1.1
 ```
 
-Python host では PyPI package を使用します。
-
-```bash
-pip install aikernel-providers
-```
-
-Python module は `aikernel_providers` として import します。
-
-```python
-from aikernel_providers import (
-    ChatOpenAICapability,
-    ChatHistoryCapability,
-    CudaComputeCapability,
-    DynamicPipelineCompilerCapability,
-    LocalLlmCapability,
-    MicrosoftAIProviderOptions,
-)
-```
-
-wheel は managed provider assemblies を `aikernel_providers/native` に同梱します。
-これは public C# Provider surface への wrapper であり、Provider semantics を
-Python で別実装するものではありません。
+Python 関連資料は 0.1.1.1 update line では reference-only です。この line では
+PyPI package を build / publish / install しません。
 
 ## ドキュメント
 
@@ -218,6 +208,8 @@ Python で別実装するものではありません。
 - [User Guide](docs/user-guide/index-ja.md)
 - [Architecture](docs/architecture/index-ja.md)
 - [Provider catalog](docs/providers/index-ja.md)
+- [Provider development guidelines](docs/guidelines/provider-development-guidelines-ja.md)
+- [Dependency boundary checklist](docs/guidelines/dependency-boundary-checklist-ja.md)
 - [Python wrapper](docs/python/index-ja.md)
 - [Licensing](docs/licensing/index-ja.md)
 

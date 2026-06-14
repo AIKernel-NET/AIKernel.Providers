@@ -3,8 +3,8 @@
 [English](README.md)
 
 AIKernel.Providers は AIKernel の公式 Provider driver workspace です。external
-Provider、standard OS driver、manifest、Python wrapper を含み、AIKernel contract
-を具体的な service や host 側 driver へ接続します。
+Provider、standard OS driver、manifest、Python wrapper 参照資料を含み、
+AIKernel contract を具体的な service や host 側 driver へ接続します。
 
 この docs は、AIOS SDK の driver model layer として Providers を説明します。
 Providers は Core kernel runtime の周囲に、具体的な host service、外部 model
@@ -19,6 +19,8 @@ Tools を統合する標準 reference distribution として位置づけられ�
 - [User Guide](user-guide/index-ja.md)
 - [Architecture](architecture/index-ja.md)
 - [Provider Catalog](providers/index-ja.md)
+- [Provider Development Guidelines](guidelines/provider-development-guidelines-ja.md)
+- [Dependency Boundary Checklist](guidelines/dependency-boundary-checklist-ja.md)
 - [Python Wrapper](python/index-ja.md)
 - [Licensing](licensing/index-ja.md)
 
@@ -32,7 +34,10 @@ Tools を統合する標準 reference distribution として位置づけられ�
 - dependency direction を確認する場合は Architecture を読んでください。Providers は
   driver を実装する層であり、endpoint / native-driver behavior を Core や Tools に
   戻しません。
-- Python から同じ Provider surface を利用する場合は Python Wrapper を読んでください。
+- Provider を AIKernel.Providers に置くべきか、dedicated package / repository に
+  分離すべきか判断する場合は Provider Development Guidelines を読んでください。
+- Python boundary を確認する場合は Python Wrapper を読んでください。0.1.1.1 line は
+  NuGet-only であり、PyPI package を build / publish しません。
 
 ## 最初の安全な検証
 
@@ -46,6 +51,9 @@ dotnet test AIKernel.Providers.slnx -c Release --no-build
 
 ## Release Scope
 
+Version 0.1.1.1 は現在の NuGet-only development line です。local package reference
+には `0.1.1.1-dev{build-number}` を使います。
+
 Version 0.1.1 は AIKernel.Providers の初回公開 release line です。次を含みます。
 
 - Chat / OpenAI-compatible Provider
@@ -55,4 +63,4 @@ Version 0.1.1 は AIKernel.Providers の初回公開 release line です。次�
 - local LLM Provider
 - Core から Providers 管理へ移管された MicrosoftAI Provider
 - Standard OS driver Provider
-- `aikernel-providers` Python wrapper
+- `aikernel-providers` Python wrapper 参照資料
