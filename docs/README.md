@@ -15,6 +15,16 @@ AIKernel.Monolith is the official AIOS distribution now in development. It is
 planned as the standard reference distribution that integrates Core, Providers,
 Control, Wasm, GPU backends, and Tools after the 0.1.x line stabilizes.
 
+## Cross-Repository Alignment
+
+Shared repository boundaries, 0.1.1.1 local NuGet versioning, and the
+NuGet-only / no-PyPI rule for this update line are defined by
+[AIKernel Repository Alignment v0.1.1.1](https://github.com/AIKernel-NET/AIKernel.NET/blob/main/docs/development/repository-alignment-v0.1.1.1.md).
+
+Providers owns substrate, manifests, descriptors, deterministic routing, and
+runtime-configurable providers. It must not own Gate decisions, browser/WASM
+runtime implementation, fixed native SDK bindings, or scenario semantics.
+
 ## Sections
 
 - [User Guide](user-guide/index.md)
@@ -22,6 +32,7 @@ Control, Wasm, GPU backends, and Tools after the 0.1.x line stabilizes.
 - [Provider Catalog](providers/index.md)
 - [Provider Development Guidelines](guidelines/provider-development-guidelines.md)
 - [Dependency Boundary Checklist](guidelines/dependency-boundary-checklist.md)
+- [Concept Elevation Notes / 概念昇格ノート](development/concept-elevation.md)
 - [Python Wrapper](python/index.md)
 - [Licensing](licensing/index.md)
 

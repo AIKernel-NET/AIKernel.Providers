@@ -14,6 +14,17 @@ Provider、local runtime、標準 OS driver を組み合わせるための層で
 Monolith は 0.1.x 系の安定化後に Core、Providers、Control、Wasm、GPU backend、
 Tools を統合する標準 reference distribution として位置づけられます。
 
+## リポジトリ横断整合
+
+共有の repository boundary、0.1.1.1 local NuGet versioning、この更新ラインでの
+NuGet-only / no-PyPI rule は
+[AIKernel Repository Alignment v0.1.1.1](https://github.com/AIKernel-NET/AIKernel.NET/blob/main/docs/development/repository-alignment-v0.1.1.1-ja.md)
+で定義します。
+
+Providers は substrate、manifest、descriptor、deterministic routing、
+runtime-configurable provider を所有します。Gate decision、browser/WASM runtime
+implementation、固定 native SDK binding、scenario semantics は所有しません。
+
 ## Sections
 
 - [User Guide](user-guide/index-ja.md)
@@ -21,6 +32,7 @@ Tools を統合する標準 reference distribution として位置づけられ�
 - [Provider Catalog](providers/index-ja.md)
 - [Provider Development Guidelines](guidelines/provider-development-guidelines-ja.md)
 - [Dependency Boundary Checklist](guidelines/dependency-boundary-checklist-ja.md)
+- [Concept Elevation Notes / 概念昇格ノート](development/concept-elevation.md)
 - [Python Wrapper](python/index-ja.md)
 - [Licensing](licensing/index-ja.md)
 

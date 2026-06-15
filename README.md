@@ -46,6 +46,15 @@ AIKernel.Core and AIKernel.Control 0.1.1.1. The line is NuGet-only, uses
 `0.1.1.1-dev{build-number}` for local development packages, and does not create
 or publish a PyPI package.
 
+## Concept Elevation
+
+AIKernel.Providers follows the common Concept Elevation naming policy
+maintained in AIKernel.NET. Providers keep capability adapters, manifests,
+routers, DTOs, and provider implementation classes on technical names; concept
+vocabulary is limited to concept surfaces and documented compatibility names.
+
+Repository notes: [docs/development/concept-elevation.md](docs/development/concept-elevation.md)
+
 Release notes:
 
 - [English](RELEASE_NOTES.md)

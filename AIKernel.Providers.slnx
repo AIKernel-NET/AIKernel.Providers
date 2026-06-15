@@ -21,6 +21,9 @@
   <Folder Name="/src/Pipeline/">
     <Project Path="src/Pipeline/DynamicPipelineCompilerProvider/DynamicPipelineCompilerProvider.csproj" />
   </Folder>
+  <Folder Name="/src/Perception/">
+    <Project Path="src/Perception/AIKernel.Providers.Perception/AIKernel.Providers.Perception.csproj" />
+  </Folder>
   <Folder Name="/src/ProviderSubstrate/">
     <Project Path="src/ProviderSubstrate/AIKernel.Providers.Substrate/AIKernel.Providers.Substrate.csproj" />
   </Folder>
@@ -51,6 +54,9 @@
   </Folder>
   <Folder Name="/tests/Pipeline/">
     <Project Path="tests/Pipeline/DynamicPipelineCompilerProvider.Tests/DynamicPipelineCompilerProvider.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tests/Perception/">
+    <Project Path="tests/Perception/AIKernel.Providers.Perception.Tests/AIKernel.Providers.Perception.Tests.csproj" />
   </Folder>
   <Folder Name="/tests/ProviderSubstrate/">
     <Project Path="tests/ProviderSubstrate/AIKernel.Providers.Substrate.Tests/AIKernel.Providers.Substrate.Tests.csproj" />

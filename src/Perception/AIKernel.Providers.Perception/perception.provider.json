@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "1.0",
+  "manifestVersion": "1.0",
+  "providerId": "aikernel.providers.perception.substrate",
+  "name": "AIKernel Providers Perception Substrate",
+  "version": "0.1.1.1",
+  "assemblyName": "AIKernel.Providers.Perception",
+  "packageId": "AIKernel.Providers.Perception",
+  "capabilities": [
+    "perception.frame",
+    "perception.auditory",
+    "perception.spatial"
+  ],
+  "priority": 100,
+  "tags": [
+    "perception",
+    "substrate",
+    "descriptor-driven"
+  ],
+  "metadata": {
+    "boundary": "provider-substrate",
+    "runtime": "pure-managed"
+  }
+}

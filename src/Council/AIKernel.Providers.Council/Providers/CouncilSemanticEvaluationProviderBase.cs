@@ -9,6 +9,10 @@ using AIKernel.Providers.Substrate;
 /// <summary>
 /// [EN] Base class for council semantic evaluation providers.
 /// [JA] council semantic evaluation Provider の base class です。
+/// [EN] Ethos, Pathos, and Logos are CTG council concepts here; this provider base emits semantic material only and never creates GateInput or Gate decisions.
+/// [JA] ここでの Ethos / Pathos / Logos は CTG council concept です。この Provider base は semantic material のみを出力し、GateInput や Gate decision は生成しません。
+/// Old technical name: CouncilSemanticEvaluationProviderBase.
+/// Do not use council concept terms for DTO, Mapper, Adapter, Serializer, ProviderManifest, or concrete non-council Provider implementation names.
 /// </summary>
 public abstract class CouncilSemanticEvaluationProviderBase : ICouncilSemanticEvaluationProvider
 {
