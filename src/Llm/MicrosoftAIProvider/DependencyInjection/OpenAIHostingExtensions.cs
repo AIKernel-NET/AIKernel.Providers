@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
-/// <summary>EN: Documentation for public API. JA: OpenAIHostingExtensions を表します。</summary>
+/// <summary>[EN] Documents this public package API member. [JA] OpenAIHostingExtensions を表します。</summary>
 /// <include file="docs.en.xml" path="doc/members/member[@name='T:AIKernel.Providers.MicrosoftAI.DependencyInjection.OpenAIHostingExtensions']/summary" />
 /// <include file="docs.ja.xml" path="doc/members/member[@name='T:AIKernel.Providers.MicrosoftAI.DependencyInjection.OpenAIHostingExtensions']/summary" />
 public static class OpenAIHostingExtensions
@@ -21,7 +21,7 @@ public static class OpenAIHostingExtensions
     private const string AssistantRole = "assistant";
     private const string ToolRole = "tool";
 
-    /// <summary>EN: Documentation for public API. JA: WithOpenAI&lt;TBuilder&gt; を取得します。</summary>
+    /// <summary>[EN] Documents this public package API member. [JA] WithOpenAI&lt;TBuilder&gt; を取得します。</summary>
     /// <include file="docs.en.xml" path="doc/members/member[@name='M:AIKernel.Providers.MicrosoftAI.DependencyInjection.OpenAIHostingExtensions.WithOpenAI&lt;TBuilder&gt;']/summary" />
     /// <include file="docs.ja.xml" path="doc/members/member[@name='M:AIKernel.Providers.MicrosoftAI.DependencyInjection.OpenAIHostingExtensions.WithOpenAI&lt;TBuilder&gt;']/summary" />
     public static TBuilder WithOpenAI<TBuilder>(
@@ -45,7 +45,7 @@ public static class OpenAIHostingExtensions
         return builder;
     }
 
-    /// <summary>EN: Documentation for public API. JA: WithOpenAI&lt;TBuilder&gt; を取得します。</summary>
+    /// <summary>[EN] Documents this public package API member. [JA] WithOpenAI&lt;TBuilder&gt; を取得します。</summary>
     /// <include file="docs.en.xml" path="doc/members/member[@name='M:AIKernel.Providers.MicrosoftAI.DependencyInjection.OpenAIHostingExtensions.WithOpenAI&lt;TBuilder&gt;']/summary" />
     /// <include file="docs.ja.xml" path="doc/members/member[@name='M:AIKernel.Providers.MicrosoftAI.DependencyInjection.OpenAIHostingExtensions.WithOpenAI&lt;TBuilder&gt;']/summary" />
     public static TBuilder WithOpenAI<TBuilder>(

@@ -13,7 +13,7 @@ public interface IStandardProfilerProvider
     /// [EN] Safely captures a resource snapshot.
     /// [JA] resource snapshot を安全に取得します。
     /// </summary>
-    /// <returns>EN:  JA: 結果を返します。
+    /// <returns>
     /// [EN] Resource snapshot result.
     /// [JA] resource snapshot result です。
     /// </returns>

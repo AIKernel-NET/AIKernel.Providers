@@ -767,7 +767,13 @@ public sealed class DefaultPerceptionAlgorithmKernel : IPerceptionAlgorithmKerne
     {
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// [EN] Quantizes RGB pixels into semantic palette bins with the managed fallback implementation.
+    /// [JA] managed fallback 実装により RGB pixel を semantic palette bin へ量子化します。
+    /// </summary>
+    /// <param name="request">[EN] Palette quantization input. [JA] palette quantization の入力です。</param>
+    /// <param name="cancellationToken">[EN] Cancellation token. [JA] キャンセル通知を監視する token です。</param>
+    /// <returns>[EN] Palette quantization result. [JA] palette quantization の結果を返します。</returns>
     public ValueTask<SemanticPaletteQuantizationResult> QuantizePaletteAsync(
         SemanticPaletteQuantizationRequest request,
         CancellationToken cancellationToken)
@@ -781,7 +787,13 @@ public sealed class DefaultPerceptionAlgorithmKernel : IPerceptionAlgorithmKerne
             request.Palette));
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// [EN] Calculates temporal differences between two scalar frames.
+    /// [JA] 2 つの scalar frame 間の temporal difference を計算します。
+    /// </summary>
+    /// <param name="request">[EN] Temporal difference input. [JA] temporal difference の入力です。</param>
+    /// <param name="cancellationToken">[EN] Cancellation token. [JA] キャンセル通知を監視する token です。</param>
+    /// <returns>[EN] Temporal difference result. [JA] temporal difference の結果を返します。</returns>
     public ValueTask<TemporalDifferenceResult> CalculateTemporalDifferenceAsync(
         TemporalDifferenceRequest request,
         CancellationToken cancellationToken)
@@ -796,7 +808,13 @@ public sealed class DefaultPerceptionAlgorithmKernel : IPerceptionAlgorithmKerne
             request.Threshold));
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// [EN] Detects Laplacian edges from a scalar frame.
+    /// [JA] scalar frame から Laplacian edge を検出します。
+    /// </summary>
+    /// <param name="request">[EN] Edge detection input. [JA] edge detection の入力です。</param>
+    /// <param name="cancellationToken">[EN] Cancellation token. [JA] キャンセル通知を監視する token です。</param>
+    /// <returns>[EN] Edge detection result. [JA] edge detection の結果を返します。</returns>
     public ValueTask<LaplacianEdgeResult> DetectEdgesAsync(
         LaplacianEdgeRequest request,
         CancellationToken cancellationToken)
@@ -809,7 +827,13 @@ public sealed class DefaultPerceptionAlgorithmKernel : IPerceptionAlgorithmKerne
             request.Height));
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// [EN] Quantizes stereo energy balance into a provider-neutral binaural direction.
+    /// [JA] stereo energy balance を provider-neutral な binaural direction へ量子化します。
+    /// </summary>
+    /// <param name="request">[EN] Binaural quantization input. [JA] binaural quantization の入力です。</param>
+    /// <param name="cancellationToken">[EN] Cancellation token. [JA] キャンセル通知を監視する token です。</param>
+    /// <returns>[EN] Binaural direction quantization result. [JA] binaural direction quantization の結果を返します。</returns>
     public ValueTask<BinauralDirectionQuantizationResult> QuantizeBinauralDirectionAsync(
         BinauralDirectionQuantizationRequest request,
         CancellationToken cancellationToken)
@@ -822,7 +846,13 @@ public sealed class DefaultPerceptionAlgorithmKernel : IPerceptionAlgorithmKerne
             request.DirectionBins));
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// [EN] Splits PCM samples into frequency-band energy carriers.
+    /// [JA] PCM sample を frequency-band energy carrier へ分割します。
+    /// </summary>
+    /// <param name="request">[EN] Frequency band input. [JA] frequency band の入力です。</param>
+    /// <param name="cancellationToken">[EN] Cancellation token. [JA] キャンセル通知を監視する token です。</param>
+    /// <returns>[EN] Frequency-band energy result. [JA] frequency-band energy の結果を返します。</returns>
     public ValueTask<FrequencyBandEnergyResult> SplitFrequencyBandsAsync(
         FrequencyBandRequest request,
         CancellationToken cancellationToken)

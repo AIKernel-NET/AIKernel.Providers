@@ -5,6 +5,14 @@ Unified Python API for official AIKernel extension providers.
 AIKernel 公式拡張 Provider を扱う統一 Python API です。
 """
 
+from .api_catalog import (
+    ManagedMemberDescriptor,
+    ManagedTypeDescriptor,
+    find_managed_type,
+    managed_api_catalog,
+    managed_api_summary,
+    managed_type_names,
+)
 from .chat_openai import (
     CapabilityContract,
     ChatOpenAICapability,
@@ -73,6 +81,12 @@ from .standard import (
 )
 
 __all__ = [
+    "ManagedMemberDescriptor",
+    "ManagedTypeDescriptor",
+    "find_managed_type",
+    "managed_api_catalog",
+    "managed_api_summary",
+    "managed_type_names",
     "CapabilityContract",
     "ChatOpenAICapability",
     "ChatOpenAIClient",

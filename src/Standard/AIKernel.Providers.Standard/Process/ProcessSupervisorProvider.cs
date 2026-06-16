@@ -125,7 +125,7 @@ public sealed class DefaultProcessSupervisorProvider : StandardProviderBase, IPr
         return info;
     }
 
-    /// <summary>EN: Documentation for public API. JA: CreateProcessAsync を実行します。</summary>
+    /// <summary>[EN] Documents this public package API member. [JA] CreateProcessAsync を実行します。</summary>
     /// <inheritdoc />
     public Task<IProcess> CreateProcessAsync(string name, object? args = null)
     {
@@ -134,12 +134,12 @@ public sealed class DefaultProcessSupervisorProvider : StandardProviderBase, IPr
         return Task.FromResult<IProcess>(new StandardManagedProcess(info, UpdateProcessState));
     }
 
-    /// <summary>EN: Documentation for public API. JA: ListAsync を実行します。</summary>
+    /// <summary>[EN] Documents this public package API member. [JA] ListAsync を実行します。</summary>
     /// <inheritdoc />
     public Task<CoreProcessInfo[]> ListAsync()
         => Task.FromResult(_processes.Values.OrderBy(process => process.Id.Value).ToArray());
 
-    /// <summary>EN: Documentation for public API. JA: KillAsync を実行します。</summary>
+    /// <summary>[EN] Documents this public package API member. [JA] KillAsync を実行します。</summary>
     /// <inheritdoc />
     public Task KillAsync(ProcessId id)
     {
@@ -147,7 +147,7 @@ public sealed class DefaultProcessSupervisorProvider : StandardProviderBase, IPr
         return Task.CompletedTask;
     }
 
-    /// <summary>EN: Documentation for public API. JA: RestartAsync を実行します。</summary>
+    /// <summary>[EN] Documents this public package API member. [JA] RestartAsync を実行します。</summary>
     /// <inheritdoc />
     public Task RestartAsync(ProcessId id)
     {
@@ -176,7 +176,7 @@ internal static class ProcessSupervisorValidation
 {
     /// <summary>
     /// EN: Executes RequireProcessName.
-    /// EN: Documentation for public API. JA: RequireProcessName を実行します。
+    /// [EN] Documents this public package API member. [JA] RequireProcessName を実行します。
     /// </summary>
     public static string RequireProcessName(string name)
         => ValidateProcessName(name).Match(

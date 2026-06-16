@@ -10,7 +10,7 @@ public abstract class ComputeProviderBase
     /// [EN] Initializes the compute provider base with a capability descriptor.
     /// [JA] capability descriptor を指定して compute Provider base を初期化します。
     /// </summary>
-    /// <param name="capability">EN:  JA: capability パラメーターです。
+    /// <param name="capability">
     /// [EN] Compute capability descriptor.
     /// [JA] compute capability descriptor です。
     /// </param>

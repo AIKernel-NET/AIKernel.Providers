@@ -25,15 +25,15 @@ public interface ICouncilSemanticEvaluationProvider
     /// [EN] Evaluates semantic material for the requested council.
     /// [JA] 要求された council の semantic material を評価します。
     /// </summary>
-    /// <param name="request">EN:  JA: request パラメーターです。
+    /// <param name="request">
     /// [EN] Council semantic evaluation request.
     /// [JA] council semantic evaluation request です。
     /// </param>
-    /// <param name="cancellationToken">EN:  JA: cancellationToken パラメーターです。
+    /// <param name="cancellationToken">
     /// [EN] Cancellation token.
     /// [JA] cancellation token です。
     /// </param>
-    /// <returns>EN:  JA: 結果を返します。
+    /// <returns>
     /// [EN] Council semantic evaluation result.
     /// [JA] council semantic evaluation result です。
     /// </returns>

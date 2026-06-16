@@ -2,15 +2,11 @@
 
 [English](README.md)
 
-AIKernel 公式拡張 Provider 向け Python wrapper surface の参照設計です。
+AIKernel 公式拡張 Provider 向け Python wrapper surface です。
 
-0.1.1.1 系では、AIKernel.Providers は NuGet package のみを公開対象とします。
-この directory は将来の Python wrapper surface の参照資料として維持し、
-PyPI package として build / install / publish は行いません。
-
-`aikernel-providers` は、C# AIKernel.Providers assembly が公開する Provider 契約境界を
-Python へ公開するための予約名です。Provider semantics は Python 側で再実装せず、
-C# 側の contract surface へ委譲する想定です。
+0.1.2 正典系列から、`aikernel-providers` は C# AIKernel.Providers assembly が公開する
+Provider 契約境界を Python へ公開する PyPI package です。Provider semantics は
+Python 側で再実装せず、C# 側の contract surface へ委譲します。
 
 ## Import Surface
 
@@ -53,8 +49,14 @@ assemblies = provider_assemblies()
 print(assemblies.is_complete())
 ```
 
-将来 Python package を作成する場合は、pythonnet が managed assembly を読み込み、
-Python object は C# contract surface へ委譲します。
+Python package は pythonnet が managed assembly を読み込み、Python object は C#
+contract surface へ委譲します。
+
+## Managed API Catalog
+
+v0.1.2 package では generated managed API catalog を公開します。
+`managed_api_catalog()`、`managed_api_summary()`、`managed_type_names()`、
+`find_managed_type(full_name)` で確認できます。
 
 参照 package には、public な Provider、Invoker、Capability descriptor、
 Settings、MicrosoftAI の option / capability / response mapping surface、

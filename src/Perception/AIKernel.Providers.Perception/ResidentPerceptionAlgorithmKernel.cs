@@ -1077,27 +1077,63 @@ public sealed class DefaultResidentPerceptionAlgorithmKernel : IResidentPercepti
     {
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// [EN] Quantizes RGB pixels into semantic palette bins.
+    /// [JA] RGB pixel を semantic palette bin へ量子化します。
+    /// </summary>
+    /// <param name="request">[EN] Palette quantization input. [JA] palette quantization の入力です。</param>
+    /// <param name="cancellationToken">[EN] Cancellation token. [JA] キャンセル通知を監視する token です。</param>
+    /// <returns>[EN] Palette quantization result. [JA] palette quantization の結果を返します。</returns>
     public ValueTask<SemanticPaletteQuantizationResult> QuantizePaletteAsync(SemanticPaletteQuantizationRequest request, CancellationToken cancellationToken)
         => _baseKernel.QuantizePaletteAsync(request, cancellationToken);
 
-    /// <inheritdoc />
+    /// <summary>
+    /// [EN] Calculates temporal differences between scalar frames.
+    /// [JA] scalar frame 間の temporal difference を計算します。
+    /// </summary>
+    /// <param name="request">[EN] Temporal difference input. [JA] temporal difference の入力です。</param>
+    /// <param name="cancellationToken">[EN] Cancellation token. [JA] キャンセル通知を監視する token です。</param>
+    /// <returns>[EN] Temporal difference result. [JA] temporal difference の結果を返します。</returns>
     public ValueTask<TemporalDifferenceResult> CalculateTemporalDifferenceAsync(TemporalDifferenceRequest request, CancellationToken cancellationToken)
         => _baseKernel.CalculateTemporalDifferenceAsync(request, cancellationToken);
 
-    /// <inheritdoc />
+    /// <summary>
+    /// [EN] Detects Laplacian edges from scalar input.
+    /// [JA] scalar input から Laplacian edge を検出します。
+    /// </summary>
+    /// <param name="request">[EN] Edge detection input. [JA] edge detection の入力です。</param>
+    /// <param name="cancellationToken">[EN] Cancellation token. [JA] キャンセル通知を監視する token です。</param>
+    /// <returns>[EN] Edge detection result. [JA] edge detection の結果を返します。</returns>
     public ValueTask<LaplacianEdgeResult> DetectEdgesAsync(LaplacianEdgeRequest request, CancellationToken cancellationToken)
         => _baseKernel.DetectEdgesAsync(request, cancellationToken);
 
-    /// <inheritdoc />
+    /// <summary>
+    /// [EN] Quantizes stereo PCM balance into a binaural direction.
+    /// [JA] stereo PCM balance を binaural direction へ量子化します。
+    /// </summary>
+    /// <param name="request">[EN] Binaural quantization input. [JA] binaural quantization の入力です。</param>
+    /// <param name="cancellationToken">[EN] Cancellation token. [JA] キャンセル通知を監視する token です。</param>
+    /// <returns>[EN] Binaural direction quantization result. [JA] binaural direction quantization の結果を返します。</returns>
     public ValueTask<BinauralDirectionQuantizationResult> QuantizeBinauralDirectionAsync(BinauralDirectionQuantizationRequest request, CancellationToken cancellationToken)
         => _baseKernel.QuantizeBinauralDirectionAsync(request, cancellationToken);
 
-    /// <inheritdoc />
+    /// <summary>
+    /// [EN] Splits PCM samples into frequency-band energy carriers.
+    /// [JA] PCM sample を frequency-band energy carrier へ分割します。
+    /// </summary>
+    /// <param name="request">[EN] Frequency band input. [JA] frequency band の入力です。</param>
+    /// <param name="cancellationToken">[EN] Cancellation token. [JA] キャンセル通知を監視する token です。</param>
+    /// <returns>[EN] Frequency-band energy result. [JA] frequency-band energy の結果を返します。</returns>
     public ValueTask<FrequencyBandEnergyResult> SplitFrequencyBandsAsync(FrequencyBandRequest request, CancellationToken cancellationToken)
         => _baseKernel.SplitFrequencyBandsAsync(request, cancellationToken);
 
-    /// <inheritdoc />
+    /// <summary>
+    /// [EN] Creates an HSV threshold mask from RGB input.
+    /// [JA] RGB input から HSV threshold mask を作成します。
+    /// </summary>
+    /// <param name="request">[EN] HSV threshold input. [JA] HSV threshold の入力です。</param>
+    /// <param name="cancellationToken">[EN] Cancellation token. [JA] キャンセル通知を監視する token です。</param>
+    /// <returns>[EN] HSV threshold mask result. [JA] HSV threshold mask の結果を返します。</returns>
     public ValueTask<HsvThresholdMaskResult> CreateHsvThresholdMaskAsync(HsvThresholdMaskRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -1105,7 +1141,13 @@ public sealed class DefaultResidentPerceptionAlgorithmKernel : IResidentPercepti
         return ValueTask.FromResult(ResidentPerceptionAlgorithmKernel.CreateHsvThresholdMask(CopyBytes(request.RgbBytes), request.Width, request.Height, request.MinHue, request.MaxHue, request.MinSaturation, request.MinValue, request.IgnoreValue));
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// [EN] Downsamples a scalar buffer by preserving block maxima.
+    /// [JA] block maximum を保持して scalar buffer を downsample します。
+    /// </summary>
+    /// <param name="request">[EN] Max-pooling input. [JA] max-pooling の入力です。</param>
+    /// <param name="cancellationToken">[EN] Cancellation token. [JA] キャンセル通知を監視する token です。</param>
+    /// <returns>[EN] Max-pooling result. [JA] max-pooling の結果を返します。</returns>
     public ValueTask<MaxPoolingResult> MaxPoolAsync(MaxPoolingRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -1113,7 +1155,13 @@ public sealed class DefaultResidentPerceptionAlgorithmKernel : IResidentPercepti
         return ValueTask.FromResult(ResidentPerceptionAlgorithmKernel.MaxPool(CopyDoubles(request.Values), request.Width, request.Height, request.OutputWidth, request.OutputHeight));
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// [EN] Applies morphology to a scalar or binary mask.
+    /// [JA] scalar または binary mask に morphology を適用します。
+    /// </summary>
+    /// <param name="request">[EN] Morphology input. [JA] morphology の入力です。</param>
+    /// <param name="cancellationToken">[EN] Cancellation token. [JA] キャンセル通知を監視する token です。</param>
+    /// <returns>[EN] Morphology result. [JA] morphology の結果を返します。</returns>
     public ValueTask<MorphologyResult> ApplyMorphologyAsync(MorphologyRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -1121,7 +1169,13 @@ public sealed class DefaultResidentPerceptionAlgorithmKernel : IResidentPercepti
         return ValueTask.FromResult(ResidentPerceptionAlgorithmKernel.ApplyMorphology(CopyDoubles(request.Values), request.Width, request.Height, request.Operation, request.Radius));
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// [EN] Estimates dense optical flow between two scalar frames.
+    /// [JA] 2 つの scalar frame 間の dense optical flow を推定します。
+    /// </summary>
+    /// <param name="request">[EN] Optical-flow input. [JA] optical-flow の入力です。</param>
+    /// <param name="cancellationToken">[EN] Cancellation token. [JA] キャンセル通知を監視する token です。</param>
+    /// <returns>[EN] Dense optical-flow result. [JA] dense optical-flow の結果を返します。</returns>
     public ValueTask<DenseOpticalFlowResult> EstimateDenseOpticalFlowAsync(DenseOpticalFlowRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -1129,7 +1183,13 @@ public sealed class DefaultResidentPerceptionAlgorithmKernel : IResidentPercepti
         return ValueTask.FromResult(ResidentPerceptionAlgorithmKernel.EstimateDenseOpticalFlow(CopyDoubles(request.Previous), CopyDoubles(request.Current), request.Width, request.Height, request.SearchRadius));
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// [EN] Computes an audio spectrum from PCM samples.
+    /// [JA] PCM sample から audio spectrum を計算します。
+    /// </summary>
+    /// <param name="request">[EN] Audio spectrum input. [JA] audio spectrum の入力です。</param>
+    /// <param name="cancellationToken">[EN] Cancellation token. [JA] キャンセル通知を監視する token です。</param>
+    /// <returns>[EN] Audio spectrum result. [JA] audio spectrum の結果を返します。</returns>
     public ValueTask<AudioSpectrumResult> ComputeAudioSpectrumAsync(AudioSpectrumRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -1137,7 +1197,13 @@ public sealed class DefaultResidentPerceptionAlgorithmKernel : IResidentPercepti
         return ValueTask.FromResult(ResidentPerceptionAlgorithmKernel.ComputeAudioSpectrum(CopyFloats(request.Samples), request.Channels, request.MaxFftSize));
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// [EN] Applies an exponential moving average to current observations.
+    /// [JA] current observation に exponential moving average を適用します。
+    /// </summary>
+    /// <param name="request">[EN] EMA input. [JA] EMA の入力です。</param>
+    /// <param name="cancellationToken">[EN] Cancellation token. [JA] キャンセル通知を監視する token です。</param>
+    /// <returns>[EN] EMA result. [JA] EMA の結果を返します。</returns>
     public ValueTask<EmaFilterResult> ApplyEmaAsync(EmaFilterRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -1145,7 +1211,13 @@ public sealed class DefaultResidentPerceptionAlgorithmKernel : IResidentPercepti
         return ValueTask.FromResult(ResidentPerceptionAlgorithmKernel.ApplyEma(CopyDoubles(request.Previous), CopyDoubles(request.Current), request.Alpha));
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// [EN] Applies a leaky integrator to short-term event state.
+    /// [JA] short-term event state に leaky integrator を適用します。
+    /// </summary>
+    /// <param name="request">[EN] Leaky-integrator input. [JA] leaky-integrator の入力です。</param>
+    /// <param name="cancellationToken">[EN] Cancellation token. [JA] キャンセル通知を監視する token です。</param>
+    /// <returns>[EN] Leaky-integrator result. [JA] leaky-integrator の結果を返します。</returns>
     public ValueTask<LeakyIntegratorResult> ApplyLeakyIntegratorAsync(LeakyIntegratorRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -1153,7 +1225,13 @@ public sealed class DefaultResidentPerceptionAlgorithmKernel : IResidentPercepti
         return ValueTask.FromResult(ResidentPerceptionAlgorithmKernel.ApplyLeakyIntegrator(CopyDoubles(request.Previous), CopyDoubles(request.Inputs), request.LeakRate, request.MaxValue));
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// [EN] Quantizes continuous coordinates into spatial hash cells.
+    /// [JA] continuous coordinate を spatial hash cell へ量子化します。
+    /// </summary>
+    /// <param name="request">[EN] Spatial-hash input. [JA] spatial-hash の入力です。</param>
+    /// <param name="cancellationToken">[EN] Cancellation token. [JA] キャンセル通知を監視する token です。</param>
+    /// <returns>[EN] Spatial-hash result. [JA] spatial-hash の結果を返します。</returns>
     public ValueTask<SpatialHashResult> QuantizeSpatialHashAsync(SpatialHashRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -1161,7 +1239,13 @@ public sealed class DefaultResidentPerceptionAlgorithmKernel : IResidentPercepti
         return ValueTask.FromResult(ResidentPerceptionAlgorithmKernel.QuantizeSpatialHash(CopyDoubles(request.X), CopyDoubles(request.Y), request.CellSize));
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// [EN] Applies a simple Kalman-style state update to observations.
+    /// [JA] observation に simple Kalman-style state update を適用します。
+    /// </summary>
+    /// <param name="request">[EN] Kalman-filter input. [JA] Kalman-filter の入力です。</param>
+    /// <param name="cancellationToken">[EN] Cancellation token. [JA] キャンセル通知を監視する token です。</param>
+    /// <returns>[EN] Kalman-filter result. [JA] Kalman-filter の結果を返します。</returns>
     public ValueTask<KalmanFilterResult> ApplyKalmanAsync(KalmanFilterRequest request, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();

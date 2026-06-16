@@ -16,11 +16,11 @@ public static class CouncilProviderServiceCollectionExtensions
     /// [EN] Adds minimal Logos, Ethos, and Pathos semantic providers.
     /// [JA] 最小 Logos / Ethos / Pathos semantic Provider を追加します。
     /// </summary>
-    /// <param name="services">EN:  JA: services パラメーターです。
+    /// <param name="services">
     /// [EN] Service collection to update.
     /// [JA] 更新対象の service collection です。
     /// </param>
-    /// <returns>EN:  JA: 結果を返します。
+    /// <returns>
     /// [EN] The same service collection for fluent composition.
     /// [JA] fluent composition 用に同じ service collection を返します。
     /// </returns>

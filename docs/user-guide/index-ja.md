@@ -16,18 +16,18 @@ Monolith は 0.1.x 系の安定化後に公式 Provider driver と他の SDK lay
 ## Install Packages
 
 ```bash
-dotnet add package AIKernel.Providers.ChatOpenAI --version 0.1.1.1
-dotnet add package AIKernel.Providers.ChatHistory --version 0.1.1.1
-dotnet add package AIKernel.Providers.CudaCompute --version 0.1.1.1
-dotnet add package AIKernel.Providers.DynamicPipelineCompiler --version 0.1.1.1
-dotnet add package AIKernel.Providers.LocalLlm --version 0.1.1.1
-dotnet add package AIKernel.Providers.MicrosoftAI --version 0.1.1.1
-dotnet add package AIKernel.Providers.Standard --version 0.1.1.1
+dotnet add package AIKernel.Providers.ChatOpenAI --version 0.1.2
+dotnet add package AIKernel.Providers.ChatHistory --version 0.1.2
+dotnet add package AIKernel.Providers.CudaCompute --version 0.1.2
+dotnet add package AIKernel.Providers.DynamicPipelineCompiler --version 0.1.2
+dotnet add package AIKernel.Providers.LocalLlm --version 0.1.2
+dotnet add package AIKernel.Providers.MicrosoftAI --version 0.1.2
+dotnet add package AIKernel.Providers.Standard --version 0.1.2
 ```
 
-0.1.1.1 validation line は NuGet-only です。この line では PyPI package を build /
-install / publish しません。次の公式 v0.1.2 正典シリーズで NuGet と PyPI の package
-family を同期公開できるように準備します。
+local integration では、release task が公開を開始するまで stable `0.1.2` ではなく
+`0.1.2-dev{buildNumber}` の NuGet package を使います。Python validation では
+`0.1.2.dev{buildNumber}` の `aikernel-providers` wheel を使います。
 
 ## Choose a Provider
 
@@ -111,9 +111,9 @@ for driver in standard_driver_contracts():
     print(driver.provider_id, driver.name)
 ```
 
-Python wrapper 関連資料は 0.1.1.1 では reference-only です。将来の C# surface
-向け managed wrapper boundary を説明するものであり、Provider behavior を Python
-側で再実装してはいけません。
+Python wrapper は C# provider surface の薄い package です。managed loading helper と
+generated managed API catalog を公開しますが、Provider behavior を Python 側で
+再実装してはいけません。
 
 ## Failure Behavior
 
@@ -128,5 +128,5 @@ Provider は fail-closed します。
 
 - Provider ごとの scope は [Provider Catalog](../providers/index-ja.md) を参照してください。
 - dependency direction を変更する前に [Architecture](../architecture/index-ja.md) を確認してください。
-- Python wrapper の reference-only boundary は [Python Wrapper](../python/index-ja.md)
+- `aikernel-providers` wrapper boundary は [Python Wrapper](../python/index-ja.md)
   を確認してください。

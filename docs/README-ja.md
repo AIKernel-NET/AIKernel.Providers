@@ -16,10 +16,12 @@ Tools を統合する標準 reference distribution として位置づけられ�
 
 ## リポジトリ横断整合
 
-共有の repository boundary、0.1.1.1 local NuGet versioning、この検証ラインでの
-NuGet-only / no-PyPI rule、v0.1.2 の NuGet + PyPI release assumption は
+共有の repository boundary、v0.1.2 development versioning、依存関係順、
+PyPI Trusted Publishing、Python wrapper scope は
+[Package Release Alignment v0.1.2](https://github.com/AIKernel-NET/AIKernel.NET/blob/main/docs/development/package-release-alignment-v0.1.2-ja.md)
+で定義します。履歴としての v0.1.1.1 validation rule は
 [AIKernel Repository Alignment v0.1.1.1](https://github.com/AIKernel-NET/AIKernel.NET/blob/main/docs/development/repository-alignment-v0.1.1.1-ja.md)
-で定義します。
+に残します。
 複数 repository をまたぐ変更を行う場合は、まず
 [リポジトリ横断開発者ガイド v0.1.1.1](https://github.com/AIKernel-NET/AIKernel.NET/blob/main/docs/development/cross-repository-developer-guide-v0.1.1.1-ja.md)
 を読んでください。
@@ -51,9 +53,9 @@ implementation、固定 native SDK binding、scenario semantics は所有しま�
   戻しません。
 - Provider を AIKernel.Providers に置くべきか、dedicated package / repository に
   分離すべきか判断する場合は Provider Development Guidelines を読んでください。
-- Python boundary を確認する場合は Python Wrapper を読んでください。0.1.1.1 validation
-  line は NuGet-only であり、PyPI package を build / publish しません。次の公式
-  v0.1.2 正典シリーズでは、NuGet と PyPI を同期して更新する前提です。
+- Python boundary を確認する場合は Python Wrapper を読んでください。薄い
+  `aikernel-providers` boundary、managed API catalog、PyPI validation workflow を
+  扱います。
 
 ## 最初の安全な検証
 
@@ -67,11 +69,12 @@ dotnet test AIKernel.Providers.slnx -c Release --no-build
 
 ## Release Scope
 
-Version 0.1.1.1 は現在の NuGet-only development line です。local package reference
-には `0.1.1.1-dev{build-number}` を使います。
+Version 0.1.2 は現在の canonical integration line です。local NuGet package reference
+には `0.1.2-dev{build-number}`、local Python wheel validation には
+`0.1.2.dev{build-number}` を使います。
 
-次の公式 v0.1.2 正典 release line に向けて、NuGet + PyPI package の同期更新を
-準備します。
+stable package artifact は依存関係順に後で作成します。publication task が明示的に要求する
+まで、stable `0.1.2` package は作成しません。
 
 Version 0.1.1 は AIKernel.Providers の初回公開 release line です。次を含みます。
 
@@ -86,4 +89,4 @@ Version 0.1.1 は AIKernel.Providers の初回公開 release line です。次�
 - local LLM Provider
 - Core から Providers 管理へ移管された MicrosoftAI Provider
 - Standard OS driver Provider
-- `aikernel-providers` Python wrapper 参照資料
+- generated managed API catalog を含む `aikernel-providers` Python wrapper

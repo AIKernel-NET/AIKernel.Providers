@@ -272,10 +272,9 @@ build-time fixed native, OS-specific, browser/WASM-specific, vendor-SDK-specific
 or scenario-specific implementations that would pollute the default
 aikernel-providers wheel.
 
-For the 0.1.1.1 validation line, AIKernel.Providers is NuGet-only and does not
-build or publish a PyPI package. The next official v0.1.2 canonical series is
-expected to refresh the default Python install target together with the NuGet
-package family:
+In the v0.1.2 canonical series, validate `aikernel-providers` with
+`0.1.2.dev{buildNumber}` wheels until stable publication is explicitly opened.
+The stable default Python install target is:
 
 ```bash
 pip install aikernel-providers

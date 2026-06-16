@@ -16,19 +16,19 @@ drivers with the rest of the SDK after the 0.1.x line stabilizes.
 ## Install Packages
 
 ```bash
-dotnet add package AIKernel.Providers.ChatOpenAI --version 0.1.1.1
-dotnet add package AIKernel.Providers.ChatHistory --version 0.1.1.1
-dotnet add package AIKernel.Providers.CudaCompute --version 0.1.1.1
-dotnet add package AIKernel.Providers.DynamicPipelineCompiler --version 0.1.1.1
-dotnet add package AIKernel.Providers.LocalLlm --version 0.1.1.1
-dotnet add package AIKernel.Providers.MicrosoftAI --version 0.1.1.1
-dotnet add package AIKernel.Providers.Standard --version 0.1.1.1
+dotnet add package AIKernel.Providers.ChatOpenAI --version 0.1.2
+dotnet add package AIKernel.Providers.ChatHistory --version 0.1.2
+dotnet add package AIKernel.Providers.CudaCompute --version 0.1.2
+dotnet add package AIKernel.Providers.DynamicPipelineCompiler --version 0.1.2
+dotnet add package AIKernel.Providers.LocalLlm --version 0.1.2
+dotnet add package AIKernel.Providers.MicrosoftAI --version 0.1.2
+dotnet add package AIKernel.Providers.Standard --version 0.1.2
 ```
 
-The 0.1.1.1 validation line is NuGet-only. Do not build, install, or publish a
-PyPI package for this line. Prepare the Python wrapper for the next official
-v0.1.2 canonical series, where synchronized NuGet and PyPI package families are
-expected.
+During local integration, use `0.1.2-dev{buildNumber}` NuGet packages instead
+of stable `0.1.2` packages until the release task opens publication. Python
+validation uses the `aikernel-providers` wheel with version
+`0.1.2.dev{buildNumber}`.
 
 ## Choose a Provider
 
@@ -112,9 +112,9 @@ for driver in standard_driver_contracts():
     print(driver.provider_id, driver.name)
 ```
 
-Python wrapper materials are reference-only for 0.1.1.1. They describe a future
-managed wrapper over the C# surface and must not re-implement provider behavior
-in Python.
+The Python wrapper is a thin package over the C# provider surface. It exposes
+managed loading helpers and the generated managed API catalog, and it must not
+re-implement provider behavior in Python.
 
 ## Failure Behavior
 
@@ -130,5 +130,5 @@ Providers should fail closed:
 - Read the [Provider Catalog](../providers/index.md) for per-provider scope.
 - Read [Architecture](../architecture/index.md) before changing dependency
   direction.
-- Read [Python Wrapper](../python/index.md) for the reference-only Python
+- Read [Python Wrapper](../python/index.md) for the `aikernel-providers`
   wrapper boundary.

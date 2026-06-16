@@ -10,11 +10,11 @@ public sealed class ProviderManifestMergePolicy
     /// [EN] Merges provider-level, backend-level, and vendor-level metadata deterministically.
     /// [JA] provider-level、backend-level、vendor-level metadata を deterministic に merge します。
     /// </summary>
-    /// <param name="descriptor">EN:  JA: descriptor パラメーターです。
+    /// <param name="descriptor">
     /// [EN] Provider manifest descriptor.
     /// [JA] Provider manifest descriptor です。
     /// </param>
-    /// <returns>EN:  JA: 結果を返します。
+    /// <returns>
     /// [EN] Merged metadata map.
     /// [JA] merge 済み metadata map です。
     /// </returns>
@@ -33,15 +33,15 @@ public sealed class ProviderManifestMergePolicy
     /// [EN] Merges CLI hints by inheriting provider hints and allowing override hints to replace scalar fields and append lists.
     /// [JA] provider hint を継承し、override hint が scalar field を置換し list を追加できるように CLI hint を merge します。
     /// </summary>
-    /// <param name="providerHints">EN:  JA: providerHints パラメーターです。
+    /// <param name="providerHints">
     /// [EN] Provider-level CLI hints.
     /// [JA] provider-level CLI hint です。
     /// </param>
-    /// <param name="overrideHints">EN:  JA: overrideHints パラメーターです。
+    /// <param name="overrideHints">
     /// [EN] Override CLI hints.
     /// [JA] override CLI hint です。
     /// </param>
-    /// <returns>EN:  JA: 結果を返します。
+    /// <returns>
     /// [EN] Merged CLI hints.
     /// [JA] merge 済み CLI hint です。
     /// </returns>

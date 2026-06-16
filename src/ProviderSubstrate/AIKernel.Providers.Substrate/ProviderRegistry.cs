@@ -22,7 +22,7 @@ public sealed class ProviderRegistry
     /// [EN] Initializes a provider registry with a validator.
     /// [JA] validator を指定して Provider registry を初期化します。
     /// </summary>
-    /// <param name="validator">EN:  JA: validator パラメーターです。
+    /// <param name="validator">
     /// [EN] Manifest validator.
     /// [JA] manifest validator です。
     /// </param>
@@ -35,11 +35,11 @@ public sealed class ProviderRegistry
     /// [EN] Registers a provider manifest descriptor.
     /// [JA] Provider manifest descriptor を登録します。
     /// </summary>
-    /// <param name="descriptor">EN:  JA: descriptor パラメーターです。
+    /// <param name="descriptor">
     /// [EN] Provider manifest descriptor.
     /// [JA] Provider manifest descriptor です。
     /// </param>
-    /// <returns>EN:  JA: 結果を返します。
+    /// <returns>
     /// [EN] Structured registration result.
     /// [JA] 構造化された registration result です。
     /// </returns>
@@ -81,7 +81,7 @@ public sealed class ProviderRegistry
     /// [EN] Lists registered providers in deterministic order.
     /// [JA] 登録済み Provider を deterministic order で一覧します。
     /// </summary>
-    /// <returns>EN:  JA: 結果を返します。
+    /// <returns>
     /// [EN] Registered provider descriptors.
     /// [JA] 登録済み Provider descriptor です。
     /// </returns>

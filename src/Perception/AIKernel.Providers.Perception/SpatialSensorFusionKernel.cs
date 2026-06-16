@@ -173,7 +173,7 @@ public sealed class SensorStateNormalizer : ISensorStateNormalizer
     {
     }
 
-    /// <summary>EN: Documentation for public API. JA: NormalizeAsync を取得します。</summary>
+    /// <summary>[EN] Documents this public package API member. [JA] NormalizeAsync を取得します。</summary>
     /// <inheritdoc />
     public ValueTask<IReadOnlyDictionary<string, SensorStateDescriptor>> NormalizeAsync(
         IReadOnlyDictionary<string, SensorStateDescriptor> sensorInputs,
@@ -285,7 +285,7 @@ public sealed class DefaultSpatialSensorFusionKernel : ISpatialSensorFusionKerne
     {
     }
 
-    /// <summary>EN: Documentation for public API. JA: FuseAsync を取得します。</summary>
+    /// <summary>[EN] Documents this public package API member. [JA] FuseAsync を取得します。</summary>
     /// <inheritdoc />
     public ValueTask<SpatialFusionVector> FuseAsync(
         IReadOnlyDictionary<string, SensorStateDescriptor> sensorInputs,
@@ -310,7 +310,7 @@ public sealed class HealthRetryIntentResolver : IRetryIntentResolver
     {
     }
 
-    /// <summary>EN: Documentation for public API. JA: ResolveAsync を取得します。</summary>
+    /// <summary>[EN] Documents this public package API member. [JA] ResolveAsync を取得します。</summary>
     /// <inheritdoc />
     public ValueTask<RetryIntentCarrier?> ResolveAsync(
         IReadOnlyDictionary<string, SensorStateDescriptor> sensorInputs,

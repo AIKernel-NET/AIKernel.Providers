@@ -13,11 +13,11 @@ public static class CudaComputeProviderServiceCollectionExtensions
     /// [EN] Adds CUDA compute descriptor and invoker boundary services without binding a native CUDA runtime.
     /// [JA] native CUDA runtime を bind せず CUDA compute descriptor と invoker 境界 service を追加します。
     /// </summary>
-    /// <param name="services">EN:  JA: services パラメーターです。
+    /// <param name="services">
     /// [EN] Service collection to update.
     /// [JA] 更新対象の service collection です。
     /// </param>
-    /// <returns>EN:  JA: 結果を返します。
+    /// <returns>
     /// [EN] The same service collection for fluent composition.
     /// [JA] fluent composition 用に同じ service collection を返します。
     /// </returns>
@@ -28,15 +28,15 @@ public static class CudaComputeProviderServiceCollectionExtensions
     /// [EN] Adds CUDA compute descriptor and invoker boundary services with explicit settings.
     /// [JA] 明示的な settings を使用して CUDA compute descriptor と invoker 境界 service を追加します。
     /// </summary>
-    /// <param name="services">EN:  JA: services パラメーターです。
+    /// <param name="services">
     /// [EN] Service collection to update.
     /// [JA] 更新対象の service collection です。
     /// </param>
-    /// <param name="settings">EN:  JA: settings パラメーターです。
+    /// <param name="settings">
     /// [EN] Runtime-configurable CUDA compute provider settings.
     /// [JA] runtime-configurable な CUDA compute Provider settings です。
     /// </param>
-    /// <returns>EN:  JA: 結果を返します。
+    /// <returns>
     /// [EN] The same service collection for fluent composition.
     /// [JA] fluent composition 用に同じ service collection を返します。
     /// </returns>

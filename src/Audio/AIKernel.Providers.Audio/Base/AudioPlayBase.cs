@@ -16,11 +16,11 @@ public abstract class AudioPlayBase
     /// [EN] Initializes the audio playback base class.
     /// [JA] audio playback base class を初期化します。
     /// </summary>
-    /// <param name="capability">EN:  JA: capability パラメーターです。
+    /// <param name="capability">
     /// [EN] Audio capability descriptor.
     /// [JA] audio capability descriptor です。
     /// </param>
-    /// <param name="validator">EN:  JA: validator パラメーターです。
+    /// <param name="validator">
     /// [EN] Audio format validator.
     /// [JA] audio format validator です。
     /// </param>
@@ -39,15 +39,15 @@ public abstract class AudioPlayBase
     /// [EN] Plays audio after backend-independent request validation.
     /// [JA] backend 非依存の request validation 後に audio を playback します。
     /// </summary>
-    /// <param name="request">EN:  JA: request パラメーターです。
+    /// <param name="request">
     /// [EN] Audio playback request.
     /// [JA] audio playback request です。
     /// </param>
-    /// <param name="cancellationToken">EN:  JA: cancellationToken パラメーターです。
+    /// <param name="cancellationToken">
     /// [EN] Cancellation token.
     /// [JA] cancellation token です。
     /// </param>
-    /// <returns>EN:  JA: 結果を返します。
+    /// <returns>
     /// [EN] Structured audio provider result.
     /// [JA] 構造化された audio Provider result です。
     /// </returns>
@@ -78,15 +78,15 @@ public abstract class AudioPlayBase
     /// [EN] Performs provider playback after validation has succeeded.
     /// [JA] validation 成功後に Provider playback を実行します。
     /// </summary>
-    /// <param name="request">EN:  JA: request パラメーターです。
+    /// <param name="request">
     /// [EN] Audio playback request.
     /// [JA] audio playback request です。
     /// </param>
-    /// <param name="cancellationToken">EN:  JA: cancellationToken パラメーターです。
+    /// <param name="cancellationToken">
     /// [EN] Cancellation token.
     /// [JA] cancellation token です。
     /// </param>
-    /// <returns>EN:  JA: 結果を返します。
+    /// <returns>
     /// [EN] Structured audio provider result.
     /// [JA] 構造化された audio Provider result です。
     /// </returns>

@@ -10,15 +10,15 @@ public interface IProviderManifestValidator
     /// [EN] Validates a provider manifest descriptor.
     /// [JA] Provider manifest descriptor を検証します。
     /// </summary>
-    /// <param name="descriptor">EN:  JA: descriptor パラメーターです。
+    /// <param name="descriptor">
     /// [EN] Provider manifest descriptor.
     /// [JA] Provider manifest descriptor です。
     /// </param>
-    /// <param name="cancellationToken">EN:  JA: cancellationToken パラメーターです。
+    /// <param name="cancellationToken">
     /// [EN] Cancellation token.
     /// [JA] cancellation token です。
     /// </param>
-    /// <returns>EN:  JA: 結果を返します。
+    /// <returns>
     /// [EN] Structured validation result.
     /// [JA] 構造化された validation result です。
     /// </returns>

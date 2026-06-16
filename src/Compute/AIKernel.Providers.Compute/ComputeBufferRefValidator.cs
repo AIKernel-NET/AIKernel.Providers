@@ -21,11 +21,11 @@ public sealed class ComputeBufferRefValidator
     /// [EN] Validates a compute buffer reference.
     /// [JA] compute buffer reference を検証します。
     /// </summary>
-    /// <param name="buffer">EN:  JA: buffer パラメーターです。
+    /// <param name="buffer">
     /// [EN] Compute buffer reference.
     /// [JA] compute buffer reference です。
     /// </param>
-    /// <returns>EN:  JA: 結果を返します。
+    /// <returns>
     /// [EN] Structured validation result.
     /// [JA] 構造化された validation result です。
     /// </returns>

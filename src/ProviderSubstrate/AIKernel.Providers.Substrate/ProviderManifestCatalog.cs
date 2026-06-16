@@ -22,11 +22,11 @@ public sealed class ProviderManifestCatalog
     /// [EN] Initializes a provider manifest catalog.
     /// [JA] Provider manifest catalog を初期化します。
     /// </summary>
-    /// <param name="loader">EN:  JA: loader パラメーターです。
+    /// <param name="loader">
     /// [EN] Provider manifest loader.
     /// [JA] Provider manifest loader です。
     /// </param>
-    /// <param name="validator">EN:  JA: validator パラメーターです。
+    /// <param name="validator">
     /// [EN] Provider manifest validator.
     /// [JA] Provider manifest validator です。
     /// </param>
@@ -42,19 +42,19 @@ public sealed class ProviderManifestCatalog
     /// [EN] Loads manifest files into a deterministic provider registry.
     /// [JA] manifest file を deterministic Provider registry へ load します。
     /// </summary>
-    /// <param name="paths">EN:  JA: paths パラメーターです。
+    /// <param name="paths">
     /// [EN] Manifest file paths.
     /// [JA] manifest file path です。
     /// </param>
-    /// <param name="options">EN:  JA: options パラメーターです。
+    /// <param name="options">
     /// [EN] Validation options.
     /// [JA] validation option です。
     /// </param>
-    /// <param name="cancellationToken">EN:  JA: cancellationToken パラメーターです。
+    /// <param name="cancellationToken">
     /// [EN] Cancellation token.
     /// [JA] cancellation token です。
     /// </param>
-    /// <returns>EN:  JA: 結果を返します。
+    /// <returns>
     /// [EN] Structured catalog result.
     /// [JA] 構造化された catalog result です。
     /// </returns>

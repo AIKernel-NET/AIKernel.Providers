@@ -12,7 +12,7 @@ public sealed class ProviderRouter
     /// [EN] Initializes a provider router with a registry.
     /// [JA] registry を指定して Provider router を初期化します。
     /// </summary>
-    /// <param name="registry">EN:  JA: registry パラメーターです。
+    /// <param name="registry">
     /// [EN] Provider registry.
     /// [JA] Provider registry です。
     /// </param>
@@ -25,11 +25,11 @@ public sealed class ProviderRouter
     /// [EN] Resolves one provider for the supplied policy.
     /// [JA] 指定された policy に対して一つの Provider を解決します。
     /// </summary>
-    /// <param name="policy">EN:  JA: policy パラメーターです。
+    /// <param name="policy">
     /// [EN] Provider resolution policy.
     /// [JA] Provider resolution policy です。
     /// </param>
-    /// <returns>EN:  JA: 結果を返します。
+    /// <returns>
     /// [EN] Structured provider resolution result.
     /// [JA] 構造化された Provider resolution result です。
     /// </returns>
@@ -142,11 +142,11 @@ public sealed class ProviderRouter
     /// [EN] Resolves one provider for the supplied deterministic request.
     /// [JA] 指定された deterministic request に対して一つの Provider を解決します。
     /// </summary>
-    /// <param name="request">EN:  JA: request パラメーターです。
+    /// <param name="request">
     /// [EN] Provider resolution request.
     /// [JA] Provider resolution request です。
     /// </param>
-    /// <returns>EN:  JA: 結果を返します。
+    /// <returns>
     /// [EN] Structured provider resolution result.
     /// [JA] 構造化された Provider resolution result です。
     /// </returns>
@@ -165,11 +165,11 @@ public sealed class ProviderRouter
     /// [EN] Returns the deterministic availability probe order for a resolution policy.
     /// [JA] resolution policy に対する deterministic availability probe order を返します。
     /// </summary>
-    /// <param name="policy">EN:  JA: policy パラメーターです。
+    /// <param name="policy">
     /// [EN] Provider resolution policy.
     /// [JA] Provider resolution policy です。
     /// </param>
-    /// <returns>EN:  JA: 結果を返します。
+    /// <returns>
     /// [EN] Deterministically ordered provider/backend probe candidates.
     /// [JA] deterministic order の Provider/backend probe candidate です。
     /// </returns>

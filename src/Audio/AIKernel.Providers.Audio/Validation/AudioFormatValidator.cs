@@ -13,15 +13,15 @@ public sealed class AudioFormatValidator
     /// [EN] Validates an audio format.
     /// [JA] audio format を検証します。
     /// </summary>
-    /// <param name="format">EN:  JA: format パラメーターです。
+    /// <param name="format">
     /// [EN] Audio format.
     /// [JA] audio format です。
     /// </param>
-    /// <param name="capability">EN:  JA: capability パラメーターです。
+    /// <param name="capability">
     /// [EN] Audio capability descriptor.
     /// [JA] audio capability descriptor です。
     /// </param>
-    /// <returns>EN:  JA: 結果を返します。
+    /// <returns>
     /// [EN] Structured validation result.
     /// [JA] 構造化された validation result です。
     /// </returns>

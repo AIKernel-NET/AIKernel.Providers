@@ -105,11 +105,11 @@ public static class CouncilSemanticDimensionKeys
     /// [EN] Gets the minimum semantic dimension keys for the requested council.
     /// [JA] 指定された council の最低限の semantic dimension key を取得します。
     /// </summary>
-    /// <param name="councilKind">EN:  JA: councilKind パラメーターです。
+    /// <param name="councilKind">
     /// [EN] Council kind.
     /// [JA] council kind です。
     /// </param>
-    /// <returns>EN:  JA: 結果を返します。
+    /// <returns>
     /// [EN] Stable minimum key set, or an empty set for unknown councils.
     /// [JA] 安定した最低 key set。不明な council では空 set です。
     /// </returns>
@@ -126,11 +126,11 @@ public static class CouncilSemanticDimensionKeys
     /// [EN] Creates a dimension map with all minimum keys set to not evaluated.
     /// [JA] すべての最低 key に not evaluated を設定した dimension map を作成します。
     /// </summary>
-    /// <param name="councilKind">EN:  JA: councilKind パラメーターです。
+    /// <param name="councilKind">
     /// [EN] Council kind.
     /// [JA] council kind です。
     /// </param>
-    /// <returns>EN:  JA: 結果を返します。
+    /// <returns>
     /// [EN] Deterministically ordered dimension map for the council.
     /// [JA] council 向けに deterministic order で構成した dimension map です。
     /// </returns>

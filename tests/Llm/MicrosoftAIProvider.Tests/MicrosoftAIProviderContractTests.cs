@@ -54,6 +54,20 @@ public sealed class MicrosoftAIProviderContractTests
     }
 
     [Fact]
+    public async Task ProviderHealth_FailsClosed_WhenHealthFactoryIsMissing()
+    {
+        var provider = CreateProvider();
+
+        var exception = await Assert.ThrowsAsync<ProviderApiException>(
+            () => provider.GetHealthAsync());
+
+        Assert.Contains(
+            "Provider health status factory is not configured.",
+            exception.Message,
+            StringComparison.Ordinal);
+    }
+
+    [Fact]
     public void ProviderAssembly_DoesNotReferenceTools()
     {
         var referenced = typeof(OpenAICompatibleProvider).Assembly

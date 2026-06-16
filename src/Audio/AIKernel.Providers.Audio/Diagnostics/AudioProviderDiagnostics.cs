@@ -21,19 +21,19 @@ public static class AudioProviderDiagnostics
     /// [EN] Creates an audio provider diagnostic.
     /// [JA] audio Provider diagnostic を作成します。
     /// </summary>
-    /// <param name="code">EN:  JA: code パラメーターです。
+    /// <param name="code">
     /// [EN] Diagnostic code.
     /// [JA] diagnostic code です。
     /// </param>
-    /// <param name="message">EN:  JA: message パラメーターです。
+    /// <param name="message">
     /// [EN] Diagnostic message.
     /// [JA] diagnostic message です。
     /// </param>
-    /// <param name="severity">EN:  JA: severity パラメーターです。
+    /// <param name="severity">
     /// [EN] Diagnostic severity.
     /// [JA] diagnostic severity です。
     /// </param>
-    /// <returns>EN:  JA: 結果を返します。
+    /// <returns>
     /// [EN] Provider diagnostic.
     /// [JA] Provider diagnostic です。
     /// </returns>

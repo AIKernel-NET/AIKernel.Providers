@@ -23,11 +23,11 @@ public static class StandardProviderServiceCollectionExtensions
     /// [EN] Adds CPU compute, in-memory file system, console logging, process supervision, and HTTP networking providers.
     /// [JA] CPU compute、memory file system、console logging、process supervision、HTTP networking Provider を追加します。
     /// </summary>
-    /// <param name="services">EN:  JA: services パラメーターです。
+    /// <param name="services">
     /// [EN] Service collection to update.
     /// [JA] 更新対象の service collection です。
     /// </param>
-    /// <returns>EN:  JA: 結果を返します。
+    /// <returns>
     /// [EN] The same service collection for fluent composition.
     /// [JA] fluent composition 用に同じ service collection を返します。
     /// </returns>

@@ -13,15 +13,15 @@ public sealed class CudaBackendResolver
     /// [EN] Resolves a backend descriptor against a descriptor-only policy.
     /// [JA] descriptor-only policy に対して backend descriptor を解決します。
     /// </summary>
-    /// <param name="descriptor">EN:  JA: descriptor パラメーターです。
+    /// <param name="descriptor">
     /// [EN] CUDA backend descriptor.
     /// [JA] CUDA backend descriptor です。
     /// </param>
-    /// <param name="policy">EN:  JA: policy パラメーターです。
+    /// <param name="policy">
     /// [EN] CUDA backend resolution policy.
     /// [JA] CUDA backend resolution policy です。
     /// </param>
-    /// <returns>EN:  JA: 結果を返します。
+    /// <returns>
     /// [EN] Structured backend resolution result.
     /// [JA] 構造化された backend resolution result です。
     /// </returns>

@@ -17,9 +17,10 @@ Control, Wasm, GPU backends, and Tools after the 0.1.x line stabilizes.
 
 ## Cross-Repository Alignment
 
-Shared repository boundaries, 0.1.1.1 local NuGet versioning, the
-NuGet-only / no-PyPI rule for this validation line, and the v0.1.2
-NuGet + PyPI release assumption are defined by
+Shared repository boundaries, v0.1.2 development versioning, dependency order,
+PyPI Trusted Publishing, and Python wrapper scope are defined by
+[Package Release Alignment v0.1.2](https://github.com/AIKernel-NET/AIKernel.NET/blob/main/docs/development/package-release-alignment-v0.1.2.md).
+The historical v0.1.1.1 validation rules remain available in
 [AIKernel Repository Alignment v0.1.1.1](https://github.com/AIKernel-NET/AIKernel.NET/blob/main/docs/development/repository-alignment-v0.1.1.1.md).
 When a change crosses repositories, start with the
 [Cross-Repository Developer Guide v0.1.1.1](https://github.com/AIKernel-NET/AIKernel.NET/blob/main/docs/development/cross-repository-developer-guide-v0.1.1.1.md).
@@ -51,10 +52,8 @@ runtime implementation, fixed native SDK bindings, or scenario semantics.
   or Tools.
 - Read Provider Development Guidelines when deciding whether a provider belongs
   in AIKernel.Providers or needs a dedicated package / repository.
-- Read Python Wrapper when reviewing the reference-only Python boundary. The
-  0.1.1.1 validation line is NuGet-only and does not build or publish a PyPI
-  package. The next official v0.1.2 canonical series is expected to refresh
-  the PyPI package family together with NuGet.
+- Read Python Wrapper when reviewing the thin `aikernel-providers` boundary,
+  managed API catalog, and PyPI validation workflow.
 
 ## Safe First Validation
 
@@ -68,11 +67,12 @@ dotnet test AIKernel.Providers.slnx -c Release --no-build
 
 ## Release Scope
 
-Version 0.1.1.1 is the current NuGet-only development line. Use
-`0.1.1.1-dev{build-number}` for local package references.
+Version 0.1.2 is the current canonical integration line. Use
+`0.1.2-dev{build-number}` for local NuGet package references and
+`0.1.2.dev{build-number}` for local Python wheel validation.
 
-Prepare synchronized NuGet + PyPI package updates for the next official
-v0.1.2 canonical release line.
+Stable package artifacts are created later in dependency order. Do not create
+stable `0.1.2` packages until the publication task explicitly requests them.
 
 Version 0.1.1 is the first public release line for AIKernel.Providers. It
 contains:
@@ -88,4 +88,4 @@ contains:
 - local LLM provider
 - MicrosoftAI provider moved under Providers ownership
 - Standard OS driver providers
-- `aikernel-providers` Python wrapper reference materials
+- `aikernel-providers` Python wrapper with generated managed API catalog

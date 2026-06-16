@@ -59,14 +59,14 @@ AIKernel.Providers must not reference:
 
 ## Package Boundary
 
-The C# package boundary is also the Python wrapper boundary. The future
-`aikernel-providers` wrapper must stay thin over the C# package surface and must
-not pull fixed native, OS-specific, browser/WASM-specific, vendor-SDK-specific,
-or scenario-specific implementations into the default import surface.
+The C# package boundary is also the Python wrapper boundary. The
+`aikernel-providers` wrapper must stay thin over the C# package surface and
+must not pull fixed native, OS-specific, browser/WASM-specific,
+vendor-SDK-specific, or scenario-specific implementations into the default
+import surface.
 
-For the 0.1.1.1 validation line, AIKernel.Providers is NuGet-only and does not
-build or publish a PyPI package. Prepare synchronized NuGet + PyPI package
-updates for the next official v0.1.2 canonical series.
+In the v0.1.2 canonical series, use `0.1.2.dev{buildNumber}` wheels for local
+Python validation until stable publication is explicitly opened.
 
 ## Implementation Ownership
 

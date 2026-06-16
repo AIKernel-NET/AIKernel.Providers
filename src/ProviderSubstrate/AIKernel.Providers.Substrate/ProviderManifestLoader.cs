@@ -18,15 +18,15 @@ public sealed class ProviderManifestLoader : IProviderManifestLoader
     /// [EN] Loads a provider manifest from JSON text.
     /// [JA] JSON text から Provider manifest を load します。
     /// </summary>
-    /// <param name="json">EN:  JA: json パラメーターです。
+    /// <param name="json">
     /// [EN] Manifest JSON text.
     /// [JA] manifest JSON text です。
     /// </param>
-    /// <param name="source">EN:  JA: source パラメーターです。
+    /// <param name="source">
     /// [EN] Optional source label.
     /// [JA] 任意の source label です。
     /// </param>
-    /// <returns>EN:  JA: 結果を返します。
+    /// <returns>
     /// [EN] Structured load result.
     /// [JA] 構造化された load result です。
     /// </returns>
@@ -109,15 +109,15 @@ public sealed class ProviderManifestLoader : IProviderManifestLoader
     /// [EN] Loads a provider manifest from a file.
     /// [JA] file から Provider manifest を load します。
     /// </summary>
-    /// <param name="path">EN:  JA: path パラメーターです。
+    /// <param name="path">
     /// [EN] Manifest file path.
     /// [JA] manifest file path です。
     /// </param>
-    /// <param name="cancellationToken">EN:  JA: cancellationToken パラメーターです。
+    /// <param name="cancellationToken">
     /// [EN] Cancellation token.
     /// [JA] cancellation token です。
     /// </param>
-    /// <returns>EN:  JA: 結果を返します。
+    /// <returns>
     /// [EN] Structured load result.
     /// [JA] 構造化された load result です。
     /// </returns>
@@ -155,19 +155,19 @@ public sealed class ProviderManifestLoader : IProviderManifestLoader
     /// [EN] Loads a provider manifest from a stream.
     /// [JA] stream から Provider manifest を load します。
     /// </summary>
-    /// <param name="stream">EN:  JA: stream パラメーターです。
+    /// <param name="stream">
     /// [EN] Manifest stream.
     /// [JA] manifest stream です。
     /// </param>
-    /// <param name="source">EN:  JA: source パラメーターです。
+    /// <param name="source">
     /// [EN] Optional source label.
     /// [JA] 任意の source label です。
     /// </param>
-    /// <param name="cancellationToken">EN:  JA: cancellationToken パラメーターです。
+    /// <param name="cancellationToken">
     /// [EN] Cancellation token.
     /// [JA] cancellation token です。
     /// </param>
-    /// <returns>EN:  JA: 結果を返します。
+    /// <returns>
     /// [EN] Structured load result.
     /// [JA] 構造化された load result です。
     /// </returns>
@@ -197,7 +197,7 @@ public sealed class ProviderManifestLoader : IProviderManifestLoader
         }
     }
 
-    /// <summary>EN: Documentation for public API. JA: LoadAsync を取得します。</summary>
+    /// <summary>[EN] Documents this public package API member. [JA] LoadAsync を取得します。</summary>
     /// <inheritdoc />
     public ValueTask<ProviderManifestLoadResult> LoadAsync(
         ProviderManifestLoadRequest request,

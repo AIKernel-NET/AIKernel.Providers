@@ -2,17 +2,11 @@
 
 [日本語](index-ja.md)
 
-`aikernel-providers` was designed as the Python distribution for official
-AIKernel extension providers.
+`aikernel-providers` is the 0.1.2 Python distribution for official AIKernel
+extension providers.
 
-For the 0.1.1.1 validation line, AIKernel.Providers is NuGet-only. Do not build,
-install, or publish a PyPI package for this line. This page is retained as
-reference documentation for the next official v0.1.2 canonical series, where
-synchronized NuGet and PyPI package families are expected.
-
-The future wrapper design sits over C# provider packages; it is not a Python
-reimplementation of provider logic. It should expose a unified Python import
-surface:
+The wrapper sits over C# provider packages; it is not a Python reimplementation
+of provider logic. It exposes a unified Python import surface:
 
 ```python
 from aikernel_providers import (
@@ -40,14 +34,18 @@ from aikernel_providers import (
 
 ## Install
 
-There is no supported install command for 0.1.1.1. The reserved distribution
-name is `aikernel-providers`. The intended import name is
-`aikernel_providers`.
+After the stable 0.1.2 publication task opens:
+
+```bash
+pip install aikernel-providers==0.1.2
+```
+
+During local validation, install the matching `0.1.2.dev<build-number>` wheel
+from the local package output.
 
 ## Scope
 
-The archived package design exposes public provider wrappers and helper
-objects:
+The package exposes public provider wrappers and helper objects:
 
 - `CapabilityContract`
 - `ChatOpenAICapability`, `ChatOpenAIProvider`, `ChatOpenAIInvoker`,
@@ -74,7 +72,7 @@ package surface.
 
 ## Managed Assemblies
 
-The archived wheel design bundles provider assemblies and manifest files under
+The wheel bundles provider assemblies and manifest files under
 `aikernel_providers/native`:
 
 - `ChatOpenAIProvider.dll`
@@ -99,8 +97,8 @@ MicrosoftAI support is represented in the reference Python wrapper through
 mapping wrappers, and the bundled `AIKernel.Providers.MicrosoftAI.dll`.
 
 This provider was moved from AIKernel.Core into AIKernel.Providers management
-for the 0.1.1 release. Future Python packaging should follow that ownership
-change and keep the wrapper thin over the managed provider surface.
+for the 0.1.1 release. The 0.1.2 Python wrapper follows that ownership change
+and stays thin over the managed provider surface.
 
 Hosting and dependency-injection extension methods remain C# APIs.
 
@@ -113,7 +111,8 @@ dotnet test AIKernel.Providers.slnx -c Release --no-build
 dotnet pack AIKernel.Providers.slnx -c Release --no-build --no-restore -p:UseLocalPackageVersion=true -p:LocalPackageBuildNumber=1 -o ..\artifacts\local-packages
 ```
 
-Do not run Python build or publish commands for 0.1.1.1.
+Build Python wheels only as `0.1.2.dev<build-number>` during local validation.
+Create stable `0.1.2` wheels only after the publication task opens.
 
 ## API Example
 

@@ -4,7 +4,7 @@ namespace AIKernel.Providers.Substrate;
 /// [EN] Generic provider evaluation envelope for structured success and failure projection.
 /// [JA] 構造化された success / failure projection 向けの generic Provider evaluation envelope です。
 /// </summary>
-/// <typeparam name="T">EN:  JA: T 型パラメーターです。
+/// <typeparam name="T">
 /// [EN] Payload type.
 /// [JA] payload type です。
 /// </typeparam>

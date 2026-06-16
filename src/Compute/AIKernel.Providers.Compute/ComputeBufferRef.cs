@@ -32,11 +32,11 @@ public sealed record ComputeBufferRef
     /// [EN] Projects the buffer reference to deterministic metadata keys.
     /// [JA] buffer reference を deterministic metadata key へ射影します。
     /// </summary>
-    /// <param name="prefix">EN:  JA: prefix パラメーターです。
+    /// <param name="prefix">
     /// [EN] Metadata key prefix.
     /// [JA] metadata key prefix です。
     /// </param>
-    /// <returns>EN:  JA: 結果を返します。
+    /// <returns>
     /// [EN] Deterministic metadata map.
     /// [JA] deterministic metadata map です。
     /// </returns>

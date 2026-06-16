@@ -2,15 +2,11 @@
 
 [日本語](README-ja.md)
 
-Reference design for Python wrappers for AIKernel extension providers.
+Python wrappers for AIKernel extension providers.
 
-For the 0.1.1.1 line, AIKernel.Providers publishes NuGet packages only. This
-directory is retained as a reference for the future Python wrapper surface and
-is not built, installed, or published as a PyPI package.
-
-`aikernel-providers` is reserved to expose provider contract boundaries from the
-C# AIKernel.Providers assemblies without re-implementing provider semantics in
-Python.
+Starting with the 0.1.2 canon line, `aikernel-providers` exposes provider
+contract boundaries from the C# AIKernel.Providers assemblies without
+re-implementing provider semantics in Python.
 
 ## Import Surface
 
@@ -53,8 +49,14 @@ assemblies = provider_assemblies()
 print(assemblies.is_complete())
 ```
 
-Future Python packaging would resolve provider assemblies through pythonnet and
-delegate Python objects to the C# contract surface.
+Python packaging resolves provider assemblies through pythonnet and delegates
+Python objects to the C# contract surface.
+
+## Managed API Catalog
+
+The v0.1.2 package exposes the generated managed API catalog through
+`managed_api_catalog()`, `managed_api_summary()`, `managed_type_names()`, and
+`find_managed_type(full_name)`.
 
 The reference package includes wrappers for the public Provider, Invoker,
 Capability descriptor, Settings, MicrosoftAI option/capability/response mapping

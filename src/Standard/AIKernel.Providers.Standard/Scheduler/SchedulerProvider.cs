@@ -33,7 +33,7 @@ public sealed class SchedulerProvider : StandardProviderBase, IStandardScheduler
     public ScheduledJob Add(string name, TimeSpan interval)
         => RequireSuccess(TryAdd(name, interval));
 
-    /// <summary>EN: Documentation for public API. JA: TryAdd を実行します。</summary>
+    /// <summary>[EN] Documents this public package API member. [JA] TryAdd を実行します。</summary>
     /// <inheritdoc />
     public Result<ScheduledJob> TryAdd(string name, TimeSpan interval)
     {
@@ -57,7 +57,7 @@ public sealed class SchedulerProvider : StandardProviderBase, IStandardScheduler
     public IReadOnlyList<ScheduledJob> List()
         => RequireSuccess(TryList());
 
-    /// <summary>EN: Documentation for public API. JA: TryList を実行します。</summary>
+    /// <summary>[EN] Documents this public package API member. [JA] TryList を実行します。</summary>
     /// <inheritdoc />
     public Result<IReadOnlyList<ScheduledJob>> TryList()
         => Try.Run<IReadOnlyList<ScheduledJob>>(() => _jobs.Values.OrderBy(job => job.JobId, StringComparer.Ordinal).ToArray());
@@ -66,7 +66,7 @@ public sealed class SchedulerProvider : StandardProviderBase, IStandardScheduler
     public bool Remove(string jobId)
         => RequireSuccess(TryRemove(jobId));
 
-    /// <summary>EN: Documentation for public API. JA: TryRemove を実行します。</summary>
+    /// <summary>[EN] Documents this public package API member. [JA] TryRemove を実行します。</summary>
     /// <inheritdoc />
     public Result<bool> TryRemove(string jobId)
         =>

@@ -23,11 +23,11 @@ public sealed record HashMetadata
     /// [EN] Creates normalized hash metadata from an optional hash expression.
     /// [JA] 任意の hash expression から正規化された hash metadata を作成します。
     /// </summary>
-    /// <param name="expression">EN:  JA: expression パラメーターです。
+    /// <param name="expression">
     /// [EN] Hash expression.
     /// [JA] hash expression です。
     /// </param>
-    /// <returns>EN:  JA: 結果を返します。
+    /// <returns>
     /// [EN] Normalized hash metadata.
     /// [JA] 正規化された hash metadata です。
     /// </returns>

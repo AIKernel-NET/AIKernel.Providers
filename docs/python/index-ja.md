@@ -2,15 +2,11 @@
 
 [English](index.md)
 
-`aikernel-providers` は、AIKernel 公式拡張 Provider 向けに設計された Python
-distribution です。
+`aikernel-providers` は、0.1.2 正典シリーズで AIKernel 公式拡張 Provider 向けに
+公開する Python distribution です。
 
-0.1.1.1 validation line では AIKernel.Providers は NuGet-only です。この line では
-PyPI package を build / install / publish しません。このページは、次の公式 v0.1.2
-正典シリーズで NuGet + PyPI を同期公開するための reference documentation として残します。
-
-将来の wrapper design は C# Provider package の上に置き、Provider logic を Python
-で再実装するものではありません。統一された Python import surface を公開する想定です。
+wrapper は C# Provider package の上に置き、Provider logic を Python で再実装する
+ものではありません。統一された Python import surface を公開します。
 
 ```python
 from aikernel_providers import (
@@ -38,13 +34,18 @@ from aikernel_providers import (
 
 ## Install
 
-0.1.1.1 でサポートされる install command はありません。予約している
-distribution 名は `aikernel-providers` です。想定 import 名は
-`aikernel_providers` です。
+安定版 0.1.2 の公開タスク開始後は次で導入します。
+
+```bash
+pip install aikernel-providers==0.1.2
+```
+
+local validation では、local package output から一致する
+`0.1.2.dev<build-number>` wheel を導入します。
 
 ## Scope
 
-過去の package design は public Provider wrapper と helper object を公開する想定です。
+package は public Provider wrapper と helper object を公開します。
 
 - `CapabilityContract`
 - `ChatOpenAICapability`, `ChatOpenAIProvider`, `ChatOpenAIInvoker`,
@@ -70,8 +71,7 @@ internal provider helper、private runtime state、public C# package surface に
 
 ## Managed Assemblies
 
-過去の wheel design では provider assembly と manifest file を
-`aikernel_providers/native` に同梱します。
+wheel では provider assembly と manifest file を `aikernel_providers/native` に同梱します。
 
 - `ChatOpenAIProvider.dll`
 - `ChatHistoryProvider.dll`
@@ -94,7 +94,7 @@ MicrosoftAI support は reference Python wrapper で `MicrosoftAIProviderOptions
 `AIKernel.Providers.MicrosoftAI.dll` を通じて表現します。
 
 この Provider は 0.1.1 release で AIKernel.Core から AIKernel.Providers 管理へ
-移管されました。将来の Python packaging もこの所有変更に従い、managed provider
+移管されました。0.1.2 の Python wrapper もこの所有変更に従い、managed provider
 surface の薄い wrapper に留めます。
 
 hosting / dependency-injection 固有の extension method は C# API として残します。
@@ -108,7 +108,8 @@ dotnet test AIKernel.Providers.slnx -c Release --no-build
 dotnet pack AIKernel.Providers.slnx -c Release --no-build --no-restore -p:UseLocalPackageVersion=true -p:LocalPackageBuildNumber=1 -o ..\artifacts\local-packages
 ```
 
-0.1.1.1 では Python build / publish command を実行しません。
+local validation では `0.1.2.dev<build-number>` の Python wheel だけを build します。
+安定版 `0.1.2` wheel は公開タスク開始後に作成します。
 
 ## API Example
 

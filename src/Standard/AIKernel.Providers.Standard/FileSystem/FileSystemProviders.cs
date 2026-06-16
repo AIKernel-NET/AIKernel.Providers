@@ -78,40 +78,40 @@ internal sealed class StandardFileSystemVfsSession(FileSystemProviderBase provid
     private readonly FileSystemProviderBase _provider = provider ?? throw new ArgumentNullException(nameof(provider));
     /// <summary>
     /// EN: Executes SessionId.
-    /// EN: Documentation for public API. JA: SessionId を実行します。
+    /// [EN] Documents this public package API member. [JA] SessionId を実行します。
     /// </summary>
 
     public string SessionId { get; } = Guid.NewGuid().ToString("N");
     /// <summary>
     /// EN: Executes DisposeAsync.
-    /// EN: Documentation for public API. JA: DisposeAsync を実行します。
+    /// [EN] Documents this public package API member. [JA] DisposeAsync を実行します。
     /// </summary>
 
     public ValueTask DisposeAsync() => ValueTask.CompletedTask;
     /// <summary>
     /// EN: Executes ReadFileAsync.
-    /// EN: Documentation for public API. JA: ReadFileAsync を実行します。
+    /// [EN] Documents this public package API member. [JA] ReadFileAsync を実行します。
     /// </summary>
 
     public Task<IVfsFile> ReadFileAsync(string path)
         => Task.FromResult<IVfsFile>(new StandardVfsFile(path, _provider.ReadText(path)));
     /// <summary>
     /// EN: Executes ExistsAsync.
-    /// EN: Documentation for public API. JA: ExistsAsync を実行します。
+    /// [EN] Documents this public package API member. [JA] ExistsAsync を実行します。
     /// </summary>
 
     public Task<bool> ExistsAsync(string path)
         => Task.FromResult(_provider.Exists(path));
     /// <summary>
     /// EN: Executes GetDirectoryAsync.
-    /// EN: Documentation for public API. JA: GetDirectoryAsync を実行します。
+    /// [EN] Documents this public package API member. [JA] GetDirectoryAsync を実行します。
     /// </summary>
 
     public Task<IVfsDirectory> GetDirectoryAsync(string path)
         => Task.FromResult<IVfsDirectory>(new StandardVfsDirectory(path, _provider.List(path), _provider));
     /// <summary>
     /// EN: Executes WriteFileAsync.
-    /// EN: Documentation for public API. JA: WriteFileAsync を実行します。
+    /// [EN] Documents this public package API member. [JA] WriteFileAsync を実行します。
     /// </summary>
 
     public Task WriteFileAsync(string path, byte[] content)
@@ -121,7 +121,7 @@ internal sealed class StandardFileSystemVfsSession(FileSystemProviderBase provid
     }
     /// <summary>
     /// EN: Executes DeleteAsync.
-    /// EN: Documentation for public API. JA: DeleteAsync を実行します。
+    /// [EN] Documents this public package API member. [JA] DeleteAsync を実行します。
     /// </summary>
 
     public Task DeleteAsync(string path)
@@ -142,7 +142,7 @@ internal sealed class StandardFileSystemVfsSession(FileSystemProviderBase provid
     }
     /// <summary>
     /// EN: Executes QueryAsync.
-    /// EN: Documentation for public API. JA: QueryAsync を実行します。
+    /// [EN] Documents this public package API member. [JA] QueryAsync を実行します。
     /// </summary>
 
     public Task<IVfsQueryResult> QueryAsync(IVfsQuery query)
@@ -178,50 +178,50 @@ internal sealed class StandardVfsFile(string path, string content) : IVfsFile
     private readonly string _content = content ?? string.Empty;
     /// <summary>
     /// EN: Executes Name.
-    /// EN: Documentation for public API. JA: Name を実行します。
+    /// [EN] Documents this public package API member. [JA] Name を実行します。
     /// </summary>
 
     public string Name => System.IO.Path.GetFileName(path);
     /// <summary>
     /// EN: Gets Path.
-    /// EN: Documentation for public API. JA: Path を取得します。
+    /// [EN] Documents this public package API member. [JA] Path を取得します。
     /// </summary>
 
     public string Path => path;
     /// <summary>
     /// EN: Executes Size.
-    /// EN: Documentation for public API. JA: Size を実行します。
+    /// [EN] Documents this public package API member. [JA] Size を実行します。
     /// </summary>
 
     public long Size => System.Text.Encoding.UTF8.GetByteCount(_content);
     /// <summary>
     /// EN: Gets CreatedAt.
-    /// EN: Documentation for public API. JA: CreatedAt を取得します。
+    /// [EN] Documents this public package API member. [JA] CreatedAt を取得します。
     /// </summary>
 
     public DateTime CreatedAt { get; } = DateTime.UtcNow;
     /// <summary>
     /// EN: Gets ModifiedAt.
-    /// EN: Documentation for public API. JA: ModifiedAt を取得します。
+    /// [EN] Documents this public package API member. [JA] ModifiedAt を取得します。
     /// </summary>
 
     public DateTime ModifiedAt { get; } = DateTime.UtcNow;
     /// <summary>
     /// EN: Executes GetMetadata.
-    /// EN: Documentation for public API. JA: GetMetadata を実行します。
+    /// [EN] Documents this public package API member. [JA] GetMetadata を実行します。
     /// </summary>
 
     public IReadOnlyDictionary<string, string>? GetMetadata() => null;
     /// <summary>
     /// EN: Executes ReadAsync.
-    /// EN: Documentation for public API. JA: ReadAsync を実行します。
+    /// [EN] Documents this public package API member. [JA] ReadAsync を実行します。
     /// </summary>
 
     public Task<byte[]> ReadAsync()
         => Task.FromResult(System.Text.Encoding.UTF8.GetBytes(_content));
     /// <summary>
     /// EN: Executes ReadAsTextAsync.
-    /// EN: Documentation for public API. JA: ReadAsTextAsync を実行します。
+    /// [EN] Documents this public package API member. [JA] ReadAsTextAsync を実行します。
     /// </summary>
 
     public Task<string> ReadAsTextAsync()
@@ -235,24 +235,24 @@ internal sealed class StandardVfsDirectory(
 {
     /// <summary>
     /// EN: Executes Name.
-    /// EN: Documentation for public API. JA: Name を実行します。
+    /// [EN] Documents this public package API member. [JA] Name を実行します。
     /// </summary>
     public string Name => System.IO.Path.GetFileName(path.TrimEnd('/', '\\'));
     /// <summary>
     /// EN: Gets Path.
-    /// EN: Documentation for public API. JA: Path を取得します。
+    /// [EN] Documents this public package API member. [JA] Path を取得します。
     /// </summary>
 
     public string Path => path;
     /// <summary>
     /// EN: Executes GetMetadata.
-    /// EN: Documentation for public API. JA: GetMetadata を実行します。
+    /// [EN] Documents this public package API member. [JA] GetMetadata を実行します。
     /// </summary>
 
     public IReadOnlyDictionary<string, string>? GetMetadata() => null;
     /// <summary>
     /// EN: Executes GetFilesAsync.
-    /// EN: Documentation for public API. JA: GetFilesAsync を実行します。
+    /// [EN] Documents this public package API member. [JA] GetFilesAsync を実行します。
     /// </summary>
 
     public Task<IReadOnlyList<IVfsFile>> GetFilesAsync(bool recursive = false)
@@ -263,14 +263,14 @@ internal sealed class StandardVfsDirectory(
                 .ToArray());
     /// <summary>
     /// EN: Executes GetDirectoriesAsync.
-    /// EN: Documentation for public API. JA: GetDirectoriesAsync を実行します。
+    /// [EN] Documents this public package API member. [JA] GetDirectoriesAsync を実行します。
     /// </summary>
 
     public Task<IReadOnlyList<IVfsDirectory>> GetDirectoriesAsync()
         => Task.FromResult<IReadOnlyList<IVfsDirectory>>([]);
     /// <summary>
     /// EN: Executes GetEntriesAsync.
-    /// EN: Documentation for public API. JA: GetEntriesAsync を実行します。
+    /// [EN] Documents this public package API member. [JA] GetEntriesAsync を実行します。
     /// </summary>
 
     public Task<IReadOnlyList<VfsEntry>> GetEntriesAsync()
@@ -288,7 +288,7 @@ internal sealed class StandardVfsDirectory(
                 .ToArray());
     /// <summary>
     /// EN: Executes GetSubdirectoryAsync.
-    /// EN: Documentation for public API. JA: GetSubdirectoryAsync を実行します。
+    /// [EN] Documents this public package API member. [JA] GetSubdirectoryAsync を実行します。
     /// </summary>
 
     public Task<IVfsDirectory?> GetSubdirectoryAsync(string name)
@@ -322,30 +322,30 @@ internal sealed class StandardVfsQueryResult(
 {
     /// <summary>
     /// EN: Gets IsSuccessful.
-    /// EN: Documentation for public API. JA: IsSuccessful を取得します。
+    /// [EN] Documents this public package API member. [JA] IsSuccessful を取得します。
     /// </summary>
     public bool IsSuccessful { get; } = isSuccessful;
     /// <summary>
     /// EN: Gets RowCount.
-    /// EN: Documentation for public API. JA: RowCount を取得します。
+    /// [EN] Documents this public package API member. [JA] RowCount を取得します。
     /// </summary>
 
     public int RowCount => Rows.Count;
     /// <summary>
     /// EN: Gets ColumnNames.
-    /// EN: Documentation for public API. JA: ColumnNames を取得します。
+    /// [EN] Documents this public package API member. [JA] ColumnNames を取得します。
     /// </summary>
 
     public IReadOnlyList<string> ColumnNames { get; } = ["path", "exists"];
     /// <summary>
     /// EN: Gets Rows.
-    /// EN: Documentation for public API. JA: Rows を取得します。
+    /// [EN] Documents this public package API member. [JA] Rows を取得します。
     /// </summary>
 
     public IReadOnlyList<VfsQueryRow> Rows { get; } = rows;
     /// <summary>
     /// EN: Gets ErrorMessage.
-    /// EN: Documentation for public API. JA: ErrorMessage を取得します。
+    /// [EN] Documents this public package API member. [JA] ErrorMessage を取得します。
     /// </summary>
 
     public string? ErrorMessage { get; } = errorMessage;
@@ -365,16 +365,16 @@ public sealed class MemoryFileSystemProvider : FileSystemProviderBase
     {
     }
 
-    /// <summary>EN: Documentation for public API. JA: Exists を実行します。</summary>
+    /// <summary>[EN] Documents this public package API member. [JA] Exists を実行します。</summary>
     /// <inheritdoc />
     public override bool Exists(string path) => _files.ContainsKey(Normalize(path));
 
-    /// <summary>EN: Documentation for public API. JA: ReadText を実行します。</summary>
+    /// <summary>[EN] Documents this public package API member. [JA] ReadText を実行します。</summary>
     /// <inheritdoc />
     public override string ReadText(string path)
         => RequireSuccess(TryReadText(path));
 
-    /// <summary>EN: Documentation for public API. JA: TryReadText を実行します。</summary>
+    /// <summary>[EN] Documents this public package API member. [JA] TryReadText を実行します。</summary>
     /// <inheritdoc />
     public override Result<string> TryReadText(string path)
         =>
@@ -382,7 +382,7 @@ public sealed class MemoryFileSystemProvider : FileSystemProviderBase
             from content in ReadMemoryFile(normalized)
             select content;
 
-    /// <summary>EN: Documentation for public API. JA: WriteText を実行します。</summary>
+    /// <summary>[EN] Documents this public package API member. [JA] WriteText を実行します。</summary>
     /// <inheritdoc />
     public override void WriteText(string path, string content)
         => _files[Normalize(path)] = content ?? string.Empty;
@@ -391,7 +391,7 @@ public sealed class MemoryFileSystemProvider : FileSystemProviderBase
     public void Delete(string path)
         => _files.TryRemove(Normalize(path), out _);
 
-    /// <summary>EN: Documentation for public API. JA: List を実行します。</summary>
+    /// <summary>[EN] Documents this public package API member. [JA] List を実行します。</summary>
     /// <inheritdoc />
     public override IReadOnlyList<string> List(string path)
     {
@@ -439,15 +439,15 @@ public sealed class PhysicalFileSystemProvider : FileSystemProviderBase
     {
     }
 
-    /// <summary>EN: Documentation for public API. JA: Exists を実行します。</summary>
+    /// <summary>[EN] Documents this public package API member. [JA] Exists を実行します。</summary>
     /// <inheritdoc />
     public override bool Exists(string path) => File.Exists(path) || Directory.Exists(path);
 
-    /// <summary>EN: Documentation for public API. JA: ReadText を実行します。</summary>
+    /// <summary>[EN] Documents this public package API member. [JA] ReadText を実行します。</summary>
     /// <inheritdoc />
     public override string ReadText(string path) => File.ReadAllText(path);
 
-    /// <summary>EN: Documentation for public API. JA: WriteText を実行します。</summary>
+    /// <summary>[EN] Documents this public package API member. [JA] WriteText を実行します。</summary>
     /// <inheritdoc />
     public override void WriteText(string path, string content)
     {
@@ -460,7 +460,7 @@ public sealed class PhysicalFileSystemProvider : FileSystemProviderBase
         File.WriteAllText(path, content ?? string.Empty);
     }
 
-    /// <summary>EN: Documentation for public API. JA: List を実行します。</summary>
+    /// <summary>[EN] Documents this public package API member. [JA] List を実行します。</summary>
     /// <inheritdoc />
     public override IReadOnlyList<string> List(string path)
         => Directory.Exists(path)
@@ -500,7 +500,7 @@ public sealed class ZipFileSystemProvider : FileSystemProviderBase
             : zipPath;
     }
 
-    /// <summary>EN: Documentation for public API. JA: Exists を実行します。</summary>
+    /// <summary>[EN] Documents this public package API member. [JA] Exists を実行します。</summary>
     /// <inheritdoc />
     public override bool Exists(string path)
     {
@@ -508,7 +508,7 @@ public sealed class ZipFileSystemProvider : FileSystemProviderBase
         return archive.GetEntry(Normalize(path)) is not null;
     }
 
-    /// <summary>EN: Documentation for public API. JA: ReadText を実行します。</summary>
+    /// <summary>[EN] Documents this public package API member. [JA] ReadText を実行します。</summary>
     /// <inheritdoc />
     public override string ReadText(string path)
     {
@@ -519,12 +519,12 @@ public sealed class ZipFileSystemProvider : FileSystemProviderBase
         return reader.ReadToEnd();
     }
 
-    /// <summary>EN: Documentation for public API. JA: WriteText を実行します。</summary>
+    /// <summary>[EN] Documents this public package API member. [JA] WriteText を実行します。</summary>
     /// <inheritdoc />
     public override void WriteText(string path, string content)
         => throw new NotSupportedException("ZIP file system provider is read-only.");
 
-    /// <summary>EN: Documentation for public API. JA: List を実行します。</summary>
+    /// <summary>[EN] Documents this public package API member. [JA] List を実行します。</summary>
     /// <inheritdoc />
     public override IReadOnlyList<string> List(string path)
     {

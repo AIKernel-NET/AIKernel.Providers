@@ -1,7 +1,7 @@
 {
   "providerId": "cuda.compute",
   "name": "CUDA Compute",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "assembly": "CudaComputeProvider.dll",
   "capabilities": [
     "tensor.matmul",

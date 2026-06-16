@@ -1,7 +1,7 @@
 {
   "providerId": "dynamic-pipeline",
   "name": "Dynamic Pipeline Compiler",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "assembly": "DynamicPipelineCompilerProvider.dll",
   "capabilities": [
     "pipeline.compile",

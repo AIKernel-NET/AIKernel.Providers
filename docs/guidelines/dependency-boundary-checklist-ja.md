@@ -57,14 +57,13 @@ AIKernel.Providers が参照してはいけないもの:
 
 ## Package Boundary
 
-C# package boundary は Python wrapper boundary でもあります。将来の
+C# package boundary は Python wrapper boundary でもあります。
 `aikernel-providers` wrapper は C# package surface の薄い wrapper に留め、
 fixed native、OS-specific、browser/WASM-specific、vendor-SDK-specific、
 scenario-specific implementation を default import surface に混入させてはいけません。
 
-0.1.1.1 validation line では AIKernel.Providers は NuGet-only であり、PyPI package を
-build / publish しません。次の公式 v0.1.2 正典シリーズに向けて NuGet + PyPI package の
-同期更新を準備します。
+v0.1.2 正典シリーズでは、stable publication が明示的に開始されるまで
+`0.1.2.dev{buildNumber}` wheel で local Python validation を行います。
 
 ## Implementation Ownership
 
