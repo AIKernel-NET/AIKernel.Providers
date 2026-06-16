@@ -2,7 +2,7 @@
 
 [日本語](index-ja.md)
 
-This catalog describes the provider packages included in the 0.1.1
+This catalog describes the provider packages included in the 0.1.2
 AIKernel.Providers release.
 
 Provider projects are grouped under `src/` by category:
@@ -228,7 +228,7 @@ Manifest:
 execution as an AIKernel provider implementation.
 
 This provider was moved from AIKernel.Core into AIKernel.Providers management
-for the 0.1.1 release. Core continues to define contracts; this repository now
+for the 0.1.2 release. Core continues to define contracts; this repository now
 owns the implementation, package metadata, tests, documentation, and Python
 wrapper reference materials.
 

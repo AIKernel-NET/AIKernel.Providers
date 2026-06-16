@@ -93,7 +93,7 @@ MicrosoftAI support は reference Python wrapper で `MicrosoftAIProviderOptions
 `MicrosoftAIProviderCapabilities`、response mapping wrapper、および同梱された
 `AIKernel.Providers.MicrosoftAI.dll` を通じて表現します。
 
-この Provider は 0.1.1 release で AIKernel.Core から AIKernel.Providers 管理へ
+この Provider は 0.1.2 release で AIKernel.Core から AIKernel.Providers 管理へ
 移管されました。0.1.2 の Python wrapper もこの所有変更に従い、managed provider
 surface の薄い wrapper に留めます。
 

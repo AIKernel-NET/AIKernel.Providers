@@ -97,7 +97,7 @@ MicrosoftAI support is represented in the reference Python wrapper through
 mapping wrappers, and the bundled `AIKernel.Providers.MicrosoftAI.dll`.
 
 This provider was moved from AIKernel.Core into AIKernel.Providers management
-for the 0.1.1 release. The 0.1.2 Python wrapper follows that ownership change
+for the 0.1.2 release. The 0.1.2 Python wrapper follows that ownership change
 and stays thin over the managed provider surface.
 
 Hosting and dependency-injection extension methods remain C# APIs.

@@ -74,7 +74,7 @@ Version 0.1.2 is the current canonical integration line. Use
 Stable package artifacts are created later in dependency order. Do not create
 stable `0.1.2` packages until the publication task explicitly requests them.
 
-Version 0.1.1 is the first public release line for AIKernel.Providers. It
+Version 0.1.2 is the first public release line for AIKernel.Providers. It
 contains:
 
 - Chat/OpenAI-compatible providers

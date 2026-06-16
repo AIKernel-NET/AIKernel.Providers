@@ -76,7 +76,7 @@ Version 0.1.2 は現在の canonical integration line です。local NuGet packa
 stable package artifact は依存関係順に後で作成します。publication task が明示的に要求する
 まで、stable `0.1.2` package は作成しません。
 
-Version 0.1.1 は AIKernel.Providers の初回公開 release line です。次を含みます。
+Version 0.1.2 は AIKernel.Providers の初回公開 release line です。次を含みます。
 
 - Chat / OpenAI-compatible Provider
 - chat history Provider

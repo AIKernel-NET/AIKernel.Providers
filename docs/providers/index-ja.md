@@ -2,7 +2,7 @@
 
 [English](index.md)
 
-この catalog は、AIKernel.Providers 0.1.1 公開に含まれる Provider package
+この catalog は、AIKernel.Providers 0.1.2 公開に含まれる Provider package
 を説明します。
 
 Provider project は `src/` 配下で category ごとに整理します。
@@ -224,7 +224,7 @@ Manifest:
 `AIKernel.Providers.MicrosoftAI` は、Microsoft.Extensions.AI based model
 execution を AIKernel Provider implementation として wrap します。
 
-この Provider は 0.1.1 release で AIKernel.Core から AIKernel.Providers 管理へ
+この Provider は 0.1.2 release で AIKernel.Core から AIKernel.Providers 管理へ
 移管されました。Core は contract を定義し続け、この repository が
 implementation、package metadata、test、documentation、Python wrapper 参照資料を
 所有します。
