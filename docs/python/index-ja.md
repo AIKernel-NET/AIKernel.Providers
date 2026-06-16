@@ -5,9 +5,9 @@
 `aikernel-providers` は、AIKernel 公式拡張 Provider 向けに設計された Python
 distribution です。
 
-0.1.1.1 update line では AIKernel.Providers は NuGet-only です。この line では
-PyPI package を build / install / publish しません。このページは、将来明示的に
-予定される Python release のための reference documentation として残します。
+0.1.1.1 validation line では AIKernel.Providers は NuGet-only です。この line では
+PyPI package を build / install / publish しません。このページは、次の公式 v0.1.2
+正典シリーズで NuGet + PyPI を同期公開するための reference documentation として残します。
 
 将来の wrapper design は C# Provider package の上に置き、Provider logic を Python
 で再実装するものではありません。統一された Python import surface を公開する想定です。

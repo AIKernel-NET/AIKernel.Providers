@@ -5,9 +5,10 @@
 `aikernel-providers` was designed as the Python distribution for official
 AIKernel extension providers.
 
-For the 0.1.1.1 update line, AIKernel.Providers is NuGet-only. Do not build,
+For the 0.1.1.1 validation line, AIKernel.Providers is NuGet-only. Do not build,
 install, or publish a PyPI package for this line. This page is retained as
-reference documentation for a future explicitly scheduled Python release.
+reference documentation for the next official v0.1.2 canonical series, where
+synchronized NuGet and PyPI package families are expected.
 
 The future wrapper design sits over C# provider packages; it is not a Python
 reimplementation of provider logic. It should expose a unified Python import

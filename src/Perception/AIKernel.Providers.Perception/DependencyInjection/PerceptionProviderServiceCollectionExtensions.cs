@@ -21,6 +21,14 @@ public static class PerceptionProviderServiceCollectionExtensions
         ArgumentNullException.ThrowIfNull(services);
 
         services.TryAddSingleton<PerceptionProviderResolutionPolicy>();
+        services.TryAddSingleton<ISensorStateNormalizer, SensorStateNormalizer>();
+        services.TryAddSingleton<ISpatialSensorFusionKernel, DefaultSpatialSensorFusionKernel>();
+        services.TryAddSingleton<IRetryIntentResolver, HealthRetryIntentResolver>();
+        services.TryAddSingleton<DefaultResidentPerceptionAlgorithmKernel>();
+        services.TryAddSingleton<IResidentPerceptionAlgorithmKernel>(
+            provider => provider.GetRequiredService<DefaultResidentPerceptionAlgorithmKernel>());
+        services.TryAddSingleton<IPerceptionAlgorithmKernel>(
+            provider => provider.GetRequiredService<DefaultResidentPerceptionAlgorithmKernel>());
 
         return services;
     }

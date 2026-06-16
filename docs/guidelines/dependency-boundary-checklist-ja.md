@@ -62,8 +62,9 @@ C# package boundary は Python wrapper boundary でもあります。将来の
 fixed native、OS-specific、browser/WASM-specific、vendor-SDK-specific、
 scenario-specific implementation を default import surface に混入させてはいけません。
 
-0.1.1.1 line では AIKernel.Providers は NuGet-only であり、PyPI package を build /
-publish しません。
+0.1.1.1 validation line では AIKernel.Providers は NuGet-only であり、PyPI package を
+build / publish しません。次の公式 v0.1.2 正典シリーズに向けて NuGet + PyPI package の
+同期更新を準備します。
 
 ## Implementation Ownership
 
@@ -90,3 +91,4 @@ publish しません。
 - [ ] Scenario-specific logic が generic providers に混入していない
 - [ ] CUDA descriptor は descriptor のままで、CUDA implementation は dedicated backend にある
 - [ ] WindowsAI / WinRT implementation が generic Providers に混入していない
+- [ ] shared workspace root で `py AIKernel.NET\tools\check_bilingual_xml_docs.py AIKernel.Providers\src` を実行し、public API XML documentation が通る

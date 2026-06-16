@@ -20,11 +20,11 @@ public abstract class CouncilSemanticEvaluationProviderBase : ICouncilSemanticEv
     /// [EN] Initializes the provider with stable identity and council metadata.
     /// [JA] 安定した identity と council metadata で Provider を初期化します。
     /// </summary>
-    /// <param name="providerId">
+    /// <param name="providerId">EN:  JA: providerId パラメーターです。
     /// [EN] Provider identifier.
     /// [JA] Provider 識別子です。
     /// </param>
-    /// <param name="councilKind">
+    /// <param name="councilKind">EN:  JA: councilKind パラメーターです。
     /// [EN] Council kind handled by the provider.
     /// [JA] Provider が扱う council kind です。
     /// </param>
@@ -54,15 +54,15 @@ public abstract class CouncilSemanticEvaluationProviderBase : ICouncilSemanticEv
     /// [EN] Evaluates semantic material for the requested council.
     /// [JA] 要求された council の semantic material を評価します。
     /// </summary>
-    /// <param name="request">
+    /// <param name="request">EN:  JA: request パラメーターです。
     /// [EN] Council semantic evaluation request.
     /// [JA] council semantic evaluation request です。
     /// </param>
-    /// <param name="cancellationToken">
+    /// <param name="cancellationToken">EN:  JA: cancellationToken パラメーターです。
     /// [EN] Cancellation token.
     /// [JA] cancellation token です。
     /// </param>
-    /// <returns>
+    /// <returns>EN:  JA: 結果を返します。
     /// [EN] Council semantic evaluation result.
     /// [JA] council semantic evaluation result です。
     /// </returns>
@@ -88,15 +88,15 @@ public abstract class CouncilSemanticEvaluationProviderBase : ICouncilSemanticEv
     /// [EN] Evaluates provider-specific semantic material.
     /// [JA] Provider 固有の semantic material を評価します。
     /// </summary>
-    /// <param name="request">
+    /// <param name="request">EN:  JA: request パラメーターです。
     /// [EN] Council semantic evaluation request.
     /// [JA] council semantic evaluation request です。
     /// </param>
-    /// <param name="cancellationToken">
+    /// <param name="cancellationToken">EN:  JA: cancellationToken パラメーターです。
     /// [EN] Cancellation token.
     /// [JA] cancellation token です。
     /// </param>
-    /// <returns>
+    /// <returns>EN:  JA: 結果を返します。
     /// [EN] Council semantic evaluation result.
     /// [JA] council semantic evaluation result です。
     /// </returns>
@@ -108,11 +108,11 @@ public abstract class CouncilSemanticEvaluationProviderBase : ICouncilSemanticEv
     /// [EN] Creates an Unknown vote semantic result for a configured but non-evaluating provider.
     /// [JA] 構成済みだが評価を行わない Provider 用の Unknown vote semantic result を作成します。
     /// </summary>
-    /// <param name="request">
+    /// <param name="request">EN:  JA: request パラメーターです。
     /// [EN] Council semantic evaluation request.
     /// [JA] council semantic evaluation request です。
     /// </param>
-    /// <returns>
+    /// <returns>EN:  JA: 結果を返します。
     /// [EN] Unknown vote semantic evaluation result.
     /// [JA] Unknown vote の semantic evaluation result です。
     /// </returns>

@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Net;
 
+/// <summary>EN: Documentation for public API. JA: OpenAICompatibleProvider を表します。</summary>
 /// <include file="docs.en.xml" path="doc/members/member[@name='T:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProvider']/summary" />
 /// <include file="docs.ja.xml" path="doc/members/member[@name='T:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProvider']/summary" />
 public sealed class OpenAICompatibleProvider : IModelProvider
@@ -41,6 +42,7 @@ public sealed class OpenAICompatibleProvider : IModelProvider
 
     private volatile bool _isInitialized;
 
+    /// <summary>EN: Documentation for public API. JA: OpenAICompatibleProvider を取得します。</summary>
     /// <include file="docs.en.xml" path="doc/members/member[@name='M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProvider.#ctor']/summary" />
     /// <include file="docs.ja.xml" path="doc/members/member[@name='M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProvider.#ctor']/summary" />
     public OpenAICompatibleProvider(
@@ -60,6 +62,7 @@ public sealed class OpenAICompatibleProvider : IModelProvider
     {
     }
 
+    /// <summary>EN: Documentation for public API. JA: OpenAICompatibleProvider を取得します。</summary>
     /// <include file="docs.en.xml" path="doc/members/member[@name='M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProvider.#ctor']/summary" />
     /// <include file="docs.ja.xml" path="doc/members/member[@name='M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProvider.#ctor']/summary" />
     public OpenAICompatibleProvider(
@@ -83,18 +86,22 @@ public sealed class OpenAICompatibleProvider : IModelProvider
         Version = RequireNonEmpty(_options.Version, nameof(_options.Version));
     }
 
+    /// <summary>EN: Documentation for public API. JA: ProviderId を取得します。</summary>
     /// <include file="docs.en.xml" path="doc/members/member[@name='P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProvider.ProviderId']/summary" />
     /// <include file="docs.ja.xml" path="doc/members/member[@name='P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProvider.ProviderId']/summary" />
     public string ProviderId { get; }
 
+    /// <summary>EN: Documentation for public API. JA: Name を取得します。</summary>
     /// <include file="docs.en.xml" path="doc/members/member[@name='P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProvider.Name']/summary" />
     /// <include file="docs.ja.xml" path="doc/members/member[@name='P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProvider.Name']/summary" />
     public string Name { get; }
 
+    /// <summary>EN: Documentation for public API. JA: Version を取得します。</summary>
     /// <include file="docs.en.xml" path="doc/members/member[@name='P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProvider.Version']/summary" />
     /// <include file="docs.ja.xml" path="doc/members/member[@name='P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProvider.Version']/summary" />
     public string Version { get; }
 
+    /// <summary>EN: Documentation for public API. JA: GetCapabilities を実行します。</summary>
     /// <include file="docs.en.xml" path="doc/members/member[@name='M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProvider.GetCapabilities']/summary" />
     /// <include file="docs.ja.xml" path="doc/members/member[@name='M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProvider.GetCapabilities']/summary" />
     public IProviderCapabilities GetCapabilities()
@@ -102,6 +109,7 @@ public sealed class OpenAICompatibleProvider : IModelProvider
         return _capabilities;
     }
 
+    /// <summary>EN: Documentation for public API. JA: IsAvailableAsync を実行します。</summary>
     /// <include file="docs.en.xml" path="doc/members/member[@name='M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProvider.IsAvailableAsync']/summary" />
     /// <include file="docs.ja.xml" path="doc/members/member[@name='M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProvider.IsAvailableAsync']/summary" />
     public Task<bool> IsAvailableAsync()
@@ -109,6 +117,7 @@ public sealed class OpenAICompatibleProvider : IModelProvider
         return Task.FromResult(_isInitialized);
     }
 
+    /// <summary>EN: Documentation for public API. JA: InitializeAsync を実行します。</summary>
     /// <include file="docs.en.xml" path="doc/members/member[@name='M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProvider.InitializeAsync']/summary" />
     /// <include file="docs.ja.xml" path="doc/members/member[@name='M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProvider.InitializeAsync']/summary" />
     public Task InitializeAsync()
@@ -117,6 +126,7 @@ public sealed class OpenAICompatibleProvider : IModelProvider
         return Task.CompletedTask;
     }
 
+    /// <summary>EN: Documentation for public API. JA: ShutdownAsync を実行します。</summary>
     /// <include file="docs.en.xml" path="doc/members/member[@name='M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProvider.ShutdownAsync']/summary" />
     /// <include file="docs.ja.xml" path="doc/members/member[@name='M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProvider.ShutdownAsync']/summary" />
     public Task ShutdownAsync()
@@ -125,6 +135,7 @@ public sealed class OpenAICompatibleProvider : IModelProvider
         return Task.CompletedTask;
     }
 
+    /// <summary>EN: Documentation for public API. JA: GetHealthAsync を実行します。</summary>
     /// <include file="docs.en.xml" path="doc/members/member[@name='M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProvider.GetHealthAsync']/summary" />
     /// <include file="docs.ja.xml" path="doc/members/member[@name='M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProvider.GetHealthAsync']/summary" />
     public async Task<ProviderHealthStatus> GetHealthAsync()
@@ -138,6 +149,7 @@ public sealed class OpenAICompatibleProvider : IModelProvider
             .ConfigureAwait(false);
     }
 
+    /// <summary>EN: Documentation for public API. JA: GenerateAsync を取得します。</summary>
     /// <include file="docs.en.xml" path="doc/members/member[@name='M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProvider.GenerateAsync']/summary" />
     /// <include file="docs.ja.xml" path="doc/members/member[@name='M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProvider.GenerateAsync']/summary" />
     public async Task<string> GenerateAsync(
@@ -253,6 +265,7 @@ public sealed class OpenAICompatibleProvider : IModelProvider
         }
     }
 
+    /// <summary>EN: Documentation for public API. JA: StreamGenerateAsync を取得します。</summary>
     /// <include file="docs.en.xml" path="doc/members/member[@name='M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProvider.StreamGenerateAsync']/summary" />
     /// <include file="docs.ja.xml" path="doc/members/member[@name='M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProvider.StreamGenerateAsync']/summary" />
     public async Task StreamGenerateAsync(
@@ -274,6 +287,7 @@ public sealed class OpenAICompatibleProvider : IModelProvider
         await onChunk(text).ConfigureAwait(false);
     }
 
+    /// <summary>EN: Documentation for public API. JA: AnswerAsync を取得します。</summary>
     /// <include file="docs.en.xml" path="doc/members/member[@name='M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProvider.AnswerAsync']/summary" />
     /// <include file="docs.ja.xml" path="doc/members/member[@name='M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProvider.AnswerAsync']/summary" />
     public Task<string> AnswerAsync(

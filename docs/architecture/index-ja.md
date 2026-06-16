@@ -142,9 +142,10 @@ packaging や Microsoft.Extensions.AI integration detail を所有しません�
 ## Python Boundary
 
 `aikernel-providers` は、同じ Provider boundary を Python host 向けに公開するための
-予約済み wrapper 名です。0.1.1.1 line は NuGet-only であり、PyPI package を
-build / publish しません。将来の Python packaging では managed assembly と
-manifest JSON file を pythonnet 経由で読み込み、薄い wrapper object を公開します。
+予約済み wrapper 名です。0.1.1.1 validation line は NuGet-only であり、PyPI package を
+build / publish しません。次の公式 v0.1.2 正典シリーズでは PyPI package family を
+更新する前提です。Python packaging では managed assembly と manifest JSON file を
+pythonnet 経由で読み込み、薄い wrapper object を公開します。
 
 Python code は Provider semantics を再実装しません。public C# package surface
 へ委譲します。

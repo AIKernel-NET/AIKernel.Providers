@@ -66,6 +66,7 @@ public sealed class HttpNetworkProvider : StandardProviderBase, INetworkProvider
         _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
     }
 
+    /// <summary>EN: Documentation for public API. JA: ConnectAsync を実行します。</summary>
     /// <inheritdoc />
     public async Task<INetworkStream> ConnectAsync(string host, int port)
         => RequireSuccess(await TryConnectAsync(host, port).ConfigureAwait(false));
@@ -85,6 +86,7 @@ public sealed class HttpNetworkProvider : StandardProviderBase, INetworkProvider
             select stream;
     }
 
+    /// <summary>EN: Documentation for public API. JA: HttpGetAsync を実行します。</summary>
     /// <inheritdoc />
     public async Task<IHttpResponse> HttpGetAsync(string url)
         => RequireSuccess(await TryHttpGetAsync(url).ConfigureAwait(false));
@@ -102,6 +104,7 @@ public sealed class HttpNetworkProvider : StandardProviderBase, INetworkProvider
             select response;
     }
 
+    /// <summary>EN: Documentation for public API. JA: HttpPostAsync を実行します。</summary>
     /// <inheritdoc />
     public async Task<IHttpResponse> HttpPostAsync(string url, byte[] body)
         => RequireSuccess(await TryHttpPostAsync(url, body).ConfigureAwait(false));
@@ -148,6 +151,7 @@ public sealed class WebSocketNetworkProvider()
     : StandardProviderBase("providers.network.websocket", "WebSocket Network Provider", "0.1.1", ["network.websocket.connect"], ["websocket"]),
       INetworkProvider
 {
+    /// <summary>EN: Documentation for public API. JA: ConnectAsync を実行します。</summary>
     /// <inheritdoc />
     public async Task<INetworkStream> ConnectAsync(string host, int port)
         => RequireSuccess(await TryConnectAsync(host, port).ConfigureAwait(false));
@@ -167,6 +171,7 @@ public sealed class WebSocketNetworkProvider()
             select stream;
     }
 
+    /// <summary>EN: Documentation for public API. JA: HttpGetAsync を実行します。</summary>
     /// <inheritdoc />
     public Task<IHttpResponse> HttpGetAsync(string url)
         => Task.FromException<IHttpResponse>(new NotSupportedException("WebSocketNetworkProvider does not perform HTTP GET."));
@@ -175,6 +180,7 @@ public sealed class WebSocketNetworkProvider()
     public Task<Result<IHttpResponse>> TryHttpGetAsync(string url)
         => Result<IHttpResponse>.Fail("WebSocketNetworkProvider does not perform HTTP GET. ErrorCode=WEBSOCKET_HTTP_GET_UNSUPPORTED").AsTask();
 
+    /// <summary>EN: Documentation for public API. JA: HttpPostAsync を実行します。</summary>
     /// <inheritdoc />
     public Task<IHttpResponse> HttpPostAsync(string url, byte[] body)
         => Task.FromException<IHttpResponse>(new NotSupportedException("WebSocketNetworkProvider does not perform HTTP POST."));
@@ -241,15 +247,27 @@ public sealed record HttpNetworkResponse(
 internal sealed class TcpNetworkStream(TcpClient client) : INetworkStream
 {
     private readonly TcpClient _client = client ?? throw new ArgumentNullException(nameof(client));
+    /// <summary>
+    /// EN: Executes DisposeAsync.
+    /// EN: Documentation for public API. JA: DisposeAsync を実行します。
+    /// </summary>
 
     public async ValueTask DisposeAsync()
     {
         _client.Dispose();
         await ValueTask.CompletedTask.ConfigureAwait(false);
     }
+    /// <summary>
+    /// EN: Executes ReadAsync.
+    /// EN: Documentation for public API. JA: ReadAsync を実行します。
+    /// </summary>
 
     public ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken = default)
         => _client.GetStream().ReadAsync(buffer, cancellationToken);
+    /// <summary>
+    /// EN: Executes WriteAsync.
+    /// EN: Documentation for public API. JA: WriteAsync を実行します。
+    /// </summary>
 
     public ValueTask WriteAsync(ReadOnlyMemory<byte> buffer, CancellationToken cancellationToken = default)
         => _client.GetStream().WriteAsync(buffer, cancellationToken);
@@ -258,18 +276,30 @@ internal sealed class TcpNetworkStream(TcpClient client) : INetworkStream
 internal sealed class WebSocketNetworkStream(ClientWebSocket webSocket) : INetworkStream
 {
     private readonly ClientWebSocket _webSocket = webSocket ?? throw new ArgumentNullException(nameof(webSocket));
+    /// <summary>
+    /// EN: Executes DisposeAsync.
+    /// EN: Documentation for public API. JA: DisposeAsync を実行します。
+    /// </summary>
 
     public async ValueTask DisposeAsync()
     {
         await _webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "disposed", CancellationToken.None).ConfigureAwait(false);
         _webSocket.Dispose();
     }
+    /// <summary>
+    /// EN: Executes ReadAsync.
+    /// EN: Documentation for public API. JA: ReadAsync を実行します。
+    /// </summary>
 
     public async ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken = default)
     {
         var result = await _webSocket.ReceiveAsync(buffer, cancellationToken).ConfigureAwait(false);
         return result.Count;
     }
+    /// <summary>
+    /// EN: Executes WriteAsync.
+    /// EN: Documentation for public API. JA: WriteAsync を実行します。
+    /// </summary>
 
     public async ValueTask WriteAsync(ReadOnlyMemory<byte> buffer, CancellationToken cancellationToken = default)
     {

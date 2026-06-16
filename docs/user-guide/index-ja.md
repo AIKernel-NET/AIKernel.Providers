@@ -25,8 +25,9 @@ dotnet add package AIKernel.Providers.MicrosoftAI --version 0.1.1.1
 dotnet add package AIKernel.Providers.Standard --version 0.1.1.1
 ```
 
-0.1.1.1 line は NuGet-only です。この line では PyPI package を build / install /
-publish しません。
+0.1.1.1 validation line は NuGet-only です。この line では PyPI package を build /
+install / publish しません。次の公式 v0.1.2 正典シリーズで NuGet と PyPI の package
+family を同期公開できるように準備します。
 
 ## Choose a Provider
 

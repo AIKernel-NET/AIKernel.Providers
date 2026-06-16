@@ -17,9 +17,12 @@ Control, Wasm, GPU backends, and Tools after the 0.1.x line stabilizes.
 
 ## Cross-Repository Alignment
 
-Shared repository boundaries, 0.1.1.1 local NuGet versioning, and the
-NuGet-only / no-PyPI rule for this update line are defined by
+Shared repository boundaries, 0.1.1.1 local NuGet versioning, the
+NuGet-only / no-PyPI rule for this validation line, and the v0.1.2
+NuGet + PyPI release assumption are defined by
 [AIKernel Repository Alignment v0.1.1.1](https://github.com/AIKernel-NET/AIKernel.NET/blob/main/docs/development/repository-alignment-v0.1.1.1.md).
+When a change crosses repositories, start with the
+[Cross-Repository Developer Guide v0.1.1.1](https://github.com/AIKernel-NET/AIKernel.NET/blob/main/docs/development/cross-repository-developer-guide-v0.1.1.1.md).
 
 Providers owns substrate, manifests, descriptors, deterministic routing, and
 runtime-configurable providers. It must not own Gate decisions, browser/WASM
@@ -49,7 +52,9 @@ runtime implementation, fixed native SDK bindings, or scenario semantics.
 - Read Provider Development Guidelines when deciding whether a provider belongs
   in AIKernel.Providers or needs a dedicated package / repository.
 - Read Python Wrapper when reviewing the reference-only Python boundary. The
-  0.1.1.1 line is NuGet-only and does not build or publish a PyPI package.
+  0.1.1.1 validation line is NuGet-only and does not build or publish a PyPI
+  package. The next official v0.1.2 canonical series is expected to refresh
+  the PyPI package family together with NuGet.
 
 ## Safe First Validation
 
@@ -65,6 +70,9 @@ dotnet test AIKernel.Providers.slnx -c Release --no-build
 
 Version 0.1.1.1 is the current NuGet-only development line. Use
 `0.1.1.1-dev{build-number}` for local package references.
+
+Prepare synchronized NuGet + PyPI package updates for the next official
+v0.1.2 canonical release line.
 
 Version 0.1.1 is the first public release line for AIKernel.Providers. It
 contains:

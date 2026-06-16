@@ -16,11 +16,11 @@ public abstract class AudioRecBase
     /// [EN] Initializes the audio recording base class.
     /// [JA] audio recording base class を初期化します。
     /// </summary>
-    /// <param name="capability">
+    /// <param name="capability">EN:  JA: capability パラメーターです。
     /// [EN] Audio capability descriptor.
     /// [JA] audio capability descriptor です。
     /// </param>
-    /// <param name="validator">
+    /// <param name="validator">EN:  JA: validator パラメーターです。
     /// [EN] Audio format validator.
     /// [JA] audio format validator です。
     /// </param>
@@ -39,15 +39,15 @@ public abstract class AudioRecBase
     /// [EN] Records audio after backend-independent request validation.
     /// [JA] backend 非依存の request validation 後に audio を record します。
     /// </summary>
-    /// <param name="request">
+    /// <param name="request">EN:  JA: request パラメーターです。
     /// [EN] Audio recording request.
     /// [JA] audio recording request です。
     /// </param>
-    /// <param name="cancellationToken">
+    /// <param name="cancellationToken">EN:  JA: cancellationToken パラメーターです。
     /// [EN] Cancellation token.
     /// [JA] cancellation token です。
     /// </param>
-    /// <returns>
+    /// <returns>EN:  JA: 結果を返します。
     /// [EN] Structured audio recording result.
     /// [JA] 構造化された audio recording result です。
     /// </returns>
@@ -78,15 +78,15 @@ public abstract class AudioRecBase
     /// [EN] Performs provider recording after validation has succeeded.
     /// [JA] validation 成功後に Provider recording を実行します。
     /// </summary>
-    /// <param name="request">
+    /// <param name="request">EN:  JA: request パラメーターです。
     /// [EN] Audio recording request.
     /// [JA] audio recording request です。
     /// </param>
-    /// <param name="cancellationToken">
+    /// <param name="cancellationToken">EN:  JA: cancellationToken パラメーターです。
     /// [EN] Cancellation token.
     /// [JA] cancellation token です。
     /// </param>
-    /// <returns>
+    /// <returns>EN:  JA: 結果を返します。
     /// [EN] Structured audio recording result.
     /// [JA] 構造化された audio recording result です。
     /// </returns>

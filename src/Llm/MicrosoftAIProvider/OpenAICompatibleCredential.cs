@@ -3,18 +3,22 @@ namespace AIKernel.Providers.MicrosoftAI;
 using AIKernel.Core.Security;
 using AIKernel.Core.Time;
 
+/// <summary>EN: Documentation for public API. JA: OpenAICompatibleCredential を表します。</summary>
 /// <include file="docs.en.xml" path="doc/members/member[@name='T:AIKernel.Providers.MicrosoftAI.OpenAICompatibleCredential']/summary" />
 /// <include file="docs.ja.xml" path="doc/members/member[@name='T:AIKernel.Providers.MicrosoftAI.OpenAICompatibleCredential']/summary" />
 public sealed record OpenAICompatibleCredential
 {
+    /// <summary>EN: Documentation for public API. JA: ApiKey を取得します。</summary>
     /// <include file="docs.en.xml" path="doc/members/member[@name='P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleCredential.ApiKey']/summary" />
     /// <include file="docs.ja.xml" path="doc/members/member[@name='P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleCredential.ApiKey']/summary" />
     public required string ApiKey { get; init; }
 
+    /// <summary>EN: Documentation for public API. JA: ExpiresAtUtc を取得します。</summary>
     /// <include file="docs.en.xml" path="doc/members/member[@name='P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleCredential.ExpiresAtUtc']/summary" />
     /// <include file="docs.ja.xml" path="doc/members/member[@name='P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleCredential.ExpiresAtUtc']/summary" />
     public DateTimeOffset? ExpiresAtUtc { get; init; }
 
+    /// <summary>EN: Documentation for public API. JA: Create を取得します。</summary>
     /// <include file="docs.en.xml" path="doc/members/member[@name='M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleCredential.Create']/summary" />
     /// <include file="docs.ja.xml" path="doc/members/member[@name='M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleCredential.Create']/summary" />
     public static OpenAICompatibleCredential Create(
@@ -36,6 +40,7 @@ public sealed record OpenAICompatibleCredential
         };
     }
 
+    /// <summary>EN: Documentation for public API. JA: ToString を実行します。</summary>
     /// <include file="docs.en.xml" path="doc/members/member[@name='M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleCredential.ToString']/summary" />
     /// <include file="docs.ja.xml" path="doc/members/member[@name='M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleCredential.ToString']/summary" />
     public override string ToString()

@@ -77,7 +77,7 @@ public sealed record ProviderManifestDescriptor
     /// [EN] Creates a normalized capability descriptor for deterministic routing.
     /// [JA] deterministic routing 用の正規化された capability descriptor を作成します。
     /// </summary>
-    /// <returns>
+    /// <returns>EN:  JA: 結果を返します。
     /// [EN] Normalized capability descriptor.
     /// [JA] 正規化された capability descriptor です。
     /// </returns>

@@ -40,6 +40,7 @@ public sealed class EventBusProvider : StandardProviderBase, IEventBus
     public async Task PublishAsync(string eventName, object payload)
         => await PublishAsync(eventName, payload, CancellationToken.None).ConfigureAwait(false);
 
+    /// <summary>EN: Documentation for public API. JA: PublishAsync を実行します。</summary>
     /// <inheritdoc />
     public async Task PublishAsync(string eventName, object eventData, CancellationToken cancellationToken = default)
     {
@@ -57,10 +58,12 @@ public sealed class EventBusProvider : StandardProviderBase, IEventBus
         }
     }
 
+    /// <summary>EN: Documentation for public API. JA: BroadcastAsync を実行します。</summary>
     /// <inheritdoc />
     public Task BroadcastAsync(string eventName, object eventData, CancellationToken cancellationToken = default)
         => PublishAsync(eventName, eventData, cancellationToken);
 
+    /// <summary>EN: Documentation for public API. JA: Subscribe&lt;T&gt; を実行します。</summary>
     /// <inheritdoc />
     public string Subscribe<T>(string eventName, Func<T, Task> handler)
     {
@@ -68,6 +71,7 @@ public sealed class EventBusProvider : StandardProviderBase, IEventBus
         return Subscribe(eventName, payload => handler((T)payload));
     }
 
+    /// <summary>EN: Documentation for public API. JA: Unsubscribe を実行します。</summary>
     /// <inheritdoc />
     public bool Unsubscribe(string subscriptionId)
     {
@@ -79,6 +83,7 @@ public sealed class EventBusProvider : StandardProviderBase, IEventBus
                 handlers => RemoveHandler(handlers, subscriptionId));
     }
 
+    /// <summary>EN: Documentation for public API. JA: GetSubscriberCount を実行します。</summary>
     /// <inheritdoc />
     public int GetSubscriberCount(string eventName)
     {

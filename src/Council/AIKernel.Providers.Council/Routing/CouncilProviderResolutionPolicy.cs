@@ -13,15 +13,15 @@ public sealed class CouncilProviderResolutionPolicy
     /// [EN] Creates a provider resolution policy for a council kind.
     /// [JA] council kind に対応する Provider resolution policy を作成します。
     /// </summary>
-    /// <param name="councilKind">
+    /// <param name="councilKind">EN:  JA: councilKind パラメーターです。
     /// [EN] Council kind to resolve.
     /// [JA] 解決対象の council kind です。
     /// </param>
-    /// <param name="preferredProviderId">
+    /// <param name="preferredProviderId">EN:  JA: preferredProviderId パラメーターです。
     /// [EN] Optional preferred provider identifier.
     /// [JA] 任意の preferred Provider 識別子です。
     /// </param>
-    /// <returns>
+    /// <returns>EN:  JA: 結果を返します。
     /// [EN] Provider resolution policy.
     /// [JA] Provider resolution policy です。
     /// </returns>
@@ -38,11 +38,11 @@ public sealed class CouncilProviderResolutionPolicy
     /// [EN] Creates the deterministic capability name for a council kind.
     /// [JA] council kind に対応する deterministic capability 名を作成します。
     /// </summary>
-    /// <param name="councilKind">
+    /// <param name="councilKind">EN:  JA: councilKind パラメーターです。
     /// [EN] Council kind.
     /// [JA] council kind です。
     /// </param>
-    /// <returns>
+    /// <returns>EN:  JA: 結果を返します。
     /// [EN] Capability name.
     /// [JA] capability 名です。
     /// </returns>

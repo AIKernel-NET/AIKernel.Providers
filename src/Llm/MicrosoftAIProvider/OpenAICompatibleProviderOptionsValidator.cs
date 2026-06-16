@@ -2,11 +2,13 @@ namespace AIKernel.Providers.MicrosoftAI;
 
 using Microsoft.Extensions.Options;
 
+/// <summary>EN: Documentation for public API. JA: OpenAICompatibleProviderOptionsValidator を表します。</summary>
 /// <include file="docs.en.xml" path="doc/members/member[@name='T:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderOptionsValidator']/summary" />
 /// <include file="docs.ja.xml" path="doc/members/member[@name='T:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderOptionsValidator']/summary" />
 public sealed class OpenAICompatibleProviderOptionsValidator
     : IValidateOptions<OpenAICompatibleProviderOptions>
 {
+    /// <summary>EN: Documentation for public API. JA: Validate を取得します。</summary>
     /// <include file="docs.en.xml" path="doc/members/member[@name='M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderOptionsValidator.Validate']/summary" />
     /// <include file="docs.ja.xml" path="doc/members/member[@name='M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderOptionsValidator.Validate']/summary" />
     public ValidateOptionsResult Validate(

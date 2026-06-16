@@ -16,10 +16,13 @@ Tools を統合する標準 reference distribution として位置づけられ�
 
 ## リポジトリ横断整合
 
-共有の repository boundary、0.1.1.1 local NuGet versioning、この更新ラインでの
-NuGet-only / no-PyPI rule は
+共有の repository boundary、0.1.1.1 local NuGet versioning、この検証ラインでの
+NuGet-only / no-PyPI rule、v0.1.2 の NuGet + PyPI release assumption は
 [AIKernel Repository Alignment v0.1.1.1](https://github.com/AIKernel-NET/AIKernel.NET/blob/main/docs/development/repository-alignment-v0.1.1.1-ja.md)
 で定義します。
+複数 repository をまたぐ変更を行う場合は、まず
+[リポジトリ横断開発者ガイド v0.1.1.1](https://github.com/AIKernel-NET/AIKernel.NET/blob/main/docs/development/cross-repository-developer-guide-v0.1.1.1-ja.md)
+を読んでください。
 
 Providers は substrate、manifest、descriptor、deterministic routing、
 runtime-configurable provider を所有します。Gate decision、browser/WASM runtime
@@ -48,8 +51,9 @@ implementation、固定 native SDK binding、scenario semantics は所有しま�
   戻しません。
 - Provider を AIKernel.Providers に置くべきか、dedicated package / repository に
   分離すべきか判断する場合は Provider Development Guidelines を読んでください。
-- Python boundary を確認する場合は Python Wrapper を読んでください。0.1.1.1 line は
-  NuGet-only であり、PyPI package を build / publish しません。
+- Python boundary を確認する場合は Python Wrapper を読んでください。0.1.1.1 validation
+  line は NuGet-only であり、PyPI package を build / publish しません。次の公式
+  v0.1.2 正典シリーズでは、NuGet と PyPI を同期して更新する前提です。
 
 ## 最初の安全な検証
 
@@ -65,6 +69,9 @@ dotnet test AIKernel.Providers.slnx -c Release --no-build
 
 Version 0.1.1.1 は現在の NuGet-only development line です。local package reference
 には `0.1.1.1-dev{build-number}` を使います。
+
+次の公式 v0.1.2 正典 release line に向けて、NuGet + PyPI package の同期更新を
+準備します。
 
 Version 0.1.1 は AIKernel.Providers の初回公開 release line です。次を含みます。
 

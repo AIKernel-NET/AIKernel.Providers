@@ -25,8 +25,10 @@ dotnet add package AIKernel.Providers.MicrosoftAI --version 0.1.1.1
 dotnet add package AIKernel.Providers.Standard --version 0.1.1.1
 ```
 
-The 0.1.1.1 line is NuGet-only. Do not build, install, or publish a PyPI
-package for this line.
+The 0.1.1.1 validation line is NuGet-only. Do not build, install, or publish a
+PyPI package for this line. Prepare the Python wrapper for the next official
+v0.1.2 canonical series, where synchronized NuGet and PyPI package families are
+expected.
 
 ## Choose a Provider
 

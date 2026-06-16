@@ -64,8 +64,9 @@ The C# package boundary is also the Python wrapper boundary. The future
 not pull fixed native, OS-specific, browser/WASM-specific, vendor-SDK-specific,
 or scenario-specific implementations into the default import surface.
 
-For the 0.1.1.1 line, AIKernel.Providers is NuGet-only and does not build or
-publish a PyPI package.
+For the 0.1.1.1 validation line, AIKernel.Providers is NuGet-only and does not
+build or publish a PyPI package. Prepare synchronized NuGet + PyPI package
+updates for the next official v0.1.2 canonical series.
 
 ## Implementation Ownership
 
@@ -92,3 +93,4 @@ publish a PyPI package.
 - [ ] Scenario-specific logic is not mixed into generic providers.
 - [ ] CUDA descriptors remain descriptors; CUDA implementation stays in a dedicated backend.
 - [ ] WindowsAI / WinRT implementation stays out of generic Providers.
+- [ ] Public API XML documentation passes `py AIKernel.NET\tools\check_bilingual_xml_docs.py AIKernel.Providers\src` from the shared workspace root.

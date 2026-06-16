@@ -146,9 +146,11 @@ ownership location:
 ## Python Boundary
 
 `aikernel-providers` is the reserved Python wrapper name for the same provider
-boundary. The 0.1.1.1 line is NuGet-only and does not build or publish a PyPI
-package. Future Python packaging should load managed assemblies and manifest
-JSON files through pythonnet and expose thin wrapper objects.
+boundary. The 0.1.1.1 validation line is NuGet-only and does not build or
+publish a PyPI package. The next official v0.1.2 canonical series is expected
+to refresh the PyPI package family; Python packaging should load managed
+assemblies and manifest JSON files through pythonnet and expose thin wrapper
+objects.
 
 Python code must not reimplement provider semantics. It delegates to the public
 C# package surface.

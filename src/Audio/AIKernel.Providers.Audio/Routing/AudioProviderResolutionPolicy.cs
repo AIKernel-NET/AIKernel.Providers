@@ -12,11 +12,11 @@ public sealed class AudioProviderResolutionPolicy
     /// [EN] Creates a playback provider resolution policy.
     /// [JA] playback Provider resolution policy を作成します。
     /// </summary>
-    /// <param name="preferredProviderId">
+    /// <param name="preferredProviderId">EN:  JA: preferredProviderId パラメーターです。
     /// [EN] Optional preferred provider identifier.
     /// [JA] 任意の preferred Provider 識別子です。
     /// </param>
-    /// <returns>
+    /// <returns>EN:  JA: 結果を返します。
     /// [EN] Provider resolution policy.
     /// [JA] Provider resolution policy です。
     /// </returns>
@@ -31,11 +31,11 @@ public sealed class AudioProviderResolutionPolicy
     /// [EN] Creates a recording provider resolution policy.
     /// [JA] recording Provider resolution policy を作成します。
     /// </summary>
-    /// <param name="preferredProviderId">
+    /// <param name="preferredProviderId">EN:  JA: preferredProviderId パラメーターです。
     /// [EN] Optional preferred provider identifier.
     /// [JA] 任意の preferred Provider 識別子です。
     /// </param>
-    /// <returns>
+    /// <returns>EN:  JA: 結果を返します。
     /// [EN] Provider resolution policy.
     /// [JA] Provider resolution policy です。
     /// </returns>

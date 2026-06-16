@@ -10,11 +10,11 @@ public sealed class ProviderManifestValidator : IProviderManifestValidator
     /// [EN] Validates a loaded provider manifest descriptor.
     /// [JA] load 済み Provider manifest descriptor を検証します。
     /// </summary>
-    /// <param name="descriptor">
+    /// <param name="descriptor">EN:  JA: descriptor パラメーターです。
     /// [EN] Provider manifest descriptor to validate.
     /// [JA] 検証対象の Provider manifest descriptor です。
     /// </param>
-    /// <returns>
+    /// <returns>EN:  JA: 結果を返します。
     /// [EN] Structured validation result.
     /// [JA] 構造化された validation result です。
     /// </returns>
@@ -25,15 +25,15 @@ public sealed class ProviderManifestValidator : IProviderManifestValidator
     /// [EN] Validates a loaded provider manifest descriptor with strictness options.
     /// [JA] strictness option を指定して load 済み Provider manifest descriptor を検証します。
     /// </summary>
-    /// <param name="descriptor">
+    /// <param name="descriptor">EN:  JA: descriptor パラメーターです。
     /// [EN] Provider manifest descriptor to validate.
     /// [JA] 検証対象の Provider manifest descriptor です。
     /// </param>
-    /// <param name="options">
+    /// <param name="options">EN:  JA: options パラメーターです。
     /// [EN] Validation options.
     /// [JA] validation option です。
     /// </param>
-    /// <returns>
+    /// <returns>EN:  JA: 結果を返します。
     /// [EN] Structured validation result.
     /// [JA] 構造化された validation result です。
     /// </returns>
@@ -107,6 +107,7 @@ public sealed class ProviderManifestValidator : IProviderManifestValidator
         };
     }
 
+    /// <summary>EN: Documentation for public API. JA: ValidateAsync を取得します。</summary>
     /// <inheritdoc />
     public ValueTask<ProviderManifestValidationResult> ValidateAsync(
         ProviderManifestDescriptor descriptor,
