@@ -127,3 +127,16 @@ print(assemblies.is_complete())
 将来の Python wrapper は C# contract mapper と managed Provider object へ委譲します。
 host application は得られた contract object を AIKernel capability registry への
 Provider 登録に利用します。
+## Trusted Publisher 設定
+
+aikernel-providers project の PyPI Trusted Publisher は、この repository が発行する GitHub OIDC claims と一致している必要があります。
+
+| Field | Value |
+| --- | --- |
+| PyPI project | aikernel-providers |
+| Owner | AIKernel-NET |
+| Repository | AIKernel.Providers |
+| Workflow | publish-pypi.yml |
+| Environment | pypi |
+
+PyPI が `invalid-publisher` を返す場合、workflow を token credential 方式へ戻してはいけません。PyPI project 側の Trusted Publisher entry を上記の値に合わせて修正し、失敗した publish job を rerun します。

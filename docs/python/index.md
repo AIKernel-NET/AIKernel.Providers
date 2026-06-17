@@ -130,3 +130,16 @@ print(assemblies.is_complete())
 The future Python wrapper must delegate to C# contract mappers and managed
 provider objects. Host applications should use the resulting contract objects to
 register providers with their AIKernel capability registry.
+## Trusted Publisher Configuration
+
+The PyPI Trusted Publisher for the aikernel-providers project must match the GitHub OIDC claims emitted by this repository:
+
+| Field | Value |
+| --- | --- |
+| PyPI project | aikernel-providers |
+| Owner | AIKernel-NET |
+| Repository | AIKernel.Providers |
+| Workflow | publish-pypi.yml |
+| Environment | pypi |
+
+If PyPI reports `invalid-publisher`, do not change the workflow to token credentials. Fix the PyPI project Trusted Publisher entry so it matches the table above, then rerun the failed publish job.
