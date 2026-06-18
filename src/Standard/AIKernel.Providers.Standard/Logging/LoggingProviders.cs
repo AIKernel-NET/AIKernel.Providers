@@ -44,6 +44,7 @@ public sealed class ConsoleLoggingProvider : LoggingProviderBase
     {
     }
 
+    /// <summary>[EN] Documents this public package API member. [JA] Write を実行します。</summary>
     /// <inheritdoc />
     public override void Write(string level, string message)
         => Console.WriteLine($"[{NormalizeLevel(level)}] {message}");
@@ -66,6 +67,7 @@ public sealed class FileLoggingProvider : LoggingProviderBase
             value => value);
     }
 
+    /// <summary>[EN] Documents this public package API member. [JA] Write を実行します。</summary>
     /// <inheritdoc />
     public override void Write(string level, string message)
     {

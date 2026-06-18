@@ -26,6 +26,19 @@ outside AIKernel.Core and AIKernel.Tools.
 This repository must not become a second Core runtime. Providers expose
 capabilities and invokers; Core keeps the contract model.
 
+## Inclusion Boundary
+
+AIKernel.Providers may contain provider substrate, manifests, registries,
+routers, deterministic fallback policy, runtime-configurable providers, and
+pure managed multi-platform .NET dependencies.
+
+Providers that require build-time fixed native runtimes, OS SDKs, browser/WASM
+runtimes, vendor SDKs, scenario runtime, or another top-level AIKernel
+implementation repository must move to a dedicated package or repository.
+
+See [Provider development guidelines](../guidelines/provider-development-guidelines.md)
+and [Dependency boundary checklist](../guidelines/dependency-boundary-checklist.md).
+
 ## Provider Types
 
 AIKernel.Providers currently contains these provider categories:
@@ -85,6 +98,29 @@ and CLI hints.
 Hosts can copy manifests into a provider directory, resolve the corresponding
 assembly, and register the provider through AIKernel's capability registry.
 
+`AIKernel.Providers.Substrate` supplies the shared manifest loader, validator,
+registry, and deterministic router used by this flow. Resolution returns
+structured results for missing providers, duplicate providers, and explicit
+fallback selection.
+
+Forward-compatible manifests may add optional `capabilities`, `metadata`,
+`backendMetadata`, `vendorMetadata`, `cli`, and unknown JSON blocks. Unknown
+JSON is preserved as raw extension JSON so future schema versions can add
+fields without breaking older loaders.
+
+## Council, Audio, And Compute Substrates
+
+Council providers emit semantic material and diagnostics only. They do not own
+downstream decision or control-state semantics.
+
+Audio substrate types model audio formats, frames, playback requests, recording
+requests, capability descriptors, and validation without backend dependencies.
+Dedicated packages own NAudio, SDL, WebAudio, WASM, or OS-specific audio stacks.
+
+Compute substrate types model tensor-like buffer references with standardized
+dtype strings, comma-separated shape and stride strings, optional layout, and a
+metadata map for backend-specific details.
+
 ## MicrosoftAI Migration
 
 `AIKernel.Providers.MicrosoftAI` is managed by this repository starting with the
@@ -97,7 +133,7 @@ ownership location:
 
 - Core keeps abstractions and runtime contracts.
 - AIKernel.Providers owns MicrosoftAI provider implementation, tests, package
-  metadata, documentation, and Python wrapper inclusion.
+  metadata, documentation, and Python wrapper reference materials.
 
 ## Dependency Rules
 
@@ -109,9 +145,9 @@ ownership location:
 
 ## Python Boundary
 
-The Python package `aikernel-providers` exposes the same provider boundary for
-Python hosts. It bundles managed assemblies and manifest JSON files, loads them
-through pythonnet, and exposes thin wrapper objects.
+`aikernel-providers` is the Python wrapper name for the same provider boundary
+in the 0.1.2 canonical series. Python packaging loads managed assemblies and
+manifest JSON files through pythonnet and exposes thin wrapper objects.
 
 Python code must not reimplement provider semantics. It delegates to the public
 C# package surface.

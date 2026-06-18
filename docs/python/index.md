@@ -2,12 +2,11 @@
 
 [日本語](index-ja.md)
 
-`aikernel-providers` is the Python distribution for official AIKernel extension
-providers.
+`aikernel-providers` is the 0.1.2 Python distribution for official AIKernel
+extension providers.
 
-It is a wrapper over C# provider packages, not a Python reimplementation of
-provider logic. The wheel bundles managed assemblies and exposes a unified
-Python import surface:
+The wrapper sits over C# provider packages; it is not a Python reimplementation
+of provider logic. It exposes a unified Python import surface:
 
 ```python
 from aikernel_providers import (
@@ -35,12 +34,14 @@ from aikernel_providers import (
 
 ## Install
 
+After the stable 0.1.2 publication task opens:
+
 ```bash
-pip install aikernel-providers
+pip install aikernel-providers==0.1.2
 ```
 
-The distribution name is `aikernel-providers`. The import name is
-`aikernel_providers`.
+During local validation, install the matching `0.1.2.dev<build-number>` wheel
+from the local package output.
 
 ## Scope
 
@@ -82,26 +83,24 @@ The wheel bundles provider assemblies and manifest files under
 - `AIKernel.Providers.MicrosoftAI.dll`
 - provider manifest JSON files
 
-`provider_assemblies()` resolves bundled assemblies first, then paths from
-`AIKERNEL_PROVIDERS_ASSEMBLY_PATH`, then matching NuGet packages from the global
-packages cache.
+`provider_assemblies()` is intended to resolve bundled assemblies first, then
+paths from `AIKERNEL_PROVIDERS_ASSEMBLY_PATH`, then matching NuGet packages
+from the global packages cache.
 
-`load_provider_runtime()` loads the resolved assemblies through pythonnet.
+`load_provider_runtime()` is intended to load the resolved assemblies through
+pythonnet.
 
 ## MicrosoftAI Provider
 
-MicrosoftAI support is included in the Python package through
+MicrosoftAI support is represented in the reference Python wrapper through
 `MicrosoftAIProviderOptions`, `MicrosoftAIProviderCapabilities`, response
 mapping wrappers, and the bundled `AIKernel.Providers.MicrosoftAI.dll`.
 
 This provider was moved from AIKernel.Core into AIKernel.Providers management
-for the 0.1.1 release. Python packaging follows that ownership change and
-bundles the provider with the official extension provider set.
+for the 0.1.2 release. The 0.1.2 Python wrapper follows that ownership change
+and stays thin over the managed provider surface.
 
-Hosting and dependency-injection extension methods remain C# APIs. The Python
-wheel still bundles the required Microsoft.Extensions dependency assemblies so
-pythonnet can resolve the managed provider surface consistently on Windows,
-Linux, and macOS.
+Hosting and dependency-injection extension methods remain C# APIs.
 
 ## Build
 
@@ -109,10 +108,11 @@ Linux, and macOS.
 cd AIKernel.Providers
 dotnet build AIKernel.Providers.slnx -c Release
 dotnet test AIKernel.Providers.slnx -c Release --no-build
-cd python
-py -m pytest
-py -m build
+dotnet pack AIKernel.Providers.slnx -c Release --no-build --no-restore -p:UseLocalPackageVersion=true -p:LocalPackageBuildNumber=1 -o ..\artifacts\local-packages
 ```
+
+Build Python wheels only as `0.1.2.dev<build-number>` during local validation.
+Create stable `0.1.2` wheels only after the publication task opens.
 
 ## API Example
 
@@ -127,6 +127,19 @@ assemblies = provider_assemblies()
 print(assemblies.is_complete())
 ```
 
-The Python wrapper delegates to C# contract mappers and managed provider
-objects. Host applications should use the resulting contract objects to
+The future Python wrapper must delegate to C# contract mappers and managed
+provider objects. Host applications should use the resulting contract objects to
 register providers with their AIKernel capability registry.
+## Trusted Publisher Configuration
+
+The PyPI Trusted Publisher for the aikernel-providers project must match the GitHub OIDC claims emitted by this repository:
+
+| Field | Value |
+| --- | --- |
+| PyPI project | aikernel-providers |
+| Owner | AIKernel-NET |
+| Repository | AIKernel.Providers |
+| Workflow | publish-pypi.yml |
+| Environment | pypi |
+
+If PyPI reports `invalid-publisher`, do not change the workflow to token credentials. Fix the PyPI project Trusted Publisher entry so it matches the table above, then rerun the failed publish job.

@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Title>AIKernel.Providers.Substrate</Title>
+    <PackageId>AIKernel.Providers.Substrate</PackageId>
+    <Description>EN: Pure managed provider manifest, registry, and deterministic routing substrate for AIKernel.Providers.
+
+JA: AIKernel.Providers 向けの pure managed な provider manifest、registry、deterministic routing substrate です。</Description>
+  </PropertyGroup>
+</Project>

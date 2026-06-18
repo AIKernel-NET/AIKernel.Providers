@@ -30,6 +30,7 @@ public sealed class ProfilerProvider : StandardProviderBase, IStandardProfilerPr
     public ResourceSnapshot Capture()
         => RequireSuccess(TryCapture());
 
+    /// <summary>[EN] Documents this public package API member. [JA] TryCapture を実行します。</summary>
     /// <inheritdoc />
     public Result<ResourceSnapshot> TryCapture()
         => Try.Run(() => new ResourceSnapshot(

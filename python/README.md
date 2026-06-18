@@ -2,11 +2,11 @@
 
 [日本語](README-ja.md)
 
-Official Python wrappers for AIKernel extension providers.
+Python wrappers for AIKernel extension providers.
 
-`aikernel-providers` exposes provider contract boundaries from the C#
-AIKernel.Providers assemblies without re-implementing provider semantics in
-Python.
+Starting with the 0.1.2 canon line, `aikernel-providers` exposes provider
+contract boundaries from the C# AIKernel.Providers assemblies without
+re-implementing provider semantics in Python.
 
 ## Import Surface
 
@@ -49,16 +49,19 @@ assemblies = provider_assemblies()
 print(assemblies.is_complete())
 ```
 
-The wheel bundles provider assemblies when built from the repository package
-workflow. At runtime, pythonnet loads the managed assemblies and Python objects
-delegate to the C# contract surface.
+Python packaging resolves provider assemblies through pythonnet and delegates
+Python objects to the C# contract surface.
 
-The Python package includes wrappers for the public Provider, Invoker,
+## Managed API Catalog
+
+The v0.1.2 package exposes the generated managed API catalog through
+`managed_api_catalog()`, `managed_api_summary()`, `managed_type_names()`, and
+`find_managed_type(full_name)`.
+
+The reference package includes wrappers for the public Provider, Invoker,
 Capability descriptor, Settings, MicrosoftAI option/capability/response mapping
 surfaces, and `AIKernel.Providers.Standard` OS driver descriptors. C# hosting-
-specific extension methods remain C# APIs, while the wheel still bundles their
-assembly dependencies so the managed runtime can resolve them on Windows,
-Linux, and macOS.
+specific extension methods remain C# APIs.
 
 ## Included Providers
 
@@ -70,8 +73,8 @@ Linux, and macOS.
 - AIKernel.Providers.MicrosoftAI
 - AIKernel.Providers.Standard
 
-MicrosoftAI support is included because ownership of that provider moved from
-AIKernel.Core to AIKernel.Providers for the 0.1.1 release.
+MicrosoftAI support is represented because ownership of that provider moved
+from AIKernel.Core to AIKernel.Providers for the 0.1.1 release.
 
 See the repository documentation for the full package scope:
 

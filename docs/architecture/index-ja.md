@@ -27,6 +27,19 @@ AIKernel.Core と AIKernel.Tools の外へ分離します。
 この repository は第二の Core runtime になってはいけません。Provider は
 capability と invoker を公開し、contract model は Core が保持します。
 
+## Inclusion Boundary
+
+AIKernel.Providers には provider substrate、manifest、registry、router、
+deterministic fallback policy、runtime-configurable provider、pure managed
+multi-platform .NET dependency を置けます。
+
+ビルド時に native runtime、OS SDK、browser/WASM runtime、vendor SDK、scenario
+runtime、または別の top-level AIKernel implementation repository へ固定依存する
+Provider は dedicated package / repository に分離します。
+
+[Provider development guidelines](../guidelines/provider-development-guidelines-ja.md) と
+[Dependency boundary checklist](../guidelines/dependency-boundary-checklist-ja.md) を参照してください。
+
 ## Provider Type
 
 AIKernel.Providers には、現時点で以下の Provider category が含まれます。
@@ -84,6 +97,28 @@ capability、metadata、CLI hint を識別します。
 host は manifest を provider directory へコピーし、対応 assembly を解決して、
 AIKernel capability registry に provider を登録できます。
 
+`AIKernel.Providers.Substrate` は、この flow で使う shared manifest loader、
+validator、registry、deterministic router を提供します。Resolution は missing
+provider、duplicate provider、明示的 fallback selection を structured result として返します。
+
+Forward-compatible manifest は任意の `capabilities`、`metadata`、
+`backendMetadata`、`vendorMetadata`、`cli`、未知 JSON block を追加できます。
+未知 JSON は raw extension JSON として保持されるため、将来の schema version が field を
+追加しても古い loader を壊しません。
+
+## Council, Audio, And Compute Substrates
+
+Council Provider は semantic material と diagnostics のみを出力します。downstream
+decision や control-state semantics は所有しません。
+
+Audio substrate 型は、backend dependency を持たずに audio format、frame、playback
+request、recording request、capability descriptor、validation を表します。NAudio、
+SDL、WebAudio、WASM、OS-specific audio stack は dedicated package が所有します。
+
+Compute substrate 型は、標準化された dtype string、comma-separated shape / stride
+string、任意 layout、backend-specific detail 用 metadata map により tensor-like
+buffer reference を表します。
+
 ## MicrosoftAI Migration
 
 `AIKernel.Providers.MicrosoftAI` は、0.1.1 公開からこの repository で管理します。
@@ -94,7 +129,7 @@ packaging や Microsoft.Extensions.AI integration detail を所有しません�
 
 - Core は abstraction と runtime contract を保持します。
 - AIKernel.Providers は MicrosoftAI Provider implementation、test、package
-  metadata、documentation、Python wrapper への同梱を所有します。
+  metadata、documentation、Python wrapper 参照資料を所有します。
 
 ## Dependency Rule
 
@@ -106,9 +141,9 @@ packaging や Microsoft.Extensions.AI integration detail を所有しません�
 
 ## Python Boundary
 
-Python package `aikernel-providers` は、Python host 向けに同じ Provider boundary
-を公開します。managed assembly と manifest JSON file を同梱し、pythonnet を
-通じて読み込み、薄い wrapper object を公開します。
+`aikernel-providers` は、0.1.2 正典シリーズで同じ Provider boundary を Python host
+向けに公開する wrapper 名です。Python packaging では managed assembly と manifest
+JSON file を pythonnet 経由で読み込み、薄い wrapper object を公開します。
 
 Python code は Provider semantics を再実装しません。public C# package surface
 へ委譲します。

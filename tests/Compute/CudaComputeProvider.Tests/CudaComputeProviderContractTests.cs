@@ -1,6 +1,9 @@
 using AIKernel.Dtos.Capabilities;
 using AIKernel.Enums;
+using AIKernel.Providers.Compute;
 using AIKernel.Providers.CudaCompute;
+using AIKernel.Providers.CudaCompute.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace AIKernel.Providers.Tests;
 
@@ -66,6 +69,124 @@ public sealed class CudaComputeProviderContractTests
 
         Assert.DoesNotContain("AIKernel.Tools", referenced);
         Assert.DoesNotContain(referenced, name => name is not null && name.StartsWith("AIKernel.Tools.", StringComparison.Ordinal));
+        Assert.DoesNotContain("AIKernel.Cuda13.0", referenced);
+        Assert.DoesNotContain(referenced, name => name is not null && name.Contains("Cuda13", StringComparison.OrdinalIgnoreCase));
+    }
+
+    [Fact]
+    public void ToBackendDescriptor_CarriesNativeBoundaryByDescriptorOnly()
+    {
+        var provider = new global::AIKernel.Providers.CudaCompute.CudaComputeProvider(new CudaComputeSettings
+        {
+            ProviderId = "providers.cuda",
+            BackendName = "cuda13.0",
+            NativeModuleRef = "aikernel-cuda://cuda13.0/modules/libtorch_bridge",
+            ArtifactHash = "sha256:cuda",
+            MaxDeviceMemoryBytes = 1024
+        });
+
+        var descriptor = provider.ToBackendDescriptor();
+
+        Assert.Equal("cuda13.0", descriptor.BackendName);
+        Assert.Equal("cuda13.0", descriptor.BackendId);
+        Assert.Equal("13.0", descriptor.BackendVersion);
+        Assert.Equal("aikernel-cuda13", descriptor.PackageId);
+        Assert.Equal("aikernel-cuda://cuda13.0/modules/libtorch_bridge", descriptor.NativeModule.ModuleRef);
+        Assert.Equal("cuda13.0", descriptor.NativeModule.BackendId);
+        Assert.Equal("libtorch_bridge", descriptor.NativeModule.ModuleId);
+        Assert.Equal("1.0", descriptor.NativeModule.AbiVersion);
+        Assert.Equal("sha256:cuda", descriptor.NativeModule.Hash.Expression);
+        Assert.Equal("sha256:cuda", descriptor.NativeModule.ArtifactHash);
+        Assert.Contains("tensor.matmul", descriptor.Operations);
+        Assert.Contains("tensor.matmul", descriptor.SupportedOps);
+        Assert.Equal(1024, descriptor.MaxDeviceMemoryBytes);
+    }
+
+    [Fact]
+    public void CudaBackendResolver_MissingOperation_ReturnsStructuredUnavailable()
+    {
+        var provider = new global::AIKernel.Providers.CudaCompute.CudaComputeProvider();
+        var result = new CudaBackendResolver().Resolve(
+            provider.ToBackendDescriptor(),
+            new CudaBackendResolutionPolicy
+            {
+                RequiredBackend = "cuda13.0",
+                RequiredDeviceProfile = "cuda13",
+                RequiredOperations = ["tensor.unknown"]
+            });
+
+        Assert.False(result.Succeeded);
+        Assert.Equal("CUDA_OPERATION_NOT_ADVERTISED", result.ErrorCode);
+        Assert.Equal(ComputeAvailabilityReason.UnsupportedOperation, result.AvailabilityReason);
+        Assert.NotEmpty(result.Diagnostics);
+    }
+
+    [Fact]
+    public void CudaBackendResolver_MissingNativeModule_ReturnsNativeModuleMissing()
+    {
+        var result = new CudaBackendResolver().Resolve(
+            new CudaBackendDescriptor
+            {
+                BackendName = "cuda13.0",
+                DeviceProfile = "cuda13",
+                Operations = ["tensor.matmul"]
+            },
+            new CudaBackendResolutionPolicy
+            {
+                RequiredBackend = "cuda13.0",
+                RequiredDeviceProfile = "cuda13",
+                RequiredOperations = ["tensor.matmul"]
+            });
+
+        Assert.False(result.Succeeded);
+        Assert.Equal("CUDA_NATIVE_MODULE_MISSING", result.ErrorCode);
+        Assert.Equal(ComputeAvailabilityReason.NativeModuleMissing, result.AvailabilityReason);
+    }
+
+    [Fact]
+    public void CudaBackendResolver_InvalidNativeModuleScheme_FailsClosed()
+    {
+        var result = new CudaBackendResolver().Resolve(
+            new CudaBackendDescriptor
+            {
+                BackendName = "cuda13.0",
+                DeviceProfile = "cuda13",
+                NativeModule = new NativeModuleDescriptor
+                {
+                    ModuleRef = "aikernel-cuda13://modules/libtorch_bridge"
+                },
+                Operations = ["tensor.matmul"]
+            },
+            new CudaBackendResolutionPolicy
+            {
+                RequiredBackend = "cuda13.0",
+                RequiredDeviceProfile = "cuda13",
+                RequiredOperations = ["tensor.matmul"]
+            });
+
+        Assert.False(result.Succeeded);
+        Assert.Equal("CUDA_NATIVE_MODULE_REF_INVALID", result.ErrorCode);
+        Assert.Equal(ComputeAvailabilityReason.NativeModuleMissing, result.AvailabilityReason);
+    }
+
+    [Fact]
+    public async Task Invoker_RecognizedOperationReturnsBackendNotBoundFailure()
+    {
+        var invoker = new CudaComputeInvoker();
+
+        var result = await invoker.InvokeAsync(new CapabilityInvocationRequest(
+            "invoke-1",
+            "cuda.compute",
+            "tensor.matmul",
+            new Dictionary<string, string>(),
+            null,
+            "sha256:replay",
+            new Dictionary<string, string>()),
+            TestContext.Current.CancellationToken);
+
+        Assert.False(result.Succeeded);
+        Assert.Equal("CUDA_BACKEND_NOT_BOUND", result.ErrorCode);
+        Assert.Equal("BackendNotInstalled", result.Metadata["compute.availability_reason"]);
     }
 
     [Fact]
@@ -85,6 +206,7 @@ public sealed class CudaComputeProviderContractTests
 
         Assert.False(result.Succeeded);
         Assert.Equal("CUDA_OPERATION_NOT_SUPPORTED", result.ErrorCode);
+        Assert.Equal("UnsupportedOperation", result.Metadata["compute.availability_reason"]);
     }
 
     [Fact]
@@ -111,7 +233,39 @@ public sealed class CudaComputeProviderContractTests
         };
 
         Assert.Equal(
-            ["artifact_hash", "device_profile", "entry_point", "loader_json", "version"],
+            [
+                "abi_version",
+                "artifact_hash",
+                "backend",
+                "backend_id",
+                "backend_version",
+                "device_profile",
+                "entry_point",
+                "loader_json",
+                "module_id",
+                "native_module_ref",
+                "package_id",
+                "version"
+            ],
             settings.ToMetadata().Keys.ToArray());
+    }
+
+    [Fact]
+    public void AddCudaComputeProvider_RegistersDescriptorBoundaryServices()
+    {
+        var services = new ServiceCollection();
+        services.AddCudaComputeProvider(new CudaComputeSettings
+        {
+            ProviderId = "providers.cuda.test",
+            BackendId = "cuda-test"
+        });
+
+        using var provider = services.BuildServiceProvider();
+
+        Assert.Equal("providers.cuda.test", provider.GetRequiredService<CudaComputeSettings>().ProviderId);
+        Assert.Equal("providers.cuda.test", provider.GetRequiredService<global::AIKernel.Providers.CudaCompute.CudaComputeProvider>().ProviderId);
+        Assert.NotNull(provider.GetRequiredService<CudaComputeInvoker>());
+        Assert.NotNull(provider.GetRequiredService<CudaBackendResolver>());
+        Assert.NotNull(provider.GetRequiredService<CudaBackendResolutionPolicy>());
     }
 }

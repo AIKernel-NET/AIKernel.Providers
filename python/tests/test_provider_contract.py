@@ -30,6 +30,8 @@ from aikernel_providers import (
     LocalLlmProvider,
     LocalLlmSettings,
     MemoryFileSystemProvider,
+    managed_api_summary,
+    managed_type_names,
     MicrosoftAICredential,
     MicrosoftAIHealthContext,
     MicrosoftAIProvider,
@@ -273,3 +275,14 @@ def test_microsoft_ai_additional_public_wrappers_resolve_managed_surface():
     assert validator.managed is not None
     assert "ProviderApiException" in exceptions
     assert exceptions["ProviderApiException"].Name == "ProviderApiException"
+
+
+def test_managed_api_catalog_covers_provider_substrate_and_perception():
+    names = set(managed_type_names())
+    summary = managed_api_summary()
+
+    assert "AIKernel.Providers.Substrate.ProviderRouter" in names
+    assert "AIKernel.Providers.Perception.DefaultResidentPerceptionAlgorithmKernel" in names
+    assert "AIKernel.Providers.Council.Providers.CouncilSemanticEvaluationProviderBase" in names
+    assert summary["AIKernel.Providers.Substrate"] > 0
+    assert summary["AIKernel.Providers.Perception"] > 0

@@ -5,12 +5,13 @@ using AIKernel.Common.Results;
 using AIKernel.Dtos.Capabilities;
 using AIKernel.Dtos.Core;
 using AIKernel.Dtos.Routing;
+using AIKernel.Providers.Compute;
 
 namespace AIKernel.Providers.CudaCompute;
 
 /// <summary>
-/// [EN] Official AIKernel external provider for native CUDA compute modules.
-/// [JA] native CUDA compute module 向けの AIKernel 公式外部 Provider です。
+/// [EN] Official AIKernel external provider boundary for descriptor-driven CUDA compute modules.
+/// [JA] descriptor-driven CUDA compute module 向けの AIKernel 公式外部 Provider 境界です。
 /// </summary>
 public sealed class CudaComputeProvider(
     CudaComputeSettings settings) : IProvider, IComputeProvider
@@ -99,6 +100,33 @@ public sealed class CudaComputeProvider(
                 ProviderId,
                 _settings.DeviceProfile,
                 _settings.ToMetadata()));
+
+    /// <summary>
+    /// [EN] Creates a descriptor-only CUDA backend boundary from the current settings.
+    /// [JA] 現在の設定から descriptor-only CUDA backend 境界を作成します。
+    /// </summary>
+    public CudaBackendDescriptor ToBackendDescriptor()
+        => new()
+        {
+            ProviderId = ProviderId,
+            BackendId = _settings.BackendId,
+            BackendVersion = _settings.BackendVersion,
+            PackageId = _settings.PackageId,
+            DeviceProfile = _settings.DeviceProfile,
+            SupportedComputeCapabilities = _settings.SupportedComputeCapabilities,
+            NativeModule = new NativeModuleDescriptor
+            {
+                BackendId = _settings.BackendId,
+                ModuleId = _settings.ModuleId,
+                ModuleRef = _settings.NativeModuleRef,
+                AbiVersion = _settings.AbiVersion,
+                EntryPoint = _settings.EntryPoint,
+                Hash = HashMetadata.FromExpression(_settings.ArtifactHash)
+            },
+            SupportedOps = Capabilities.SupportedOperations,
+            MaxDeviceMemoryBytes = _settings.MaxDeviceMemoryBytes,
+            Metadata = _settings.ToMetadata()
+        };
 
     /// <summary>[EN] Returns whether CUDA compute is available. [JA] CUDA compute が利用可能かどうかを返します。</summary>
     public bool IsAvailable() => _initialized;

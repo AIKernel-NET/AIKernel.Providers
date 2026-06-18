@@ -10,6 +10,8 @@
     "tensor.layernorm"
   ],
   "metadata": {
+    "backend": "cuda13.0",
+    "nativeModuleRef": "aikernel-cuda://cuda13.0/modules/libtorch_bridge",
     "deviceProfile": "cuda13",
     "entryPoint": "libtorch_bridge",
     "loaderJson": "rom://providers/cuda/loader.json",

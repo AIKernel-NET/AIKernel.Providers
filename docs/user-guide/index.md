@@ -16,20 +16,19 @@ drivers with the rest of the SDK after the 0.1.x line stabilizes.
 ## Install Packages
 
 ```bash
-dotnet add package AIKernel.Providers.ChatOpenAI --version 0.1.1
-dotnet add package AIKernel.Providers.ChatHistory --version 0.1.1
-dotnet add package AIKernel.Providers.CudaCompute --version 0.1.1
-dotnet add package AIKernel.Providers.DynamicPipelineCompiler --version 0.1.1
-dotnet add package AIKernel.Providers.LocalLlm --version 0.1.1
-dotnet add package AIKernel.Providers.MicrosoftAI --version 0.1.1
-dotnet add package AIKernel.Providers.Standard --version 0.1.1
+dotnet add package AIKernel.Providers.ChatOpenAI --version 0.1.2
+dotnet add package AIKernel.Providers.ChatHistory --version 0.1.2
+dotnet add package AIKernel.Providers.CudaCompute --version 0.1.2
+dotnet add package AIKernel.Providers.DynamicPipelineCompiler --version 0.1.2
+dotnet add package AIKernel.Providers.LocalLlm --version 0.1.2
+dotnet add package AIKernel.Providers.MicrosoftAI --version 0.1.2
+dotnet add package AIKernel.Providers.Standard --version 0.1.2
 ```
 
-Python:
-
-```bash
-pip install aikernel-providers
-```
+During local integration, use `0.1.2-dev{buildNumber}` NuGet packages instead
+of stable `0.1.2` packages until the release task opens publication. Python
+validation uses the `aikernel-providers` wheel with version
+`0.1.2.dev{buildNumber}`.
 
 ## Choose a Provider
 
@@ -59,7 +58,7 @@ A minimal manifest shape:
 {
   "providerId": "openai.chat",
   "name": "OpenAI Chat Provider",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "assembly": "ChatOpenAIProvider.dll",
   "capabilities": ["chat.completion"],
   "metadata": {
@@ -97,7 +96,7 @@ var compute = new CpuComputeProvider();
 var sum = compute.AddVectors([1.0f, 2.0f], [3.0f, 4.0f]);
 ```
 
-## Use Python Wrappers
+## Python Wrapper Reference
 
 ```python
 from aikernel_providers import (
@@ -113,7 +112,8 @@ for driver in standard_driver_contracts():
     print(driver.provider_id, driver.name)
 ```
 
-The Python package is a managed wrapper over the C# surface. It does not
+The Python wrapper is a thin package over the C# provider surface. It exposes
+managed loading helpers and the generated managed API catalog, and it must not
 re-implement provider behavior in Python.
 
 ## Failure Behavior
@@ -130,4 +130,5 @@ Providers should fail closed:
 - Read the [Provider Catalog](../providers/index.md) for per-provider scope.
 - Read [Architecture](../architecture/index.md) before changing dependency
   direction.
-- Read [Python Wrapper](../python/index.md) before publishing wheels.
+- Read [Python Wrapper](../python/index.md) for the `aikernel-providers`
+  wrapper boundary.

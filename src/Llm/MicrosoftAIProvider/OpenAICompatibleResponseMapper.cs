@@ -5,6 +5,7 @@ using System.Text.Json;
 using AIKernel.Common.Results;
 using Microsoft.Extensions.AI;
 
+/// <summary>[EN] Documents this public package API member. [JA] OpenAICompatibleResponseMapper を表します。</summary>
 /// <include file="docs.en.xml" path="doc/members/member[@name='T:AIKernel.Providers.MicrosoftAI.OpenAICompatibleResponseMapper']/summary" />
 /// <include file="docs.ja.xml" path="doc/members/member[@name='T:AIKernel.Providers.MicrosoftAI.OpenAICompatibleResponseMapper']/summary" />
 public sealed class OpenAICompatibleResponseMapper : IOpenAICompatibleResponseMapper
@@ -14,6 +15,7 @@ public sealed class OpenAICompatibleResponseMapper : IOpenAICompatibleResponseMa
         WriteIndented = false
     };
 
+    /// <summary>[EN] Documents this public package API member. [JA] GetPrimaryText を実行します。</summary>
     /// <include file="docs.en.xml" path="doc/members/member[@name='M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleResponseMapper.GetPrimaryText']/summary" />
     /// <include file="docs.ja.xml" path="doc/members/member[@name='M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleResponseMapper.GetPrimaryText']/summary" />
     public string GetPrimaryText(ChatResponse response)
@@ -29,6 +31,7 @@ public sealed class OpenAICompatibleResponseMapper : IOpenAICompatibleResponseMa
         return response.Text;
     }
 
+    /// <summary>[EN] Documents this public package API member. [JA] CreateProjection を取得します。</summary>
     /// <include file="docs.en.xml" path="doc/members/member[@name='M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleResponseMapper.CreateProjection']/summary" />
     /// <include file="docs.ja.xml" path="doc/members/member[@name='M:AIKernel.Providers.MicrosoftAI.OpenAICompatibleResponseMapper.CreateProjection']/summary" />
     public OpenAICompatibleResponseProjection CreateProjection(
