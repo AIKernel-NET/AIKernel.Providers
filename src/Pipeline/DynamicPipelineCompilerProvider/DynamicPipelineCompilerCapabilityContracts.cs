@@ -23,7 +23,7 @@ public static class DynamicPipelineCompilerCapabilityContracts
             "Dynamic Pipeline Compiler Provider",
             CapabilityModuleKind.ManagedAssembly,
             CapabilityInvocationMode.AssemblyReference,
-            GetMetadataValue(descriptor.Metadata, "version", "0.1.1"),
+            GetMetadataValue(descriptor.Metadata, "version", "0.1.2"),
             "AIKernel.Providers.DynamicPipelineCompiler",
             null,
             null,

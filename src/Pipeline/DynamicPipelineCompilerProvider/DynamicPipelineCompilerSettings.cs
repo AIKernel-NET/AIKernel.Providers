@@ -13,10 +13,10 @@ public sealed record DynamicPipelineCompilerSettings
     public string Name { get; init; } = "Dynamic Pipeline Compiler Provider";
 
     /// <summary>[EN] Provider contract version. [JA] Provider 契約 version です。</summary>
-    public string Version { get; init; } = "0.1.1";
+    public string Version { get; init; } = "0.1.2";
 
     /// <summary>[EN] DSL schema version. [JA] DSL schema version です。</summary>
-    public string DslSchemaVersion { get; init; } = "0.1";
+    public string DslSchemaVersion { get; init; } = "0.2";
 
     /// <summary>[EN] Optional DSL schema URI. [JA] 任意の DSL schema URI です。</summary>
     public string? DslSchemaUri { get; init; } = "rom://providers/dynamic-pipeline/schema.json";
@@ -26,6 +26,7 @@ public sealed record DynamicPipelineCompilerSettings
     {
         var metadata = new SortedDictionary<string, string>(StringComparer.Ordinal)
         {
+            ["pipeline_architecture"] = "aisthesis->phainesis->nous->topos->kairos->kinesis->zoe",
             ["dsl_schema_version"] = DslSchemaVersion,
             ["version"] = Version
         };

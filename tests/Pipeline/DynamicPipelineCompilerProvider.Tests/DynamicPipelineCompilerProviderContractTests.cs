@@ -11,14 +11,15 @@ public sealed class DynamicPipelineCompilerProviderContractTests
     {
         var metadata = new Dictionary<string, string>(StringComparer.Ordinal)
         {
-            ["version"] = "0.1.1",
-            ["dsl_schema_version"] = "0.1"
+            ["version"] = "0.1.2",
+            ["dsl_schema_version"] = "0.2",
+            ["pipeline_architecture"] = "aisthesis->phainesis->nous->topos->kairos->kinesis->zoe"
         };
 
         var contract = DynamicPipelineCompilerCapabilityContracts.ToContract(
             new DynamicPipelineCompilerCapabilityDescriptor(
                 "dynamic-pipeline",
-                "0.1",
+                "0.2",
                 metadata));
 
         Assert.Equal("dynamic-pipeline", contract.CapabilityId);
@@ -38,7 +39,7 @@ public sealed class DynamicPipelineCompilerProviderContractTests
         var provider = new global::AIKernel.Providers.DynamicPipelineCompiler.DynamicPipelineCompilerProvider(new DynamicPipelineCompilerSettings
         {
             ProviderId = "dynamic-pipeline",
-            DslSchemaVersion = "0.1"
+            DslSchemaVersion = "0.2"
         });
 
         Assert.False(await provider.IsAvailableAsync());
@@ -48,6 +49,10 @@ public sealed class DynamicPipelineCompilerProviderContractTests
         Assert.True(provider.GetCapabilities().SupportsOperation("pipeline.compile"));
         Assert.True(provider.GetCapabilities().SupportsOperation("pipeline.validate"));
         Assert.Equal("dynamic-pipeline", provider.ToCapabilityDescriptor().CapabilityId);
+        Assert.Equal("0.2", provider.ToCapabilityDescriptor().Metadata["dsl_schema_version"]);
+        Assert.Equal(
+            "aisthesis->phainesis->nous->topos->kairos->kinesis->zoe",
+            provider.ToCapabilityDescriptor().Metadata["pipeline_architecture"]);
 
         await provider.ShutdownAsync();
         Assert.False(await provider.IsAvailableAsync());
