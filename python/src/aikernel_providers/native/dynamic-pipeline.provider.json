@@ -1,7 +1,7 @@
 {
   "providerId": "dynamic-pipeline",
   "name": "Dynamic Pipeline Compiler",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "assembly": "DynamicPipelineCompilerProvider.dll",
   "capabilities": [
     "pipeline.compile",
@@ -9,8 +9,12 @@
     "pipeline.validate"
   ],
   "metadata": {
-    "dslSchemaVersion": "0.1",
-    "dslSchemaUri": "rom://providers/dynamic-pipeline/schema.json",
+    "dsl_schema_version": "0.3",
+    "pipeline_architecture": "aisthesis->phainesis->nous->topos->kairos->kinesis->zoe",
+    "gpu_execution_paths": "optional",
+    "parenthesized_boolean_expressions": "supported",
+    "dsl_schema_uri": "rom://providers/dynamic-pipeline/schema.json",
+    "rev3": "true",
     "providerType": "AIKernel.Providers.DynamicPipelineCompiler.DynamicPipelineCompilerProvider",
     "invokerType": "AIKernel.Providers.DynamicPipelineCompiler.DynamicPipelineCompilerInvoker"
   },

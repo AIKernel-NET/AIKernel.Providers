@@ -2,7 +2,7 @@
 
 [English](index.md)
 
-この catalog は、AIKernel.Providers 0.1.2 公開に含まれる Provider package
+この catalog は、AIKernel.Providers 0.1.3 公開に含まれる Provider package
 を説明します。
 
 Provider project は `src/` 配下で category ごとに整理します。

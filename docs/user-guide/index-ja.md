@@ -16,18 +16,18 @@ Monolith は 0.1.x 系の安定化後に公式 Provider driver と他の SDK lay
 ## Install Packages
 
 ```bash
-dotnet add package AIKernel.Providers.ChatOpenAI --version 0.1.2
-dotnet add package AIKernel.Providers.ChatHistory --version 0.1.2
-dotnet add package AIKernel.Providers.CudaCompute --version 0.1.2
-dotnet add package AIKernel.Providers.DynamicPipelineCompiler --version 0.1.2
-dotnet add package AIKernel.Providers.LocalLlm --version 0.1.2
-dotnet add package AIKernel.Providers.MicrosoftAI --version 0.1.2
-dotnet add package AIKernel.Providers.Standard --version 0.1.2
+dotnet add package AIKernel.Providers.ChatOpenAI --version 0.1.3
+dotnet add package AIKernel.Providers.ChatHistory --version 0.1.3
+dotnet add package AIKernel.Providers.CudaCompute --version 0.1.3
+dotnet add package AIKernel.Providers.DynamicPipelineCompiler --version 0.1.3
+dotnet add package AIKernel.Providers.LocalLlm --version 0.1.3
+dotnet add package AIKernel.Providers.MicrosoftAI --version 0.1.3
+dotnet add package AIKernel.Providers.Standard --version 0.1.3
 ```
 
-local integration では、release task が公開を開始するまで stable `0.1.2` ではなく
-`0.1.2-dev{buildNumber}` の NuGet package を使います。Python validation では
-`0.1.2.dev{buildNumber}` の `aikernel-providers` wheel を使います。
+local integration では、release task が公開を開始するまで stable `0.1.3` ではなく
+`0.1.3-dev{buildNumber}` の NuGet package を使います。Python validation では
+`0.1.3.dev{buildNumber}` の `aikernel-providers` wheel を使います。
 
 ## Choose a Provider
 
@@ -57,7 +57,7 @@ aik providers invoke openai.chat chat.completion --dir ./providers prompt=hello
 {
   "providerId": "openai.chat",
   "name": "OpenAI Chat Provider",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "assembly": "ChatOpenAIProvider.dll",
   "capabilities": ["chat.completion"],
   "metadata": {

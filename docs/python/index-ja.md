@@ -2,7 +2,7 @@
 
 [English](index.md)
 
-`aikernel-providers` は、0.1.2 正典シリーズで AIKernel 公式拡張 Provider 向けに
+`aikernel-providers` は、0.1.3 正典シリーズで AIKernel 公式拡張 Provider 向けに
 公開する Python distribution です。
 
 wrapper は C# Provider package の上に置き、Provider logic を Python で再実装する
@@ -34,14 +34,14 @@ from aikernel_providers import (
 
 ## Install
 
-安定版 0.1.2 の公開タスク開始後は次で導入します。
+安定版 0.1.3 の公開タスク開始後は次で導入します。
 
 ```bash
-pip install aikernel-providers==0.1.2
+pip install aikernel-providers==0.1.3
 ```
 
 local validation では、local package output から一致する
-`0.1.2.dev<build-number>` wheel を導入します。
+`0.1.3.dev<build-number>` wheel を導入します。
 
 ## Scope
 
@@ -94,7 +94,7 @@ MicrosoftAI support は reference Python wrapper で `MicrosoftAIProviderOptions
 `AIKernel.Providers.MicrosoftAI.dll` を通じて表現します。
 
 この Provider は 0.1.2 release で AIKernel.Core から AIKernel.Providers 管理へ
-移管されました。0.1.2 の Python wrapper もこの所有変更に従い、managed provider
+移管されました。現在の Python wrapper もこの所有変更に従い、managed provider
 surface の薄い wrapper に留めます。
 
 hosting / dependency-injection 固有の extension method は C# API として残します。
@@ -108,8 +108,8 @@ dotnet test AIKernel.Providers.slnx -c Release --no-build
 dotnet pack AIKernel.Providers.slnx -c Release --no-build --no-restore -p:UseLocalPackageVersion=true -p:LocalPackageBuildNumber=1 -o ..\artifacts\local-packages
 ```
 
-local validation では `0.1.2.dev<build-number>` の Python wheel だけを build します。
-安定版 `0.1.2` wheel は公開タスク開始後に作成します。
+local validation では `0.1.3.dev<build-number>` の Python wheel だけを build します。
+安定版 `0.1.3` wheel は公開タスク開始後に作成します。
 
 ## API Example
 

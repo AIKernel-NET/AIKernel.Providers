@@ -2,8 +2,7 @@
 
 [日本語](index-ja.md)
 
-This catalog describes the provider packages included in the 0.1.2
-AIKernel.Providers release.
+This catalog describes the provider packages included in the 0.1.3 AIKernel.Providers release.
 
 Provider projects are grouped under `src/` by category:
 

@@ -1,7 +1,7 @@
 {
   "providerId": "chat-history",
   "name": "Chat History",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "assembly": "ChatHistoryProvider.dll",
   "capabilities": [
     "chat.history.read",

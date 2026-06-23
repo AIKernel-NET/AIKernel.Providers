@@ -13,7 +13,7 @@ public sealed record LocalLlmSettings
     public string Name { get; init; } = "Local LLM Provider";
 
     /// <summary>[EN] Provider contract version. [JA] Provider 契約 version です。</summary>
-    public string Version { get; init; } = "0.1.1";
+    public string Version { get; init; } = "0.1.3";
 
     /// <summary>[EN] Local runtime name. [JA] local runtime 名です。</summary>
     public string Runtime { get; init; } = "ollama";

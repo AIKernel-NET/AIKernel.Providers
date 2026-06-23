@@ -16,19 +16,19 @@ drivers with the rest of the SDK after the 0.1.x line stabilizes.
 ## Install Packages
 
 ```bash
-dotnet add package AIKernel.Providers.ChatOpenAI --version 0.1.2
-dotnet add package AIKernel.Providers.ChatHistory --version 0.1.2
-dotnet add package AIKernel.Providers.CudaCompute --version 0.1.2
-dotnet add package AIKernel.Providers.DynamicPipelineCompiler --version 0.1.2
-dotnet add package AIKernel.Providers.LocalLlm --version 0.1.2
-dotnet add package AIKernel.Providers.MicrosoftAI --version 0.1.2
-dotnet add package AIKernel.Providers.Standard --version 0.1.2
+dotnet add package AIKernel.Providers.ChatOpenAI --version 0.1.3
+dotnet add package AIKernel.Providers.ChatHistory --version 0.1.3
+dotnet add package AIKernel.Providers.CudaCompute --version 0.1.3
+dotnet add package AIKernel.Providers.DynamicPipelineCompiler --version 0.1.3
+dotnet add package AIKernel.Providers.LocalLlm --version 0.1.3
+dotnet add package AIKernel.Providers.MicrosoftAI --version 0.1.3
+dotnet add package AIKernel.Providers.Standard --version 0.1.3
 ```
 
-During local integration, use `0.1.2-dev{buildNumber}` NuGet packages instead
-of stable `0.1.2` packages until the release task opens publication. Python
+During local integration, use `0.1.3-dev{buildNumber}` NuGet packages instead
+of stable `0.1.3` packages until the release task opens publication. Python
 validation uses the `aikernel-providers` wheel with version
-`0.1.2.dev{buildNumber}`.
+`0.1.3.dev{buildNumber}`.
 
 ## Choose a Provider
 
@@ -58,7 +58,7 @@ A minimal manifest shape:
 {
   "providerId": "openai.chat",
   "name": "OpenAI Chat Provider",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "assembly": "ChatOpenAIProvider.dll",
   "capabilities": ["chat.completion"],
   "metadata": {

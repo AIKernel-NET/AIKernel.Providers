@@ -2,7 +2,7 @@
 
 [日本語](index-ja.md)
 
-`aikernel-providers` is the 0.1.2 Python distribution for official AIKernel
+`aikernel-providers` is the 0.1.3 Python distribution for official AIKernel
 extension providers.
 
 The wrapper sits over C# provider packages; it is not a Python reimplementation
@@ -34,13 +34,13 @@ from aikernel_providers import (
 
 ## Install
 
-After the stable 0.1.2 publication task opens:
+After the stable 0.1.3 publication task opens:
 
 ```bash
-pip install aikernel-providers==0.1.2
+pip install aikernel-providers==0.1.3
 ```
 
-During local validation, install the matching `0.1.2.dev<build-number>` wheel
+During local validation, install the matching `0.1.3.dev<build-number>` wheel
 from the local package output.
 
 ## Scope
@@ -97,7 +97,7 @@ MicrosoftAI support is represented in the reference Python wrapper through
 mapping wrappers, and the bundled `AIKernel.Providers.MicrosoftAI.dll`.
 
 This provider was moved from AIKernel.Core into AIKernel.Providers management
-for the 0.1.2 release. The 0.1.2 Python wrapper follows that ownership change
+for the 0.1.2 release. The current Python wrapper follows that ownership change
 and stays thin over the managed provider surface.
 
 Hosting and dependency-injection extension methods remain C# APIs.
@@ -111,8 +111,8 @@ dotnet test AIKernel.Providers.slnx -c Release --no-build
 dotnet pack AIKernel.Providers.slnx -c Release --no-build --no-restore -p:UseLocalPackageVersion=true -p:LocalPackageBuildNumber=1 -o ..\artifacts\local-packages
 ```
 
-Build Python wheels only as `0.1.2.dev<build-number>` during local validation.
-Create stable `0.1.2` wheels only after the publication task opens.
+Build Python wheels only as `0.1.3.dev<build-number>` during local validation.
+Create stable `0.1.3` wheels only after the publication task opens.
 
 ## API Example
 

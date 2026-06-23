@@ -13,7 +13,7 @@ public sealed record ChatOpenAISettings
     public string Name { get; init; } = "Chat OpenAI Provider";
 
     /// <summary>[EN] Provider contract version. [JA] Provider 契約 version です。</summary>
-    public string Version { get; init; } = "0.1.1";
+    public string Version { get; init; } = "0.1.3";
 
     /// <summary>[EN] OpenAI-compatible endpoint. [JA] OpenAI 互換 endpoint です。</summary>
     public Uri Endpoint { get; init; } = new("https://api.openai.com/v1");

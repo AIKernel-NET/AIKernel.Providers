@@ -22,7 +22,7 @@ public sealed class ProfilerProvider : StandardProviderBase, IStandardProfilerPr
 {
     /// <summary>[EN] Initializes the profiler provider. [JA] profiler Provider を初期化します。</summary>
     public ProfilerProvider()
-        : base("providers.profiler.standard", "Profiler Provider", "0.1.1", ["profiler.snapshot", "profiler.top"], ["resource.snapshot"])
+        : base("providers.profiler.standard", "Profiler Provider", "0.1.3", ["profiler.snapshot", "profiler.top"], ["resource.snapshot"])
     {
     }
 

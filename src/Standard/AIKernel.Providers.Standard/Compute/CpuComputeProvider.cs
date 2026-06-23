@@ -16,7 +16,7 @@ public sealed class CpuComputeProvider : StandardProviderBase, IComputeProvider
         : base(
             "providers.compute.cpu",
             "CPU Compute Provider",
-            "0.1.1",
+            "0.1.3",
             ["compute.vector_add", "compute.dot", "compute.fill"],
             ["float32", "float64", "int32", "buffer"])
     {

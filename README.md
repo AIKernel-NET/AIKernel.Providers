@@ -41,10 +41,8 @@ repository keeps only driver implementations such as CPU/CUDA compute,
 standard file systems, logging drivers, process supervisor drivers, network
 drivers, schedulers, and profilers.
 
-AIKernel.Providers 0.1.2 follows the same development policy as
-AIKernel.Core and AIKernel.Control 0.1.2. The line publishes NuGet packages and synchronized Python wrappers, and uses
-`0.1.2-dev{build-number}` for local development packages, and does not create
-or publish a PyPI package.
+AIKernel.Providers 0.1.3 follows the same development policy as
+AIKernel.Core and AIKernel.Control 0.1.3. The line publishes NuGet packages and synchronized Python wrappers. Use`r`n`0.1.3-dev{build-number}` for local NuGet development packages and`r`n`0.1.3.dev{build-number}` for local Python wheel validation until stable publication opens.
 
 ## Concept Elevation
 
@@ -67,9 +65,9 @@ manifest validation before enabling live endpoints, credentials, local model
 runtimes, or native drivers.
 
 ```bash
-dotnet add package AIKernel.Providers.Standard --version 0.1.2
-dotnet add package AIKernel.Providers.ChatOpenAI --version 0.1.2
-dotnet add package AIKernel.Providers.MicrosoftAI --version 0.1.2
+dotnet add package AIKernel.Providers.Standard --version 0.1.3
+dotnet add package AIKernel.Providers.ChatOpenAI --version 0.1.3
+dotnet add package AIKernel.Providers.MicrosoftAI --version 0.1.3
 ```
 
 Use `AIKernel.Providers.Standard` for OS driver surfaces. Add LLM, chat,
@@ -159,7 +157,7 @@ extension surface; it does not currently ship a separate manifest file.
 `aikernel-providers` is the reserved Python wrapper name for the official
 extension provider set.
 
-The 0.1.2 development line publishes a synchronized PyPI wrapper. Existing
+The 0.1.3 development line publishes a synchronized PyPI wrapper. Existing
 Python materials remain in the repository for reference and future scheduled
 Python releases only.
 
@@ -226,19 +224,19 @@ Common package metadata is centralized in `Directory.Build.props`.
 For .NET hosts during public release:
 
 ```bash
-dotnet add package AIKernel.Providers.ChatOpenAI --version 0.1.2
-dotnet add package AIKernel.Providers.ChatHistory --version 0.1.2
-dotnet add package AIKernel.Providers.Substrate --version 0.1.2
-dotnet add package AIKernel.Providers.Council --version 0.1.2
-dotnet add package AIKernel.Providers.Audio --version 0.1.2
-dotnet add package AIKernel.Providers.Compute --version 0.1.2
-dotnet add package AIKernel.Providers.CudaCompute --version 0.1.2
-dotnet add package AIKernel.Providers.DynamicPipelineCompiler --version 0.1.2
-dotnet add package AIKernel.Providers.LocalLlm --version 0.1.2
-dotnet add package AIKernel.Providers.MicrosoftAI --version 0.1.2
+dotnet add package AIKernel.Providers.ChatOpenAI --version 0.1.3
+dotnet add package AIKernel.Providers.ChatHistory --version 0.1.3
+dotnet add package AIKernel.Providers.Substrate --version 0.1.3
+dotnet add package AIKernel.Providers.Council --version 0.1.3
+dotnet add package AIKernel.Providers.Audio --version 0.1.3
+dotnet add package AIKernel.Providers.Compute --version 0.1.3
+dotnet add package AIKernel.Providers.CudaCompute --version 0.1.3
+dotnet add package AIKernel.Providers.DynamicPipelineCompiler --version 0.1.3
+dotnet add package AIKernel.Providers.LocalLlm --version 0.1.3
+dotnet add package AIKernel.Providers.MicrosoftAI --version 0.1.3
 ```
 
-Python materials are published as synchronized 0.1.2 wrappers for this line.
+Python materials are published as synchronized 0.1.3 wrappers for this line.
 
 ## Documentation
 

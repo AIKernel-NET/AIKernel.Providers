@@ -141,7 +141,7 @@ packaging や Microsoft.Extensions.AI integration detail を所有しません�
 
 ## Python Boundary
 
-`aikernel-providers` は、0.1.2 正典シリーズで同じ Provider boundary を Python host
+`aikernel-providers` は、0.1.3 正典シリーズで同じ Provider boundary を Python host
 向けに公開する wrapper 名です。Python packaging では managed assembly と manifest
 JSON file を pythonnet 経由で読み込み、薄い wrapper object を公開します。
 

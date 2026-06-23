@@ -1,7 +1,7 @@
 {
   "providerId": "openai.chat",
   "name": "Chat OpenAI",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "assembly": "ChatOpenAIProvider.dll",
   "capabilities": [
     "chat.completion",

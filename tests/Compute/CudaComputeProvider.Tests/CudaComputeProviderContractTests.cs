@@ -1,4 +1,6 @@
+using AIKernel.Abstractions.Gpu;
 using AIKernel.Dtos.Capabilities;
+using AIKernel.Dtos.Gpu;
 using AIKernel.Enums;
 using AIKernel.Providers.Compute;
 using AIKernel.Providers.CudaCompute;
@@ -14,7 +16,7 @@ public sealed class CudaComputeProviderContractTests
     {
         var metadata = new Dictionary<string, string>(StringComparer.Ordinal)
         {
-            ["version"] = "0.1.1",
+            ["version"] = "0.1.3",
             ["device_profile"] = "cuda13",
             ["entry_point"] = "libtorch_bridge",
             ["loader_json"] = "rom://providers/cuda/loader.json"
@@ -33,9 +35,24 @@ public sealed class CudaComputeProviderContractTests
         Assert.Equal("libtorch_bridge", contract.EntryPoint);
         Assert.Equal("rom://providers/cuda/loader.json", contract.ArtifactUri);
         Assert.Equal(
-            ["tensor.matmul", "tensor.softmax", "tensor.conv2d", "tensor.layernorm"],
+            [
+                GpuOperationNames.ComputeDispatch,
+                GpuOperationNames.ComputeVectorAdd,
+                "tensor.matmul",
+                "tensor.softmax",
+                "tensor.conv2d",
+                "tensor.layernorm"
+            ],
             contract.ProvidedOperations);
-        Assert.Equal(["native.load", "tensor.compute"], contract.RequiredPermissions);
+        Assert.Equal(
+            [
+                "native.load",
+                GpuPermissionNames.ComputeExecute,
+                GpuPermissionNames.BufferRead,
+                GpuPermissionNames.BufferWrite,
+                "tensor.compute"
+            ],
+            contract.RequiredPermissions);
     }
 
     [Fact]
@@ -51,12 +68,76 @@ public sealed class CudaComputeProviderContractTests
         await provider.InitializeAsync();
 
         Assert.True(await provider.IsAvailableAsync());
+        Assert.True(provider.GetCapabilities().SupportsOperation(GpuOperationNames.ComputeDispatch));
         Assert.True(provider.GetCapabilities().SupportsOperation("tensor.matmul"));
         Assert.True(provider.GetCapabilities().SupportsOperation("tensor.softmax"));
         Assert.Equal("providers.cuda", provider.ToCapabilityDescriptor().CapabilityId);
 
         await provider.ShutdownAsync();
         Assert.False(await provider.IsAvailableAsync());
+    }
+
+    [Fact]
+    public async Task Provider_DiagnosticsExposeRev3ExecutionLayerMetadata()
+    {
+        var provider = new global::AIKernel.Providers.CudaCompute.CudaComputeProvider(new CudaComputeSettings
+        {
+            ProviderId = "providers.cuda"
+        });
+        await provider.InitializeAsync();
+
+        var diagnosticsProvider = Assert.IsAssignableFrom<IGpuDiagnostics>(provider);
+        var frame = new GpuFrameToken
+        {
+            FrameId = "frame-1",
+            FrameIndex = 1,
+            SampleTicks = 100,
+            RawTarget = new GpuFrameTarget
+            {
+                TargetId = "raw",
+                Backend = GpuBackend.Cuda,
+                Kind = GpuFrameTargetKind.RawFramebuffer,
+                Width = 320,
+                Height = 200,
+                PixelFormat = FramePixelFormat.Indexed8
+            },
+            HudTarget = new GpuFrameTarget
+            {
+                TargetId = "hud",
+                Backend = GpuBackend.Cuda,
+                Kind = GpuFrameTargetKind.HudCompositeOffscreen,
+                Width = 320,
+                Height = 200,
+                PixelFormat = FramePixelFormat.Rgba32
+            }
+        };
+
+        var diagnostics = await diagnosticsProvider.CaptureFrameDiagnosticsAsync(
+            frame,
+            TestContext.Current.CancellationToken);
+
+        Assert.Equal("frame-1", diagnostics.SensorPath.FrameId);
+        Assert.Equal(GpuBackend.Cuda.ToString(), diagnostics.SensorPath.Backend);
+        Assert.False(diagnostics.SensorPath.ZeroCopy);
+        Assert.Equal(GpuReadbackPolicy.RequiredFallback, diagnostics.SensorPath.Readback);
+        Assert.Equal(320 * 200, diagnostics.SensorPath.MemoryEstimate);
+        Assert.Equal(320 * 200 * 4, diagnostics.HudPath.MemoryEstimate);
+        Assert.Equal("sensor", diagnostics.SensorPath.Metadata[GpuDiagnosticsMetadataKeys.Rev3PathRole]);
+        Assert.Equal("sensor", diagnostics.SensorPath.Metadata[GpuDiagnosticsMetadataKeys.Rev3PassId]);
+        Assert.Equal("native-cuda-descriptor", diagnostics.SensorPath.Metadata[GpuDiagnosticsMetadataKeys.Rev3ExecutionMode]);
+        Assert.Equal("true", diagnostics.SensorPath.Metadata[GpuDiagnosticsMetadataKeys.Rev3PromotionBlocked]);
+        Assert.Equal("false", diagnostics.SensorPath.Metadata[GpuDiagnosticsMetadataKeys.Rev3PromotionCandidateReady]);
+        Assert.Equal("false", diagnostics.SensorPath.Metadata[GpuDiagnosticsMetadataKeys.Rev3PromotionDiagnosticStable]);
+        Assert.Equal(
+            GpuRev3PromotionGates.NativeBridgeRequired,
+            diagnostics.SensorPath.Metadata[GpuDiagnosticsMetadataKeys.Rev3PromotionReason]);
+        Assert.Equal("native-cuda-buffer-dispatch", diagnostics.SensorPath.Metadata[GpuProviderMetadataKeys.GpuBypass]);
+        Assert.Equal("native-cuda-device-buffer", diagnostics.SensorPath.Metadata[GpuProviderMetadataKeys.ZeroCopyBufferHandling]);
+        Assert.Contains("ReadyForBuiltIn=false", diagnostics.SensorPath.Metadata[GpuDiagnosticsMetadataKeys.Rev3PassReadiness]);
+        Assert.True(GpuCanonicalValidation.EvaluateRev3PromotionReadiness(
+            diagnostics.SensorPath.Metadata).IsBlocked);
+        Assert.True(GpuCanonicalValidation.ValidateRev3ExecutionLayerMetadata(diagnostics.SensorPath.Metadata).IsValid);
+        Assert.True(GpuCanonicalValidation.ValidateFrameDiagnostics(diagnostics).IsValid);
     }
 
     [Fact]
@@ -98,6 +179,7 @@ public sealed class CudaComputeProviderContractTests
         Assert.Equal("sha256:cuda", descriptor.NativeModule.Hash.Expression);
         Assert.Equal("sha256:cuda", descriptor.NativeModule.ArtifactHash);
         Assert.Contains("tensor.matmul", descriptor.Operations);
+        Assert.Contains(GpuOperationNames.ComputeDispatch, descriptor.Operations);
         Assert.Contains("tensor.matmul", descriptor.SupportedOps);
         Assert.Equal(1024, descriptor.MaxDeviceMemoryBytes);
     }
@@ -177,7 +259,7 @@ public sealed class CudaComputeProviderContractTests
         var result = await invoker.InvokeAsync(new CapabilityInvocationRequest(
             "invoke-1",
             "cuda.compute",
-            "tensor.matmul",
+            GpuOperationNames.ComputeDispatch,
             new Dictionary<string, string>(),
             null,
             "sha256:replay",
@@ -187,6 +269,46 @@ public sealed class CudaComputeProviderContractTests
         Assert.False(result.Succeeded);
         Assert.Equal("CUDA_BACKEND_NOT_BOUND", result.ErrorCode);
         Assert.Equal("BackendNotInstalled", result.Metadata["compute.availability_reason"]);
+        Assert.Equal("true", result.Metadata[GpuProviderMetadataKeys.Rev3]);
+        Assert.Equal(GpuBackend.Cuda.ToString(), result.Metadata[GpuProviderMetadataKeys.GpuBackend]);
+        Assert.Equal("native-cuda-buffer-dispatch", result.Metadata[GpuProviderMetadataKeys.GpuBypass]);
+        Assert.Equal("native-cuda-device-buffer", result.Metadata[GpuProviderMetadataKeys.ZeroCopyBufferHandling]);
+        Assert.True(GpuCanonicalValidation.ValidateRev3ExecutionLayerMetadata(result.Metadata).IsValid);
+    }
+
+    [Fact]
+    public async Task Invoker_OverwritesSpoofedGpuExecutionMetadata()
+    {
+        var invoker = new CudaComputeInvoker();
+
+        var result = await invoker.InvokeAsync(new CapabilityInvocationRequest(
+            "invoke-spoofed-metadata",
+            "cuda.compute",
+            GpuOperationNames.ComputeDispatch,
+            new Dictionary<string, string>(),
+            null,
+            "sha256:replay",
+            new Dictionary<string, string>
+            {
+                ["caller_trace"] = "preserve-me",
+                [GpuProviderMetadataKeys.Backend] = GpuBackend.WebGpu.ToString(),
+                [GpuProviderMetadataKeys.GpuBackend] = GpuBackend.WebGpu.ToString(),
+                [GpuProviderMetadataKeys.GpuBypass] = "raw-texture-binding",
+                [GpuProviderMetadataKeys.NativeJsBridge] = "rev3-envelope-bridge",
+                [GpuProviderMetadataKeys.PassBridge] = "optional-native-or-js",
+                [GpuProviderMetadataKeys.ZeroCopyBufferHandling] = "raw-framebuffer-texture"
+            }),
+            TestContext.Current.CancellationToken);
+
+        Assert.False(result.Succeeded);
+        Assert.Equal("preserve-me", result.Metadata["caller_trace"]);
+        Assert.Equal("cuda13.0", result.Metadata[GpuProviderMetadataKeys.Backend]);
+        Assert.Equal(GpuBackend.Cuda.ToString(), result.Metadata[GpuProviderMetadataKeys.GpuBackend]);
+        Assert.Equal("native-cuda-buffer-dispatch", result.Metadata[GpuProviderMetadataKeys.GpuBypass]);
+        Assert.Equal("not-required-native-provider", result.Metadata[GpuProviderMetadataKeys.NativeJsBridge]);
+        Assert.Equal("native-abi", result.Metadata[GpuProviderMetadataKeys.PassBridge]);
+        Assert.Equal("native-cuda-device-buffer", result.Metadata[GpuProviderMetadataKeys.ZeroCopyBufferHandling]);
+        Assert.True(GpuCanonicalValidation.ValidateRev3ExecutionLayerMetadata(result.Metadata).IsValid);
     }
 
     [Fact]
@@ -207,6 +329,9 @@ public sealed class CudaComputeProviderContractTests
         Assert.False(result.Succeeded);
         Assert.Equal("CUDA_OPERATION_NOT_SUPPORTED", result.ErrorCode);
         Assert.Equal("UnsupportedOperation", result.Metadata["compute.availability_reason"]);
+        Assert.Equal("true", result.Metadata[GpuProviderMetadataKeys.Rev3]);
+        Assert.Equal(GpuBackend.Cuda.ToString(), result.Metadata[GpuProviderMetadataKeys.GpuBackend]);
+        Assert.True(GpuCanonicalValidation.ValidateRev3ExecutionLayerMetadata(result.Metadata).IsValid);
     }
 
     [Fact]
@@ -220,6 +345,8 @@ public sealed class CudaComputeProviderContractTests
 
         var json = File.ReadAllText(path);
         Assert.Contains("\"cli\"", json);
+        Assert.Contains("\"compute.dispatch\"", json);
+        Assert.Contains("\"rev3\": \"true\"", json);
         Assert.Contains("\"defaultOperation\": \"tensor.matmul\"", json);
         Assert.Contains("\"command\": \"cuda\"", json);
     }
@@ -235,19 +362,35 @@ public sealed class CudaComputeProviderContractTests
         Assert.Equal(
             [
                 "abi_version",
+                "adapter_profile",
+                "aot_compiler_hooks",
                 "artifact_hash",
                 "backend",
                 "backend_id",
                 "backend_version",
+                "deterministic_frame_sampling",
                 "device_profile",
                 "entry_point",
+                "fallback",
+                "gpu_backend",
+                "gpu_bypass",
+                "gpu_capabilities",
                 "loader_json",
                 "module_id",
+                "native_js_bridge",
                 "native_module_ref",
                 "package_id",
-                "version"
+                "pass_bridge",
+                "provider_family",
+                "provider_role",
+                "raw_capture_source",
+                "rev3",
+                "version",
+                "zero_copy_buffer_handling"
             ],
             settings.ToMetadata().Keys.ToArray());
+
+        Assert.True(GpuCanonicalValidation.ValidateRev3ExecutionLayerMetadata(settings.ToMetadata()).IsValid);
     }
 
     [Fact]

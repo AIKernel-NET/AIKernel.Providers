@@ -25,7 +25,7 @@ public sealed class NetworkProvider : StandardProviderBase
         : base(
             "providers.network.standard",
             "Network Provider",
-            "0.1.1",
+            "0.1.3",
             ["network.http.get", "network.websocket.connect", "network.webrtc.signal"],
             ["http", "websocket", "webrtc"])
     {
@@ -61,7 +61,7 @@ public sealed class HttpNetworkProvider : StandardProviderBase, INetworkProvider
 
     /// <summary>[EN] Initializes the HTTP network provider with a client. [JA] client で HTTP network Provider を初期化します。</summary>
     public HttpNetworkProvider(HttpClient httpClient)
-        : base("providers.network.http", "HTTP Network Provider", "0.1.1", ["network.http.get", "network.http.post"], ["http"])
+        : base("providers.network.http", "HTTP Network Provider", "0.1.3", ["network.http.get", "network.http.post"], ["http"])
     {
         _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
     }
@@ -148,7 +148,7 @@ public sealed class HttpNetworkProvider : StandardProviderBase, INetworkProvider
 /// [JA] Core network 抽象を実装する WebSocket network Provider です。
 /// </summary>
 public sealed class WebSocketNetworkProvider()
-    : StandardProviderBase("providers.network.websocket", "WebSocket Network Provider", "0.1.1", ["network.websocket.connect"], ["websocket"]),
+    : StandardProviderBase("providers.network.websocket", "WebSocket Network Provider", "0.1.3", ["network.websocket.connect"], ["websocket"]),
       INetworkProvider
 {
     /// <summary>[EN] Documents this public package API member. [JA] ConnectAsync を実行します。</summary>

@@ -62,8 +62,8 @@ C# package boundary は Python wrapper boundary でもあります。
 fixed native、OS-specific、browser/WASM-specific、vendor-SDK-specific、
 scenario-specific implementation を default import surface に混入させてはいけません。
 
-v0.1.2 正典シリーズでは、stable publication が明示的に開始されるまで
-`0.1.2.dev{buildNumber}` wheel で local Python validation を行います。
+v0.1.3 正典シリーズでは、stable publication が明示的に開始されるまで
+`0.1.3.dev{buildNumber}` wheel で local Python validation を行います。
 
 ## Implementation Ownership
 

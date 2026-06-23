@@ -65,7 +65,7 @@ must not pull fixed native, OS-specific, browser/WASM-specific,
 vendor-SDK-specific, or scenario-specific implementations into the default
 import surface.
 
-In the v0.1.2 canonical series, use `0.1.2.dev{buildNumber}` wheels for local
+In the v0.1.3 canonical series, use `0.1.3.dev{buildNumber}` wheels for local
 Python validation until stable publication is explicitly opened.
 
 ## Implementation Ownership

@@ -1,3 +1,5 @@
+using AIKernel.Dtos.Gpu;
+
 namespace AIKernel.Providers.CudaCompute;
 
 /// <summary>
@@ -13,7 +15,7 @@ public sealed record CudaComputeSettings
     public string Name { get; init; } = "CUDA Compute Provider";
 
     /// <summary>[EN] Provider contract version. [JA] Provider 契約 version です。</summary>
-    public string Version { get; init; } = "0.1.1";
+    public string Version { get; init; } = "0.1.3";
 
     /// <summary>[EN] Native CUDA device profile. [JA] Native CUDA device profile です。</summary>
     public string DeviceProfile { get; init; } = "cuda13";
@@ -63,13 +65,30 @@ public sealed record CudaComputeSettings
     {
         var metadata = new SortedDictionary<string, string>(StringComparer.Ordinal)
         {
-            ["backend"] = BackendName,
+            [GpuProviderMetadataKeys.AdapterProfile] = DeviceProfile,
+            [GpuProviderMetadataKeys.AotCompilerHooks] = "planned-gpu-native-execution",
+            [GpuProviderMetadataKeys.Backend] = BackendName,
             ["backend_id"] = BackendId,
             ["device_profile"] = DeviceProfile,
+            [GpuProviderMetadataKeys.DeterministicFrameSampling] = "host-frame-token-sample-ticks",
             ["entry_point"] = EntryPoint,
+            [GpuProviderMetadataKeys.Fallback] = "fail-closed",
+            [GpuProviderMetadataKeys.GpuBypass] = "native-cuda-buffer-dispatch",
+            [GpuProviderMetadataKeys.GpuBackend] = AIKernel.Enums.GpuBackend.Cuda.ToString(),
+            [GpuProviderMetadataKeys.GpuCapabilities] = (
+                AIKernel.Enums.GpuProviderCapabilities.SupportsCompute |
+                AIKernel.Enums.GpuProviderCapabilities.SupportsNativeValidation |
+                AIKernel.Enums.GpuProviderCapabilities.SupportsFrameDiagnostics).ToString(),
             ["module_id"] = ModuleId,
             ["native_module_ref"] = NativeModuleRef,
-            ["version"] = Version
+            [GpuProviderMetadataKeys.NativeJsBridge] = "not-required-native-provider",
+            [GpuProviderMetadataKeys.PassBridge] = "native-abi",
+            [GpuProviderMetadataKeys.ProviderFamily] = "aikernel.gpu.rev3",
+            [GpuProviderMetadataKeys.ProviderRole] = "cuda13-native-compute",
+            [GpuProviderMetadataKeys.RawCaptureSource] = "none",
+            [GpuProviderMetadataKeys.Rev3] = "true",
+            [GpuProviderMetadataKeys.Version] = Version,
+            [GpuProviderMetadataKeys.ZeroCopyBufferHandling] = "native-cuda-device-buffer"
         };
 
         if (!string.IsNullOrWhiteSpace(AbiVersion))

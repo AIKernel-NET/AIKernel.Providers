@@ -21,7 +21,7 @@ public abstract class FileSystemProviderBase : StandardProviderBase, IFileSystem
         : base(
             providerId,
             name,
-            "0.1.1",
+            "0.1.3",
             ["fs.exists", "fs.read_text", "fs.write_text", "fs.list"],
             ["path", "text", "directory", "file"])
     {

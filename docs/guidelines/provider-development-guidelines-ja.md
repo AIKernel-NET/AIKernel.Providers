@@ -266,8 +266,8 @@ build-time fixed native, OS-specific, browser/WASM-specific, vendor-SDK-specific
 or scenario-specific implementations that would pollute the default
 aikernel-providers wheel.
 
-v0.1.2 正典シリーズでは、stable publication が明示的に開始されるまで
-`0.1.2.dev{buildNumber}` wheel で `aikernel-providers` を検証します。stable default
+v0.1.3 正典シリーズでは、stable publication が明示的に開始されるまで
+`0.1.3.dev{buildNumber}` wheel で `aikernel-providers` を検証します。stable default
 Python install target は次の通りです。
 
 ```bash

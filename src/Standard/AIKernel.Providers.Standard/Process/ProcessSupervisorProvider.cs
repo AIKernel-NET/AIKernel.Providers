@@ -44,7 +44,7 @@ public sealed class ProcessSupervisorProvider : StandardProviderBase
         : base(
             "providers.process.supervisor",
             "Process Supervisor Provider",
-            "0.1.1",
+            "0.1.3",
             ["process.start", "process.list", "process.kill", "process.restart"],
             ["process", "process.info"])
     {
@@ -105,7 +105,7 @@ public sealed class DefaultProcessSupervisorProvider : StandardProviderBase, IPr
         : base(
             "providers.process.supervisor.default",
             "Default Process Supervisor Provider",
-            "0.1.1",
+            "0.1.3",
             ["process.start", "process.list", "process.kill", "process.restart"],
             ["process", "process.info"])
     {

@@ -11,17 +11,17 @@ public sealed class ProviderSubstrateTests
             {
               "providerId": "openai.chat",
               "name": "Chat OpenAI",
-              "version": "0.1.1",
+              "version": "0.1.3",
               "manifestVersion": "1.0",
               "schemaVersion": "1.0",
               "assembly": "ChatOpenAIProvider.dll",
               "packageId": "AIKernel.Providers.ChatOpenAI",
               "capabilities": [ "chat.completion", "embedding" ],
               "dependencies": [
-                { "id": "AIKernel.NET", "kind": "package", "version": "0.1.1.1", "optional": false }
+                { "id": "AIKernel.NET", "kind": "package", "version": "0.1.3", "optional": false }
               ],
               "compatibility": {
-                "minimumAIKernelVersion": "0.1.1",
+                "minimumAIKernelVersion": "0.1.3",
                 "targetFrameworks": [ "net10.0" ]
               },
               "metadata": {
@@ -60,7 +60,7 @@ public sealed class ProviderSubstrateTests
         Assert.Equal("AIKernel.Providers.ChatOpenAI", result.Descriptor?.PackageId);
         Assert.Equal("AIKernel.NET", result.Descriptor?.Dependencies.Single().Id);
         Assert.False(result.Descriptor?.Dependencies.Single().Optional);
-        Assert.Equal("0.1.1", result.Descriptor?.Compatibility.MinimumAIKernelVersion);
+        Assert.Equal("0.1.3", result.Descriptor?.Compatibility.MinimumAIKernelVersion);
         Assert.Equal(["net10.0"], result.Descriptor?.Compatibility.TargetFrameworks);
         Assert.Equal("https://example.test", result.Descriptor?.BackendMetadata["endpoint"]);
         Assert.Equal("local", result.Descriptor?.BackendDescriptors.Single().BackendName);
@@ -81,7 +81,7 @@ public sealed class ProviderSubstrateTests
                 {
                   "providerId": "sample.provider",
                   "name": "Sample",
-                  "version": "0.1.1",
+                  "version": "0.1.3",
                   "assembly": "Sample.dll"
                 }
                 """
@@ -100,7 +100,7 @@ public sealed class ProviderSubstrateTests
         {
             ProviderId = "sample.provider",
             Name = "Sample",
-            Version = "0.1.1",
+            Version = "0.1.3",
             AssemblyName = "Sample.dll"
         }, TestContext.Current.CancellationToken);
 
@@ -114,7 +114,7 @@ public sealed class ProviderSubstrateTests
         {
             ProviderId = "sample",
             Name = "Sample",
-            Version = "0.1.1",
+            Version = "0.1.3",
             AssemblyName = "Sample.dll"
         };
 
@@ -130,7 +130,7 @@ public sealed class ProviderSubstrateTests
         {
             ProviderId = "sample",
             Name = "Sample",
-            Version = "0.1.1",
+            Version = "0.1.3",
             AssemblyName = "Sample.dll"
         };
 
@@ -151,7 +151,7 @@ public sealed class ProviderSubstrateTests
         {
             ProviderId = "sample",
             Name = "Sample",
-            Version = "0.1.1",
+            Version = "0.1.3",
             Source = "sample.provider.json"
         };
 
@@ -306,6 +306,64 @@ public sealed class ProviderSubstrateTests
 
         Assert.True(result.Succeeded);
         Assert.Equal("local", result.Backend?.BackendName);
+    }
+
+    [Fact]
+    public void ProviderRouter_GpuCapabilityManifest_PreservesRev3Metadata()
+    {
+        const string json = """
+            {
+              "providerId": "webgpu.compute",
+              "name": "WebGPU Compute",
+              "version": "0.1.3",
+              "assembly": "WebGpuComputeProvider.dll",
+              "capabilities": [
+                "compute.dispatch",
+                "gpu.hud.composite",
+                "gpu.aisthesis.raw-frame",
+                "gpu.spatial-reasoning",
+                "gpu.zero-copy.raw-texture"
+              ],
+              "metadata": {
+                "backend": "browser-webgpu",
+                "rev3": "true",
+                "raw_capture_source": "raw-framebuffer",
+                "ais_matrix_order": "topos,route,threat,zoe"
+              },
+              "backendDescriptors": [
+                {
+                  "backend": "browser-webgpu",
+                  "kind": "webgpu",
+                  "rank": 0,
+                  "capabilities": [ "gpu.aisthesis.raw-frame", "gpu.zero-copy.raw-texture" ],
+                  "metadata": {
+                    "zeroCopy": "true",
+                    "target": "raw-framebuffer"
+                  }
+                }
+              ]
+            }
+            """;
+        var descriptor = new ProviderManifestLoader().LoadJson(json, "webgpu.provider.json").Descriptor!;
+        var registry = new ProviderRegistry();
+        registry.Register(descriptor);
+
+        var result = new ProviderRouter(registry).Resolve(new ProviderResolutionPolicy
+        {
+            RequiredCapability = "gpu.aisthesis.raw-frame",
+            RuntimeHints = new ProviderRuntimeHints { Backend = "browser-webgpu" }
+        });
+        var capability = descriptor.ToCapabilityDescriptor();
+
+        Assert.True(result.Succeeded);
+        Assert.Equal("webgpu.compute", result.Provider?.ProviderId);
+        Assert.Equal("browser-webgpu", result.Backend?.BackendName);
+        Assert.Equal("webgpu", result.Backend?.Kind);
+        Assert.Equal("true", result.Backend?.Metadata["zeroCopy"]);
+        Assert.Equal("raw-framebuffer", result.Backend?.Metadata["target"]);
+        Assert.Equal("true", descriptor.Metadata["rev3"]);
+        Assert.Equal("raw-framebuffer", descriptor.Metadata["raw_capture_source"]);
+        Assert.Equal("topos,route,threat,zoe", capability.Metadata["ais_matrix_order"]);
     }
 
     [Fact]
@@ -479,7 +537,7 @@ public sealed class ProviderSubstrateTests
         {
             ProviderId = providerId,
             Name = providerId,
-            Version = "0.1.1",
+            Version = "0.1.3",
             AssemblyName = providerId + ".dll",
             Capabilities = [capability]
         };

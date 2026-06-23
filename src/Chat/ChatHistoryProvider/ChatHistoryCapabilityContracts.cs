@@ -23,7 +23,7 @@ public static class ChatHistoryCapabilityContracts
             "Chat History Provider",
             CapabilityModuleKind.ManagedAssembly,
             CapabilityInvocationMode.AssemblyReference,
-            GetRequiredMetadataValue(descriptor.Metadata, "version", "0.1.1"),
+            GetRequiredMetadataValue(descriptor.Metadata, "version", "0.1.3"),
             "AIKernel.Providers.ChatHistory",
             GetMetadataValue(descriptor.Metadata, "source_uri", null),
             GetMetadataValue(descriptor.Metadata, "artifact_hash", null),

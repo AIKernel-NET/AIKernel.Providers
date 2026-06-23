@@ -1,3 +1,5 @@
+using AIKernel.Dtos.Gpu;
+
 namespace AIKernel.Providers.DynamicPipelineCompiler;
 
 /// <summary>
@@ -13,7 +15,7 @@ public sealed record DynamicPipelineCompilerSettings
     public string Name { get; init; } = "Dynamic Pipeline Compiler Provider";
 
     /// <summary>[EN] Provider contract version. [JA] Provider 契約 version です。</summary>
-    public string Version { get; init; } = "0.1.2";
+    public string Version { get; init; } = "0.1.3";
 
     /// <summary>[EN] DSL schema version. [JA] DSL schema version です。</summary>
     public string DslSchemaVersion { get; init; } = "0.2";
@@ -26,9 +28,12 @@ public sealed record DynamicPipelineCompilerSettings
     {
         var metadata = new SortedDictionary<string, string>(StringComparer.Ordinal)
         {
-            ["pipeline_architecture"] = "aisthesis->phainesis->nous->topos->kairos->kinesis->zoe",
             ["dsl_schema_version"] = DslSchemaVersion,
-            ["version"] = Version
+            ["gpu_execution_paths"] = "optional",
+            ["parenthesized_boolean_expressions"] = "supported",
+            ["pipeline_architecture"] = "aisthesis->phainesis->nous->topos->kairos->kinesis->zoe",
+            [GpuProviderMetadataKeys.Rev3] = "true",
+            [GpuProviderMetadataKeys.Version] = Version
         };
 
         if (!string.IsNullOrWhiteSpace(DslSchemaUri))

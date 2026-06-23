@@ -23,7 +23,7 @@ public static class LocalLlmCapabilityContracts
             "Local LLM Provider",
             CapabilityModuleKind.ManagedAssembly,
             CapabilityInvocationMode.AssemblyReference,
-            GetRequiredMetadataValue(descriptor.Metadata, "version", "0.1.1"),
+            GetRequiredMetadataValue(descriptor.Metadata, "version", "0.1.3"),
             descriptor.Runtime,
             GetMetadataValue(descriptor.Metadata, "runtime_uri", null),
             GetMetadataValue(descriptor.Metadata, "artifact_hash", null),

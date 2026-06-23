@@ -23,7 +23,7 @@ public static class ChatOpenAICapabilityContracts
             "Chat OpenAI Provider",
             CapabilityModuleKind.RemoteEndpoint,
             CapabilityInvocationMode.Remote,
-            GetRequiredMetadataValue(descriptor.Metadata, "version", "0.1.1"),
+            GetRequiredMetadataValue(descriptor.Metadata, "version", "0.1.3"),
             GetMetadataValue(descriptor.Metadata, "endpoint", null),
             null,
             null,
