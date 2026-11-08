@@ -27,7 +27,7 @@
     "providerType": "AIKernel.Providers.CudaCompute.CudaComputeProvider",
     "invokerType": "AIKernel.Providers.CudaCompute.CudaComputeInvoker",
     "raw_capture_source": "none",
-    "rev3": "true",
+    "canonical": "true",
     "zero_copy_buffer_handling": "native-cuda-device-buffer"
   },
   "cli": {
