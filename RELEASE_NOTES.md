@@ -2,6 +2,11 @@
 
 [日本語](RELEASE_NOTES-ja.md)
 
+## 0.1.3 (Unreleased)
+
+- Align the official Provider packages with AIKernel.NET, Core, and Control 0.1.3. Keep endpoint, driver, and optional native-runtime concerns outside Core.
+- Include the Compute provider in `aikernel-providers` bundle verification: check that the matching DLL is loaded and that the provider can be registered. Native CUDA execution remains an opt-in capability.
+
 ## 0.1.2
 
 **June 16th, 2026 - Provider substrate package line.**

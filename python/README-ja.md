@@ -4,7 +4,7 @@
 
 AIKernel 公式拡張 Provider 向け Python wrapper surface です。
 
-0.1.2 正典系列から、`aikernel-providers` は C# AIKernel.Providers assembly が公開する
+0.1.3 正典系列では、`aikernel-providers` は C# AIKernel.Providers assembly が公開する
 Provider 契約境界を Python へ公開する PyPI package です。Provider semantics は
 Python 側で再実装せず、C# 側の contract surface へ委譲します。
 
@@ -54,7 +54,7 @@ contract surface へ委譲します。
 
 ## Managed API Catalog
 
-v0.1.2 package では generated managed API catalog を公開します。
+v0.1.3 package では generated managed API catalog を公開します。
 `managed_api_catalog()`、`managed_api_summary()`、`managed_type_names()`、
 `find_managed_type(full_name)` で確認できます。
 
