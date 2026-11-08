@@ -14,7 +14,7 @@
     "gpu_execution_paths": "optional",
     "parenthesized_boolean_expressions": "supported",
     "dsl_schema_uri": "rom://providers/dynamic-pipeline/schema.json",
-    "rev3": "true",
+    "canonical": "true",
     "providerType": "AIKernel.Providers.DynamicPipelineCompiler.DynamicPipelineCompilerProvider",
     "invokerType": "AIKernel.Providers.DynamicPipelineCompiler.DynamicPipelineCompilerInvoker"
   },

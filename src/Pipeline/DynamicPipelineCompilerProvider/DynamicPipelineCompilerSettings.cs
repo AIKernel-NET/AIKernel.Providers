@@ -32,7 +32,7 @@ public sealed record DynamicPipelineCompilerSettings
             ["gpu_execution_paths"] = "optional",
             ["parenthesized_boolean_expressions"] = "supported",
             ["pipeline_architecture"] = "aisthesis->phainesis->nous->topos->kairos->kinesis->zoe",
-            [GpuProviderMetadataKeys.Rev3] = "true",
+            [GpuProviderMetadataKeys.Canonical] = "true",
             [GpuProviderMetadataKeys.Version] = Version
         };
 

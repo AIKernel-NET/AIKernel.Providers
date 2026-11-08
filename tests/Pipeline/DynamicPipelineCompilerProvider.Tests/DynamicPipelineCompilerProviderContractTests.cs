@@ -56,7 +56,7 @@ public sealed class DynamicPipelineCompilerProviderContractTests
         Assert.Equal("0.2", provider.ToCapabilityDescriptor().Metadata["dsl_schema_version"]);
         Assert.Equal("supported", provider.ToCapabilityDescriptor().Metadata["parenthesized_boolean_expressions"]);
         Assert.Equal("optional", provider.ToCapabilityDescriptor().Metadata["gpu_execution_paths"]);
-        Assert.Equal("true", provider.ToCapabilityDescriptor().Metadata["rev3"]);
+        Assert.Equal("true", provider.ToCapabilityDescriptor().Metadata["canonical"]);
         Assert.Equal(
             "aisthesis->phainesis->nous->topos->kairos->kinesis->zoe",
             provider.ToCapabilityDescriptor().Metadata["pipeline_architecture"]);

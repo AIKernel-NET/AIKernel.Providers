@@ -309,7 +309,7 @@ public sealed class ProviderSubstrateTests
     }
 
     [Fact]
-    public void ProviderRouter_GpuCapabilityManifest_PreservesRev3Metadata()
+    public void ProviderRouter_GpuCapabilityManifest_PreservesCanonicalMetadata()
     {
         const string json = """
             {
@@ -326,7 +326,7 @@ public sealed class ProviderSubstrateTests
               ],
               "metadata": {
                 "backend": "browser-webgpu",
-                "rev3": "true",
+                "canonical": "true",
                 "raw_capture_source": "raw-framebuffer",
                 "ais_matrix_order": "topos,route,threat,zoe"
               },
@@ -361,7 +361,7 @@ public sealed class ProviderSubstrateTests
         Assert.Equal("webgpu", result.Backend?.Kind);
         Assert.Equal("true", result.Backend?.Metadata["zeroCopy"]);
         Assert.Equal("raw-framebuffer", result.Backend?.Metadata["target"]);
-        Assert.Equal("true", descriptor.Metadata["rev3"]);
+        Assert.Equal("true", descriptor.Metadata["canonical"]);
         Assert.Equal("raw-framebuffer", descriptor.Metadata["raw_capture_source"]);
         Assert.Equal("topos,route,threat,zoe", capability.Metadata["ais_matrix_order"]);
     }

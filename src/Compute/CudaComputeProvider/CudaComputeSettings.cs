@@ -83,10 +83,10 @@ public sealed record CudaComputeSettings
             ["native_module_ref"] = NativeModuleRef,
             [GpuProviderMetadataKeys.NativeJsBridge] = "not-required-native-provider",
             [GpuProviderMetadataKeys.PassBridge] = "native-abi",
-            [GpuProviderMetadataKeys.ProviderFamily] = "aikernel.gpu.rev3",
+            [GpuProviderMetadataKeys.ProviderFamily] = "aikernel.gpu.canonical",
             [GpuProviderMetadataKeys.ProviderRole] = "cuda13-native-compute",
             [GpuProviderMetadataKeys.RawCaptureSource] = "none",
-            [GpuProviderMetadataKeys.Rev3] = "true",
+            [GpuProviderMetadataKeys.Canonical] = "true",
             [GpuProviderMetadataKeys.Version] = Version,
             [GpuProviderMetadataKeys.ZeroCopyBufferHandling] = "native-cuda-device-buffer"
         };
