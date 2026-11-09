@@ -25,7 +25,7 @@ public sealed class SchedulerProvider : StandardProviderBase, IStandardScheduler
 
     /// <summary>[EN] Initializes the scheduler provider. [JA] scheduler Provider を初期化します。</summary>
     public SchedulerProvider()
-        : base("providers.scheduler.standard", "Scheduler Provider", "0.1.1", ["schedule.add", "schedule.list", "schedule.remove"], ["job"])
+        : base("providers.scheduler.standard", "Scheduler Provider", "0.1.3", ["schedule.add", "schedule.list", "schedule.remove"], ["job"])
     {
     }
 

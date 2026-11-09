@@ -1,4 +1,5 @@
 using AIKernel.Dtos.Capabilities;
+using AIKernel.Dtos.Gpu;
 using AIKernel.Enums;
 
 namespace AIKernel.Providers.CudaCompute;
@@ -23,17 +24,25 @@ public static class CudaComputeCapabilityContracts
             "CUDA Compute Provider",
             CapabilityModuleKind.NativeLibrary,
             CapabilityInvocationMode.NativeAbi,
-            GetRequiredMetadataValue(descriptor.Metadata, "version", "0.1.1"),
+            GetRequiredMetadataValue(descriptor.Metadata, GpuProviderMetadataKeys.Version, "0.1.3"),
             GetMetadataValue(descriptor.Metadata, "entry_point", "libtorch_bridge"),
             GetMetadataValue(descriptor.Metadata, "loader_json", null),
             GetMetadataValue(descriptor.Metadata, "artifact_hash", null),
             [
+                GpuOperationNames.ComputeDispatch,
+                GpuOperationNames.ComputeVectorAdd,
                 "tensor.matmul",
                 "tensor.softmax",
                 "tensor.conv2d",
                 "tensor.layernorm"
             ],
-            ["native.load", "tensor.compute"],
+            [
+                "native.load",
+                GpuPermissionNames.ComputeExecute,
+                GpuPermissionNames.BufferRead,
+                GpuPermissionNames.BufferWrite,
+                "tensor.compute"
+            ],
             descriptor.Metadata);
     }
 

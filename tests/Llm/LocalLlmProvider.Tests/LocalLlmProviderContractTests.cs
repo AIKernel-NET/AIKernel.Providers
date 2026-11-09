@@ -11,7 +11,7 @@ public sealed class LocalLlmProviderContractTests
     {
         var metadata = new Dictionary<string, string>(StringComparer.Ordinal)
         {
-            ["version"] = "0.1.1",
+            ["version"] = "0.1.3",
             ["runtime"] = "ollama",
             ["runtime_uri"] = "ollama://localhost"
         };

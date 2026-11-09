@@ -12,9 +12,9 @@ from dataclasses import dataclass
 from pathlib import Path
 
 
-_PROVIDER_PACKAGE_VERSION = "0.1.2"
-_CONTRACT_PACKAGE_VERSION = "0.1.2"
-_CORE_PACKAGE_VERSION = "0.1.2"
+_PROVIDER_PACKAGE_VERSION = "0.1.3"
+_CONTRACT_PACKAGE_VERSION = "0.1.3"
+_CORE_PACKAGE_VERSION = "0.1.3"
 _MICROSOFT_AI_ABSTRACTIONS_VERSION = "10.6.0"
 _MICROSOFT_EXTENSIONS_VERSION = "10.0.8"
 _ASSEMBLIES = (
@@ -23,6 +23,7 @@ _ASSEMBLIES = (
     "AIKernel.Core.dll",
     "AIKernel.Dtos.dll",
     "AIKernel.Enums.dll",
+    "AIKernel.Providers.Compute.dll",
     "AIKernel.Providers.Standard.dll",
     "ChatOpenAIProvider.dll",
     "ChatHistoryProvider.dll",
@@ -45,6 +46,7 @@ _ASSEMBLY_PACKAGES = {
     "AIKernel.Core.dll": ("AIKernel.Core", _CORE_PACKAGE_VERSION),
     "AIKernel.Dtos.dll": ("AIKernel.Dtos", _CONTRACT_PACKAGE_VERSION),
     "AIKernel.Enums.dll": ("AIKernel.Enums", _CONTRACT_PACKAGE_VERSION),
+    "AIKernel.Providers.Compute.dll": ("AIKernel.Providers.Compute", _PROVIDER_PACKAGE_VERSION),
     "AIKernel.Providers.Standard.dll": ("AIKernel.Providers.Standard", _PROVIDER_PACKAGE_VERSION),
     "ChatOpenAIProvider.dll": ("AIKernel.Providers.ChatOpenAI", _PROVIDER_PACKAGE_VERSION),
     "ChatHistoryProvider.dll": ("AIKernel.Providers.ChatHistory", _PROVIDER_PACKAGE_VERSION),

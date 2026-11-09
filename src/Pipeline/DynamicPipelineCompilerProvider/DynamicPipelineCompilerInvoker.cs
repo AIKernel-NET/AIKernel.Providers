@@ -34,14 +34,49 @@ public sealed class DynamicPipelineCompilerInvoker : ICapabilityModuleInvoker
         metadata["provider"] = "DynamicPipelineCompilerProvider";
         metadata["operation"] = request.Operation;
         var unsupported = UnsupportedOperation(supported, request.Operation);
+        if (!supported)
+        {
+            return ValueTask.FromResult(new CapabilityInvocationResult(
+                request.InvocationId,
+                request.CapabilityId,
+                Succeeded: false,
+                OutputHash: null,
+                ErrorCode: unsupported.Match<string?>(() => null, error => error.Code),
+                ErrorMessage: unsupported.Match<string?>(() => null, error => error.Message),
+                ReplayLogHash: request.ReplayLogHash,
+                Metadata: metadata));
+        }
+
+        metadata["parenthesized_boolean_expressions"] = "supported";
+        var conditionExpression = ResolveConditionExpression(request);
+        var validation = ValidateConditionExpression(request.Operation, conditionExpression);
+        metadata["condition_expression_grammar"] = validation.Grammar;
+        metadata["condition_validation"] = ResolveConditionValidationLabel(validation, conditionExpression);
+        if (!string.IsNullOrWhiteSpace(conditionExpression))
+        {
+            metadata["condition_expression"] = conditionExpression!;
+        }
+
+        if (!validation.IsValid)
+        {
+            return ValueTask.FromResult(new CapabilityInvocationResult(
+                request.InvocationId,
+                request.CapabilityId,
+                Succeeded: false,
+                OutputHash: null,
+                ErrorCode: "DYNAMIC_PIPELINE_CONDITION_INVALID",
+                ErrorMessage: validation.Error,
+                ReplayLogHash: request.ReplayLogHash,
+                Metadata: metadata));
+        }
 
         return ValueTask.FromResult(new CapabilityInvocationResult(
             request.InvocationId,
             request.CapabilityId,
-            Succeeded: supported,
+            Succeeded: true,
             OutputHash: null,
-            ErrorCode: unsupported.Match<string?>(() => null, error => error.Code),
-            ErrorMessage: unsupported.Match<string?>(() => null, error => error.Message),
+            ErrorCode: null,
+            ErrorMessage: null,
             ReplayLogHash: request.ReplayLogHash,
             Metadata: metadata));
     }
@@ -51,4 +86,44 @@ public sealed class DynamicPipelineCompilerInvoker : ICapabilityModuleInvoker
             supported,
             "DYNAMIC_PIPELINE_OPERATION_NOT_SUPPORTED",
             $"Unsupported dynamic pipeline operation: {operation}.");
+
+    private static string? ResolveConditionExpression(CapabilityInvocationRequest request)
+    {
+        var value = FindConditionExpression(request.Arguments);
+        return value ?? FindConditionExpression(request.Metadata);
+    }
+
+    private static string? FindConditionExpression(IReadOnlyDictionary<string, string> values)
+    {
+        foreach (var key in new[] { "condition", "expression", "when" })
+        {
+            if (values.TryGetValue(key, out var value) && !string.IsNullOrWhiteSpace(value))
+            {
+                return value;
+            }
+        }
+
+        return null;
+    }
+
+    private static DynamicPipelineConditionValidationResult ValidateConditionExpression(
+        string operation,
+        string? conditionExpression)
+        => operation is "pipeline.compile" or "pipeline.validate"
+            ? DynamicPipelineConditionExpressionValidator.Validate(conditionExpression)
+            : DynamicPipelineConditionValidationResult.Valid("not-applicable");
+
+    private static string ResolveConditionValidationLabel(
+        DynamicPipelineConditionValidationResult validation,
+        string? conditionExpression)
+    {
+        if (!validation.IsValid)
+        {
+            return "failed";
+        }
+
+        return validation.Grammar == "not-applicable" || string.IsNullOrWhiteSpace(conditionExpression)
+            ? "skipped"
+            : "passed";
+    }
 }

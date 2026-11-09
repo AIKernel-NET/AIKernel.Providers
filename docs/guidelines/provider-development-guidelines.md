@@ -272,8 +272,8 @@ build-time fixed native, OS-specific, browser/WASM-specific, vendor-SDK-specific
 or scenario-specific implementations that would pollute the default
 aikernel-providers wheel.
 
-In the v0.1.2 canonical series, validate `aikernel-providers` with
-`0.1.2.dev{buildNumber}` wheels until stable publication is explicitly opened.
+In the v0.1.3 canonical series, validate `aikernel-providers` with
+`0.1.3.dev{buildNumber}` wheels until stable publication is explicitly opened.
 The stable default Python install target is:
 
 ```bash

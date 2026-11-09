@@ -3,7 +3,7 @@
   "manifestVersion": "1.0",
   "providerId": "aikernel.providers.perception.substrate",
   "name": "AIKernel Providers Perception Substrate",
-  "version": "0.1.1.1",
+  "version": "0.1.3",
   "assemblyName": "AIKernel.Providers.Perception",
   "packageId": "AIKernel.Providers.Perception",
   "capabilities": [

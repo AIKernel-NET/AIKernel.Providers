@@ -4,7 +4,7 @@
 
 Python wrappers for AIKernel extension providers.
 
-Starting with the 0.1.2 canon line, `aikernel-providers` exposes provider
+In the 0.1.3 canon line, `aikernel-providers` exposes provider
 contract boundaries from the C# AIKernel.Providers assemblies without
 re-implementing provider semantics in Python.
 
@@ -54,7 +54,7 @@ Python objects to the C# contract surface.
 
 ## Managed API Catalog
 
-The v0.1.2 package exposes the generated managed API catalog through
+The v0.1.3 package exposes the generated managed API catalog through
 `managed_api_catalog()`, `managed_api_summary()`, `managed_type_names()`, and
 `find_managed_type(full_name)`.
 

@@ -13,7 +13,7 @@ public sealed record ChatHistorySettings
     public string Name { get; init; } = "Chat History Provider";
 
     /// <summary>[EN] Provider contract version. [JA] Provider 契約 version です。</summary>
-    public string Version { get; init; } = "0.1.1";
+    public string Version { get; init; } = "0.1.3";
 
     /// <summary>[EN] Optional history source URI. [JA] 任意の history source URI です。</summary>
     public string? SourceUri { get; init; } = "rom://providers/chat-history/history.json";

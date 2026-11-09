@@ -11,7 +11,7 @@ public sealed class ChatHistoryProviderContractTests
     {
         var metadata = new Dictionary<string, string>(StringComparer.Ordinal)
         {
-            ["version"] = "0.1.1",
+            ["version"] = "0.1.3",
             ["source_uri"] = "rom://providers/chat-history/history.json"
         };
 

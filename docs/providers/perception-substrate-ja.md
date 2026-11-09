@@ -8,7 +8,7 @@
 - frame、auditory、spatial Provider 向け deterministic routing policy を作成する。
 - manifest-driven provider discovery を維持する。
 - confidence、risk、diagnostics を downstream adapter 向け semantic material として保持する。
-- Sensor OS carrier を provider-neutral に保ち、v0.1.2 contract 抽出へ備える。
+- Sensor OS carrier を provider-neutral に保ち、v0.1.3 contract 抽出へ備える。
 
 ## Sensor OS concept mapping
 
@@ -54,6 +54,6 @@ Doom 固有 logic ではなく、CTG、Gate、Council、intent、action value �
 implementation を差し替える共通抽象です。この package は pure managed に保ち、
 WebGPU dispatch descriptor は `AIKernel.Wasm.Perception` に置きます。
 
-## v0.1.2 への整理
+## v0.1.3 への整理
 
 この package の interface / DTO は、次回の AIKernel.NET 正典 Interface 更新で昇格候補になります。それまでは小さく、adapter-friendly で、scenario-specific semantics を持たない状態に保ちます。

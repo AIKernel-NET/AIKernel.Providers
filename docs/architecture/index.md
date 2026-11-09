@@ -146,7 +146,7 @@ ownership location:
 ## Python Boundary
 
 `aikernel-providers` is the Python wrapper name for the same provider boundary
-in the 0.1.2 canonical series. Python packaging loads managed assemblies and
+in the 0.1.3 canonical series. Python packaging loads managed assemblies and
 manifest JSON files through pythonnet and exposes thin wrapper objects.
 
 Python code must not reimplement provider semantics. It delegates to the public

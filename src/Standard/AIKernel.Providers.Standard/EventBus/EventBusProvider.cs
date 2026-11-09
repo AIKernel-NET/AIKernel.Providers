@@ -16,7 +16,7 @@ public sealed class EventBusProvider : StandardProviderBase, IEventBus
 
     /// <summary>[EN] Initializes the event bus provider. [JA] event bus Provider を初期化します。</summary>
     public EventBusProvider()
-        : base("providers.eventbus.memory", "Event Bus Provider", "0.1.1", ["event.publish", "event.subscribe"], ["event"])
+        : base("providers.eventbus.memory", "Event Bus Provider", "0.1.3", ["event.publish", "event.subscribe"], ["event"])
     {
     }
 

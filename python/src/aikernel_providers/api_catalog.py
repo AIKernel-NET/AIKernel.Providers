@@ -703,7 +703,7 @@ _CATALOG: tuple[ManagedTypeDescriptor, ...] = (
         members=(
             ManagedMemberDescriptor('property', 'ProviderId', 'public string ProviderId { get; init; } = "openai-compatible";'),
             ManagedMemberDescriptor('property', 'Name', 'public string Name { get; init; } = "OpenAI Compatible Provider";'),
-            ManagedMemberDescriptor('property', 'Version', 'public string Version { get; init; } = "0.1.1";'),
+            ManagedMemberDescriptor('property', 'Version', 'public string Version { get; init; } = "0.1.3";'),
             ManagedMemberDescriptor('property', 'ModelId', 'public string ModelId { get; init; } = "";'),
             ManagedMemberDescriptor('property', 'Endpoint', 'public Uri? Endpoint { get; init; }'),
             ManagedMemberDescriptor('property', 'MaxInputTokens', 'public int MaxInputTokens { get; init; } = 8192;'),
@@ -5047,7 +5047,7 @@ _CATALOG: tuple[ManagedTypeDescriptor, ...] = (
         members=(
             ManagedMemberDescriptor('method', 'ToContract', 'public static CapabilityModuleDescriptor ToContract('),
             ManagedMemberDescriptor('method', 'CapabilityModuleDescriptor', 'return new CapabilityModuleDescriptor('),
-            ManagedMemberDescriptor('method', 'GetRequiredMetadataValue', 'GetRequiredMetadataValue(descriptor.Metadata, "version", "0.1.1"),'),
+            ManagedMemberDescriptor('method', 'GetRequiredMetadataValue', 'GetRequiredMetadataValue(descriptor.Metadata, "version", "0.1.3"),'),
             ManagedMemberDescriptor('method', 'GetMetadataValue', 'GetMetadataValue(descriptor.Metadata, "source_uri", null),'),
             ManagedMemberDescriptor('method', 'GetMetadataValue', 'GetMetadataValue(descriptor.Metadata, "artifact_hash", null),'),
         ),
@@ -5130,7 +5130,7 @@ _CATALOG: tuple[ManagedTypeDescriptor, ...] = (
         members=(
             ManagedMemberDescriptor('property', 'ProviderId', 'public string ProviderId { get; init; } = "chat-history";'),
             ManagedMemberDescriptor('property', 'Name', 'public string Name { get; init; } = "Chat History Provider";'),
-            ManagedMemberDescriptor('property', 'Version', 'public string Version { get; init; } = "0.1.1";'),
+            ManagedMemberDescriptor('property', 'Version', 'public string Version { get; init; } = "0.1.3";'),
             ManagedMemberDescriptor('property', 'SourceUri', 'public string? SourceUri { get; init; } = "rom://providers/chat-history/history.json";'),
             ManagedMemberDescriptor('property', 'ArtifactHash', 'public string? ArtifactHash { get; init; }'),
             ManagedMemberDescriptor('method', 'ToMetadata', 'public IReadOnlyDictionary<string, string> ToMetadata()'),
@@ -5162,7 +5162,7 @@ _CATALOG: tuple[ManagedTypeDescriptor, ...] = (
         members=(
             ManagedMemberDescriptor('method', 'ToContract', 'public static CapabilityModuleDescriptor ToContract('),
             ManagedMemberDescriptor('method', 'CapabilityModuleDescriptor', 'return new CapabilityModuleDescriptor('),
-            ManagedMemberDescriptor('method', 'GetRequiredMetadataValue', 'GetRequiredMetadataValue(descriptor.Metadata, "version", "0.1.1"),'),
+            ManagedMemberDescriptor('method', 'GetRequiredMetadataValue', 'GetRequiredMetadataValue(descriptor.Metadata, "version", "0.1.3"),'),
             ManagedMemberDescriptor('method', 'GetMetadataValue', 'GetMetadataValue(descriptor.Metadata, "endpoint", null),'),
         ),
     ),
@@ -5246,7 +5246,7 @@ _CATALOG: tuple[ManagedTypeDescriptor, ...] = (
         members=(
             ManagedMemberDescriptor('property', 'ProviderId', 'public string ProviderId { get; init; } = "providers.openai";'),
             ManagedMemberDescriptor('property', 'Name', 'public string Name { get; init; } = "Chat OpenAI Provider";'),
-            ManagedMemberDescriptor('property', 'Version', 'public string Version { get; init; } = "0.1.1";'),
+            ManagedMemberDescriptor('property', 'Version', 'public string Version { get; init; } = "0.1.3";'),
             ManagedMemberDescriptor('property', 'Endpoint', 'public Uri Endpoint { get; init; } = new("https://api.openai.com/v1");'),
             ManagedMemberDescriptor('property', 'Model', 'public string Model { get; init; } = "gpt-4.1-mini";'),
             ManagedMemberDescriptor('property', 'EmbeddingModel', 'public string? EmbeddingModel { get; init; }'),
@@ -5322,7 +5322,7 @@ _CATALOG: tuple[ManagedTypeDescriptor, ...] = (
         members=(
             ManagedMemberDescriptor('method', 'ToContract', 'public static CapabilityModuleDescriptor ToContract('),
             ManagedMemberDescriptor('method', 'CapabilityModuleDescriptor', 'return new CapabilityModuleDescriptor('),
-            ManagedMemberDescriptor('method', 'GetRequiredMetadataValue', 'GetRequiredMetadataValue(descriptor.Metadata, "version", "0.1.1"),'),
+            ManagedMemberDescriptor('method', 'GetRequiredMetadataValue', 'GetRequiredMetadataValue(descriptor.Metadata, "version", "0.1.3"),'),
             ManagedMemberDescriptor('method', 'GetMetadataValue', 'GetMetadataValue(descriptor.Metadata, "entry_point", "libtorch_bridge"),'),
             ManagedMemberDescriptor('method', 'GetMetadataValue', 'GetMetadataValue(descriptor.Metadata, "loader_json", null),'),
             ManagedMemberDescriptor('method', 'GetMetadataValue', 'GetMetadataValue(descriptor.Metadata, "artifact_hash", null),'),
@@ -5397,7 +5397,7 @@ _CATALOG: tuple[ManagedTypeDescriptor, ...] = (
         members=(
             ManagedMemberDescriptor('property', 'ProviderId', 'public string ProviderId { get; init; } = "providers.cuda";'),
             ManagedMemberDescriptor('property', 'Name', 'public string Name { get; init; } = "CUDA Compute Provider";'),
-            ManagedMemberDescriptor('property', 'Version', 'public string Version { get; init; } = "0.1.1";'),
+            ManagedMemberDescriptor('property', 'Version', 'public string Version { get; init; } = "0.1.3";'),
             ManagedMemberDescriptor('property', 'DeviceProfile', 'public string DeviceProfile { get; init; } = "cuda13";'),
             ManagedMemberDescriptor('property', 'BackendName', 'public string BackendName { get; init; } = "cuda13.0";'),
             ManagedMemberDescriptor('property', 'BackendVersion', 'public string? BackendVersion { get; init; } = "13.0";'),
@@ -5450,7 +5450,7 @@ _CATALOG: tuple[ManagedTypeDescriptor, ...] = (
         members=(
             ManagedMemberDescriptor('method', 'ToContract', 'public static CapabilityModuleDescriptor ToContract('),
             ManagedMemberDescriptor('method', 'CapabilityModuleDescriptor', 'return new CapabilityModuleDescriptor('),
-            ManagedMemberDescriptor('method', 'GetMetadataValue', 'GetMetadataValue(descriptor.Metadata, "version", "0.1.1"),'),
+            ManagedMemberDescriptor('method', 'GetMetadataValue', 'GetMetadataValue(descriptor.Metadata, "version", "0.1.3"),'),
         ),
     ),
     ManagedTypeDescriptor(
@@ -5514,7 +5514,7 @@ _CATALOG: tuple[ManagedTypeDescriptor, ...] = (
         members=(
             ManagedMemberDescriptor('property', 'ProviderId', 'public string ProviderId { get; init; } = "providers.dynamic-pipeline";'),
             ManagedMemberDescriptor('property', 'Name', 'public string Name { get; init; } = "Dynamic Pipeline Compiler Provider";'),
-            ManagedMemberDescriptor('property', 'Version', 'public string Version { get; init; } = "0.1.1";'),
+            ManagedMemberDescriptor('property', 'Version', 'public string Version { get; init; } = "0.1.3";'),
             ManagedMemberDescriptor('property', 'DslSchemaVersion', 'public string DslSchemaVersion { get; init; } = "0.1";'),
             ManagedMemberDescriptor('property', 'DslSchemaUri', 'public string? DslSchemaUri { get; init; } = "rom://providers/dynamic-pipeline/schema.json";'),
             ManagedMemberDescriptor('method', 'ToMetadata', 'public IReadOnlyDictionary<string, string> ToMetadata()'),
@@ -5529,7 +5529,7 @@ _CATALOG: tuple[ManagedTypeDescriptor, ...] = (
         members=(
             ManagedMemberDescriptor('method', 'ToContract', 'public static CapabilityModuleDescriptor ToContract('),
             ManagedMemberDescriptor('method', 'CapabilityModuleDescriptor', 'return new CapabilityModuleDescriptor('),
-            ManagedMemberDescriptor('method', 'GetRequiredMetadataValue', 'GetRequiredMetadataValue(descriptor.Metadata, "version", "0.1.1"),'),
+            ManagedMemberDescriptor('method', 'GetRequiredMetadataValue', 'GetRequiredMetadataValue(descriptor.Metadata, "version", "0.1.3"),'),
             ManagedMemberDescriptor('method', 'GetMetadataValue', 'GetMetadataValue(descriptor.Metadata, "runtime_uri", null),'),
             ManagedMemberDescriptor('method', 'GetMetadataValue', 'GetMetadataValue(descriptor.Metadata, "artifact_hash", null),'),
         ),
@@ -5595,7 +5595,7 @@ _CATALOG: tuple[ManagedTypeDescriptor, ...] = (
         members=(
             ManagedMemberDescriptor('property', 'ProviderId', 'public string ProviderId { get; init; } = "providers.local-llm";'),
             ManagedMemberDescriptor('property', 'Name', 'public string Name { get; init; } = "Local LLM Provider";'),
-            ManagedMemberDescriptor('property', 'Version', 'public string Version { get; init; } = "0.1.1";'),
+            ManagedMemberDescriptor('property', 'Version', 'public string Version { get; init; } = "0.1.3";'),
             ManagedMemberDescriptor('property', 'Runtime', 'public string Runtime { get; init; } = "ollama";'),
             ManagedMemberDescriptor('property', 'RuntimeUri', 'public string? RuntimeUri { get; init; } = "ollama://localhost";'),
             ManagedMemberDescriptor('property', 'ArtifactHash', 'public string? ArtifactHash { get; init; }'),

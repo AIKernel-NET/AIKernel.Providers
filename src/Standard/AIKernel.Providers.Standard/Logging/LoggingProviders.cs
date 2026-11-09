@@ -13,7 +13,7 @@ public abstract class LoggingProviderBase : StandardProviderBase, ILoggingProvid
 {
     /// <summary>[EN] Initializes a logging provider. [JA] logging Provider を初期化します。</summary>
     protected LoggingProviderBase(string providerId, string name)
-        : base(providerId, name, "0.1.1", ["log.write", "log.flush"], ["log", "text"])
+        : base(providerId, name, "0.1.3", ["log.write", "log.flush"], ["log", "text"])
     {
     }
 
