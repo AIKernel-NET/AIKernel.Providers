@@ -25,6 +25,22 @@ Default provider identity:
 - Manifest id: `openai.chat`
 - Manifest file: `openai.provider.json`
 
+## Streaming and Embedding Execution
+
+`StreamGenerateAsync` delivers text deltas as the upstream event stream arrives.
+`StreamCompletionAsync` also returns the upstream finish reason.
+
+Configure `ChatOpenAISettings.EmbeddingModel`, construct the provider with a
+`ChatOpenAIClient`, and initialize it. The provider implements
+`ITextEmbeddingProvider` and `IBatchEmbeddingProvider` using the upstream
+embeddings endpoint. The batch result follows input order.
+
+For a capability invocation, construct `ChatOpenAIInvoker(provider)` and call
+`embedding` with the text in `Arguments["input"]`. On success,
+`Metadata["embedding"]` contains the JSON float vector, `Metadata["dimensions"]`
+contains its dimension, and `OutputHash` is the SHA-256 of the vector JSON.
+The default manifest-discovery constructor has no bound provider.
+
 ## Manifest Metadata
 
 The manifest and settings carry deterministic metadata:

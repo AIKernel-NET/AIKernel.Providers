@@ -25,6 +25,21 @@ default provider identity:
 - Manifest id: `openai.chat`
 - Manifest file: `openai.provider.json`
 
+## ストリーミングと埋め込みの実行
+
+`StreamGenerateAsync` は上流のイベントを受信するたびにテキストの差分を渡します。
+`StreamCompletionAsync` は上流の終了理由も返します。
+
+`ChatOpenAISettings.EmbeddingModel` を設定し、`ChatOpenAIClient` を渡して
+Providerを作成・初期化します。`ITextEmbeddingProvider` と
+`IBatchEmbeddingProvider` が上流の埋め込みAPIを呼び、ベクトルを入力順に返します。
+
+Capabilityとして呼ぶ場合は `ChatOpenAIInvoker(provider)` を作成し、
+`embedding` の `Arguments["input"]` にテキストを指定します。成功時は
+`Metadata["embedding"]` にベクトルのJSON、`Metadata["dimensions"]` に次元数、
+`OutputHash` にそのJSONのSHA-256が入ります。マニフェスト検出用の既定コンストラクターでは
+Providerの接続が別途必要です。
+
 ## Manifest Metadata
 
 manifest と settings は決定論的 metadata を保持します。
