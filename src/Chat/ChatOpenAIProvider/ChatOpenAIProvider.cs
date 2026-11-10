@@ -13,7 +13,7 @@ namespace AIKernel.Providers.ChatOpenAI;
 /// </summary>
 public sealed class ChatOpenAIProvider(
     ChatOpenAISettings settings,
-    ChatOpenAIClient? client = null) : IModelProvider
+    ChatOpenAIClient? client = null) : IModelProvider, ITextEmbeddingProvider, IBatchEmbeddingProvider
 {
     private static readonly ChatOpenAIProviderCapabilities Capabilities = new();
     private readonly ChatOpenAISettings _settings = settings ?? throw new ArgumentNullException(nameof(settings));
@@ -97,19 +97,7 @@ public sealed class ChatOpenAIProvider(
     public Task<string> GenerateAsync(
         IReadOnlyList<IModelMessage> messages,
         CancellationToken cancellationToken = default)
-    {
-        if (!_initialized)
-        {
-            throw new InvalidOperationException("Provider must be initialized before generation.");
-        }
-
-        if (_client is null)
-        {
-            throw new InvalidOperationException("ChatOpenAIClient is required for generation.");
-        }
-
-        return _client.CompleteAsync(messages, cancellationToken);
-    }
+        => GetClient().CompleteAsync(messages, cancellationToken);
 
     /// <summary>
     /// [EN] Provides the StreamGenerateAsync provider contract member.
@@ -120,9 +108,37 @@ public sealed class ChatOpenAIProvider(
         Func<string, Task> onChunk,
         CancellationToken cancellationToken = default)
     {
-        ArgumentNullException.ThrowIfNull(onChunk);
-        var text = await GenerateAsync(messages, cancellationToken).ConfigureAwait(false);
-        await onChunk(text).ConfigureAwait(false);
+        await StreamCompletionAsync(messages, onChunk, cancellationToken).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// [EN] Streams text deltas and returns the upstream finish reason.
+    /// [JA] テキストの差分を逐次返し、上流の終了理由を返します。
+    /// </summary>
+    public Task<string> StreamCompletionAsync(
+        IReadOnlyList<IModelMessage> messages,
+        Func<string, Task> onChunk,
+        CancellationToken cancellationToken = default)
+        => GetClient().StreamCompleteAsync(messages, onChunk, cancellationToken);
+
+    /// <inheritdoc />
+    public async Task<float[]> EmbedAsync(string text, CancellationToken cancellationToken = default)
+        => (await EmbedBatchAsync([text], cancellationToken).ConfigureAwait(false))[0];
+
+    /// <inheritdoc />
+    public Task<IReadOnlyList<float[]>> EmbedBatchAsync(
+        IReadOnlyList<string> texts,
+        CancellationToken cancellationToken = default)
+        => GetClient().EmbedBatchAsync(texts, cancellationToken);
+
+    private ChatOpenAIClient GetClient()
+    {
+        if (!_initialized)
+        {
+            throw new InvalidOperationException("Provider must be initialized before execution.");
+        }
+
+        return _client ?? throw new InvalidOperationException("ChatOpenAIClient is required for execution.");
     }
 
     /// <summary>
