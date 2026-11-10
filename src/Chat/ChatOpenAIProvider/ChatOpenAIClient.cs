@@ -9,7 +9,7 @@ namespace AIKernel.Providers.ChatOpenAI;
 /// [EN] Thin HTTP client for OpenAI-compatible chat completion endpoints.
 /// [JA] OpenAI 互換 chat completion endpoint 用の薄い HTTP client です。
 /// </summary>
-public sealed class ChatOpenAIClient(
+public sealed partial class ChatOpenAIClient(
     HttpClient httpClient,
     ChatOpenAISettings settings)
 {
@@ -37,7 +37,8 @@ public sealed class ChatOpenAIClient(
 
         request.Content = JsonContent.Create(new ChatCompletionRequest(
             _settings.Model,
-            messages.Select(message => new ChatCompletionMessage(message.Role, message.Content)).ToArray()));
+            messages.Select(message => new ChatCompletionMessage(message.Role, message.Content)).ToArray()),
+            ChatJsonContext.Default.ChatCompletionRequest);
 
         using var response = await _httpClient
             .SendAsync(request, cancellationToken)
@@ -45,10 +46,10 @@ public sealed class ChatOpenAIClient(
         response.EnsureSuccessStatusCode();
 
         var payload = await response.Content
-            .ReadFromJsonAsync<ChatCompletionResponse>(cancellationToken)
+            .ReadFromJsonAsync(ChatJsonContext.Default.ChatCompletionResponse, cancellationToken)
             .ConfigureAwait(false);
 
-        return payload?.Choices.FirstOrDefault()?.Message.Content ?? string.Empty;
+        return payload?.Choices?.FirstOrDefault()?.Message?.Content ?? string.Empty;
     }
 
     private sealed record ChatCompletionRequest(
@@ -64,4 +65,8 @@ public sealed class ChatOpenAIClient(
 
     private sealed record ChatCompletionChoice(
         [property: JsonPropertyName("message")] ChatCompletionMessage Message);
+
+    [JsonSerializable(typeof(ChatCompletionRequest))]
+    [JsonSerializable(typeof(ChatCompletionResponse))]
+    private sealed partial class ChatJsonContext : JsonSerializerContext;
 }
