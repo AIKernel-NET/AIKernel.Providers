@@ -156,6 +156,24 @@ public sealed class SceneService : IAsyncDisposable
         }
     }
 
+    // Trusted host API, intentionally absent from SceneSession/capabilities.
+    // Notify an accepted request's revocation before restoring its authority.
+    // This does not require the revoked caller to remain authorized to cancel.
+    public void RevokeRequestAuthorization(string callerId, string requestId)
+    {
+        SceneJson.Id(callerId); SceneJson.Id(requestId);
+        lock (_sync)
+        {
+            if (_disposed) throw new SceneException("disabled");
+            if (!_jobs.TryGetValue(Key(callerId, requestId), out var job)
+                || job.Entry.RetainUntilUtc <= _clock.GetUtcNow()) throw new SceneException("request_not_found");
+            RevokeIfUnauthorized(job, null);
+            // Also retry durability for an already-terminal in-memory record.
+            // A failed journal write must never be acknowledged as persisted.
+            Persist();
+        }
+    }
+
     internal async ValueTask<CapabilityInvocationResult> InvokeAsync(ClaimsPrincipal principal, string caller, CapabilityInvocationRequest envelope, CancellationToken token)
     {
         // Validation, hashing, and durable journal writes run away from the UI caller.
@@ -169,15 +187,15 @@ public sealed class SceneService : IAsyncDisposable
             token.ThrowIfCancellationRequested();
             SceneGrant grant;
             try { grant = Authorize(principal, caller); }
-            catch
+            catch (Exception error)
             {
                 // The session identity was authenticated when opened. Failure
-                // to obtain current authority must not leave its known completed
-                // candidates available for revival after authority returns.
-                if (!token.IsCancellationRequested) RevokeCompletedLookup(caller, envelope, null);
+                // to obtain authority must not let a known request regain its
+                // eligibility merely because authority returns before completion.
+                if (!token.IsCancellationRequested) RevokeLookup(caller, envelope, null, error);
                 throw;
             }
-            RevokeCompletedLookup(caller, envelope, grant);
+            RevokeLookup(caller, envelope, grant);
             if (envelope.CapabilityId != CapabilityId) throw new SceneException("capability_unsupported");
             SceneJson.Id(envelope.InvocationId);
             if (envelope.Arguments is null || envelope.Metadata is null) throw new SceneException("invalid_request");
@@ -271,7 +289,7 @@ public sealed class SceneService : IAsyncDisposable
     private static string Key(SceneGrant grant, string id) => Key(grant.CallerId, id);
     private static string Key(string caller, string id) => SceneJson.Hash(SceneJson.Write(new { CallerId = caller, requestId = id }));
 
-    private void RevokeCompletedLookup(string caller, CapabilityInvocationRequest envelope, SceneGrant? grant)
+    private void RevokeLookup(string caller, CapabilityInvocationRequest envelope, SceneGrant? grant, Exception? error = null)
     {
         string id;
         string? inputHash = null;
@@ -302,15 +320,30 @@ public sealed class SceneService : IAsyncDisposable
             if (_disposed) throw new SceneException("disabled");
             if (!_jobs.TryGetValue(Key(caller, id), out var job) || job.Entry.RetainUntilUtc <= _clock.GetUtcNow()
                 || (inputHash is not null && inputHash != job.Entry.InputHash)) return;
-            RevokeIfUnauthorized(job, grant);
+            RevokeIfUnauthorized(job, grant, error);
         }
     }
 
     // Called under _sync, including at the final result projection. Persist
     // before acknowledging revocation; older concurrent grants cannot undo it.
-    private void RevokeIfUnauthorized(Job job, SceneGrant? grant)
+    private void RevokeIfUnauthorized(Job job, SceneGrant? grant, Exception? error = null)
     {
         var result = job.Entry.Result;
+        if (!Terminal(result.Status))
+        {
+            try
+            {
+                if (error is not null) throw error;
+                ValidateAuthority(job, grant);
+                return;
+            }
+            catch (Exception failure)
+            {
+                var (state, reason) = AuthorizationFailure(failure);
+                Finish(job, state, reason);
+                return;
+            }
+        }
         if (result.Status != "completed" || result.Proposals.Count == 0) return;
         if (grant is not null && job.Entry.Scope == SceneJson.Scope(grant) && result.Proposals.All(p =>
             grant.ActorRevisions.TryGetValue(p.ActorId, out var revision) && revision == p.AssetRevision
@@ -429,32 +462,36 @@ public sealed class SceneService : IAsyncDisposable
 
     private SceneGrant? ReauthorizeJob(Job job)
     {
-        string state, reason;
         try
         {
             // The host resolves current permissions for the original submitter.
             // Never hold _sync while invoking host authorization code.
             var grant = Authorize(job.Principal!);
-            if (grant.CallerId != job.Caller || SceneJson.Scope(grant) != job.Entry.Scope)
-                throw new SceneException("permission_denied");
-            SceneJson.Validate(job.Request!, grant, _options);
+            ValidateAuthority(job, grant);
             return grant;
         }
-        catch (SceneException ex) when (ex.Code is "permission_denied" or "unauthenticated"
-            or "actor_revision_mismatch" or "action_not_authorized" or "target_not_authorized")
-        {
-            state = "rejected"; reason = ex.Code;
-        }
-        catch
+        catch (Exception error)
         {
             // Called before dispatch or after a successful backend return. An
             // authorization outage is not evidence of outstanding GPU work,
             // and must not expose provider exception details.
-            state = "failed"; reason = "authorization_unavailable";
+            var (state, reason) = AuthorizationFailure(error);
+            lock (_sync) { Finish(job, state, reason); }
+            return null;
         }
-        lock (_sync) { Finish(job, state, reason); }
-        return null;
     }
+
+    private void ValidateAuthority(Job job, SceneGrant? grant)
+    {
+        if (grant is null || grant.CallerId != job.Caller || SceneJson.Scope(grant) != job.Entry.Scope)
+            throw new SceneException("permission_denied");
+        SceneJson.Validate(job.Request!, grant, _options);
+    }
+
+    private static (string State, string Reason) AuthorizationFailure(Exception error)
+        => error is SceneException { Code: "permission_denied" or "unauthenticated" or "actor_revision_mismatch"
+            or "action_not_authorized" or "target_not_authorized" } known
+            ? ("rejected", known.Code) : ("failed", "authorization_unavailable");
 
     private void Pump()
     {
@@ -597,7 +634,7 @@ public sealed class SceneService : IAsyncDisposable
                 : _clock.GetUtcNow() - _probedAt > _options.ReadinessMaxAge && _options.Enabled
                     ? _readiness with { State = "unavailable", ReasonCode = "probe_required", DeploymentVerified = false }
                     : _active >= _options.MaxConcurrentInference ? _readiness with { State = "busy", ReasonCode = "inference_capacity", RetryAfterMs = 1000 } : _readiness;
-            return new(CapabilityId, "scene-catalog.v1", "0.1.4-dev5",
+            return new(CapabilityId, "scene-catalog.v1", "0.1.4-dev6",
                 ["scene.analyze", "scene.status", "scene.cancel", "scene.invalidate", "scene.capabilities"],
                 "request_json", ResultMetadataKey, ["image/png"], false, true,
                 "image-normalized; origin=top-left; x=right; y=down; orientation=stored-pixels; no-3d",

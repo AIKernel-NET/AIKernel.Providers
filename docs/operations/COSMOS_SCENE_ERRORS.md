@@ -1,6 +1,6 @@
 # Scene v1 状態・エラーコード一覧
 
-更新: 2026-11-11 / AIKernel.Providers.Cosmos 0.1.4-dev5（dev5で推論完了時の再認可を追加。理由コード追加なし）。
+更新: 2026-11-11 / AIKernel.Providers.Cosmos 0.1.4-dev6（未完了要求の失効永続化とホスト通知。理由コード追加なし）。
 受付失敗は envelope.ErrorCode、受付後は result.ErrorCode、稼働状態は readiness.ReasonCode を確認する。
 status は COSMOS_SCENE_P0.md と result.schema.json に従う。未知のコードを成功に読み替えない。
 以下は標準実装のコード。独自バックエンド・認可アダプターも短い非機密コードだけを返すこと。
@@ -9,7 +9,7 @@ status は COSMOS_SCENE_P0.md と result.schema.json に従う。未知のコー
 |---|---|---|
 | API | capability_unsupported, operation_unsupported, unknown_argument | 能力・引数を修正。既存observerへ混ぜない |
 | 認証・認可 | unauthenticated, permission_denied, action_not_authorized, target_not_authorized | 認証主体/grantをホストで確認。JSON自己申告で回避しない |
-| 認可情報取得 | authorization_unavailable | 推論前・完了時の現在grant取得失敗。failedのまま保持。ホストの認可処理を確認し、同一IDの自動再実行はしない |
+| 認可情報取得 | authorization_unavailable | 推論前・完了時・未完了要求の照会時の現在grant取得失敗。failedのまま保持。ホストの認可処理を確認し、同一IDの自動再実行はしない |
 | 要求形式 | invalid_request, invalid_json, duplicate_field, invalid_identifier, duplicate_identifier, schema_unsupported, mode_unsupported | 入力修正 |
 | 内容整合 | hash_mismatch, inconsistent_snapshot, actor_revision_mismatch, catalog_mismatch | 整合した新しいsnapshotを採取 |
 | 期限・世代 | invalid_deadline, future_capture, observation_expired, observation_deadline, stale_context, context_changed, context_invalidated, newer_observation | 元の期限は延長せず、最新のepoch/版で撮り直す |
@@ -49,3 +49,10 @@ dev5はモデル応答の検証後、結果確定前にもdev3と同じ再認可
 先に確定したcanceled / timed_out / supersededを上書きしない。
 バックエンドの正常終了を確認した後はbackendCancellation=not_requestedのまま（既に要求した取消の記録は維持）。
 完了済みの物理処理を認可障害だけで未確認GPU処理として隔離しない。台帳障害時の停止は従来どおり。
+
+dev6は未完了要求の照会・同一入力再送で失効を検知した時点で同じrejected/failedを永続化する。
+権限が復旧しても終端状態を維持し、遅い推論応答の観測・候補を保存しない。
+ホスト専用RevokeRequestAuthorization(callerId, requestId)は未完了要求をrejected / permission_deniedにする。
+完了済みならcompletedの履歴を維持し、候補を除きstale_contextとする。他の終端状態は上書きしない。
+通知は対象なしならrequest_not_found、保存失敗ならjournal_unavailableをthrowする。後者を通知成功と扱わない。
+この操作はCapabilityのoperationではなく、認可ホストが管理する受付済み要求への通知である。
