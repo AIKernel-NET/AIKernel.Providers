@@ -1,12 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <PackageId>AIKernel.Providers.Cosmos</PackageId>
-    <Version>0.1.4-dev6</Version>
-    <PackageVersion>0.1.4-dev6</PackageVersion>
-    <InformationalVersion>0.1.4-dev6</InformationalVersion>
+    <Version>0.1.4-dev7</Version>
+    <PackageVersion>0.1.4-dev7</PackageVersion>
+    <InformationalVersion>0.1.4-dev7</InformationalVersion>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <PackageReadmeFile>COSMOS_SCENE_P0.md</PackageReadmeFile>
-    <PackageReleaseNotes>Persist revocation observed while scene jobs are queued or running. Restoring authority before inference completes cannot revive a rejected request. Add a trusted host notification for accepted requests revoked between lookups. Preserve cancellation, bounded physical work, completed analysis history, Scene v1 and official 0.1.3-dev1 dependencies. Real deployment acceptance is pending.</PackageReleaseNotes>
+    <PackageReleaseNotes>Allowlist intake error codes and sanitize authorizer, session and media admission exceptions. Unknown authorization failures become authorization_unavailable; other unknown intake failures become invalid_request. Remove private exception details while retaining cancellation, durable revocation, Scene v1 and official 0.1.3-dev1 dependencies. Real deployment acceptance is pending.</PackageReleaseNotes>
     <Description>Optional, authenticated scene observation jobs and NVIDIA Cosmos Reasoner transport. Does not execute proposed actions.</Description>
   </PropertyGroup>
   <ItemGroup>

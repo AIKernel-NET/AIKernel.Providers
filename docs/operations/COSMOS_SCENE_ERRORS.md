@@ -1,9 +1,50 @@
 # Scene v1 状態・エラーコード一覧
 
-更新: 2026-11-11 / AIKernel.Providers.Cosmos 0.1.4-dev6（未完了要求の失効永続化とホスト通知。理由コード追加なし）。
+更新: 2026-11-12 / AIKernel.Providers.Cosmos 0.1.4-dev7（受付エラーの許可リスト。理由コード追加なし）。
 受付失敗は envelope.ErrorCode、受付後は result.ErrorCode、稼働状態は readiness.ReasonCode を確認する。
 status は COSMOS_SCENE_P0.md と result.schema.json に従う。未知のコードを成功に読み替えない。
 以下は標準実装のコード。独自バックエンド・認可アダプターも短い非機密コードだけを返すこと。
+
+## dev7の受付エラー許可リスト
+
+認可アダプター由来のSceneException.Codeは、次の6種類だけを採用する。
+
+`unauthenticated`, `permission_denied`, `actor_revision_mismatch`, `action_not_authorized`,
+`target_not_authorized`, `authorization_unavailable`。
+
+それ以外の認可コード、通常例外、不正なgrantはauthorization_unavailableに置き換える。
+認可アダプターがbackend_oom等の他分類のコードを返しても、この6種類以外は採用しない。
+
+最終的なCapability受付エラーおよびセッション開始・メディア登録のSceneException.Codeは次の40種類だけを返す。
+
+| 分類 | 受付時に許可するコード |
+|---|---|
+| API | capability_unsupported, operation_unsupported, unknown_argument |
+| 認可 | unauthenticated, permission_denied, authorization_unavailable, action_not_authorized, target_not_authorized |
+| 形式 | invalid_request, invalid_json, duplicate_field, invalid_identifier, duplicate_identifier, schema_unsupported, mode_unsupported |
+| 整合 | hash_mismatch, inconsistent_snapshot, actor_revision_mismatch, catalog_mismatch |
+| 期限・世代 | invalid_deadline, future_capture, observation_expired, stale_context |
+| 冪等性 | request_id_conflict, request_not_found |
+| メディア | media_unsupported, media_unavailable, media_expired, invalid_media |
+| 容量 | payload_too_large, input_limit, media_too_large, media_capacity, media_busy, job_capacity, caller_capacity, session_capacity |
+| 稼働・台帳 | backend_work_unconfirmed, disabled, journal_unavailable |
+
+比較は大文字小文字を区別した完全一致。trim、大小文字変換、接頭辞一致、例外本文からのコード抽出は行わない。
+許可外はinvalid_requestへ置換する。ErrorMessageは安全なErrorCodeと同じ文字列、Metadataは空、OutputHashはnull。
+ホストの元例外やDataを保持せず、WorkMayStillBeRunning等のホスト例外の付加情報も受付例外へコピーしない。
+独自コード・詳細本文を公開する設定は用意しない。
+
+境界で捕捉した取消は成功・通常のエラー応答へ変換せず、OperationCanceledExceptionまたはTaskCanceledExceptionを新しく生成して伝播する。
+本文は固定の`Scene request canceled.`、InnerExceptionはnull、Dataは空。呼出元が渡したCancellationTokenは維持する。
+認可内部の取消も既存どおり取消例外で返すが、内部トークンやTaskを転送しない。
+Task.Run開始前に呼出元が取り消していた場合は、.NETの既定の取消例外となり、認可・メディア処理は呼ばない。
+通常の入力JSONのinvalid_identifier等は維持し、不正grant由来はauthorization_unavailableとなる。
+保存失敗のjournal_unavailableを認可エラーで上書きせず、従来どおり候補・新規推論を停止する。
+
+この許可リストは受付境界に適用する。受付後のjob result.ErrorCode、readiness.ReasonCode、ホスト運用APIは下記の別契約であり、
+カスタムバックエンドの理由コードを一括して正規化する改修ではない。HTTPホストはSDK例外のスタックトレースを公開応答へ転写しないこと。
+
+## 標準実装全体のコード
 
 | 分類 | コード | 呼出側の扱い |
 |---|---|---|

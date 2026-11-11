@@ -91,23 +91,31 @@ public sealed class SceneService : IAsyncDisposable
 
     public SceneSession OpenSession(ClaimsPrincipal authenticatedCaller)
     {
-        var principal = new ClaimsPrincipal(authenticatedCaller.Identities.Select(identity => new ClaimsIdentity(identity)));
-        var grant = Authorize(principal);
-        return new(this, principal, grant.CallerId);
+        try
+        {
+            var principal = new ClaimsPrincipal(authenticatedCaller.Identities.Select(identity => new ClaimsIdentity(identity)));
+            var grant = Authorize(principal);
+            return new(this, principal, grant.CallerId);
+        }
+        catch (Exception error) { throw SceneIntakeErrors.Sanitize(error); }
     }
 
     private SceneGrant Authorize(ClaimsPrincipal principal, string? expectedCaller = null)
     {
-        if (principal.Identity?.IsAuthenticated != true) throw new SceneException("unauthenticated");
-        var grant = _authorizer.Authorize(principal) ?? throw new SceneException("permission_denied");
-        SceneJson.Id(grant.CallerId); SceneJson.Id(grant.PolicyRevision); SceneJson.Id(grant.PermissionScope);
-        if (expectedCaller is not null && grant.CallerId != expectedCaller) throw new SceneException("permission_denied");
-        return grant with
+        try
         {
-            ActorRevisions = grant.ActorRevisions.ToDictionary(p => p.Key, p => p.Value, StringComparer.Ordinal),
-            ActionIds = new HashSet<string>(grant.ActionIds, StringComparer.Ordinal),
-            TargetIds = new HashSet<string>(grant.TargetIds, StringComparer.Ordinal)
-        };
+            if (principal.Identity?.IsAuthenticated != true) throw new SceneException("unauthenticated");
+            var grant = _authorizer.Authorize(principal) ?? throw new SceneException("permission_denied");
+            SceneJson.Id(grant.CallerId); SceneJson.Id(grant.PolicyRevision); SceneJson.Id(grant.PermissionScope);
+            if (expectedCaller is not null && grant.CallerId != expectedCaller) throw new SceneException("permission_denied");
+            return grant with
+            {
+                ActorRevisions = grant.ActorRevisions.ToDictionary(p => p.Key, p => p.Value, StringComparer.Ordinal),
+                ActionIds = new HashSet<string>(grant.ActionIds, StringComparer.Ordinal),
+                TargetIds = new HashSet<string>(grant.TargetIds, StringComparer.Ordinal)
+            };
+        }
+        catch (Exception error) { throw SceneIntakeErrors.Authorization(error); }
     }
 
     internal Task<SceneMediaReceipt> RegisterAsync(ClaimsPrincipal principal, string caller, SceneMediaRegistration registration,
@@ -115,9 +123,13 @@ public sealed class SceneService : IAsyncDisposable
     {
         return Task.Run(async () =>
         {
-            var grant = Authorize(principal, caller);
-            lock (_sync) { CheckEnabled(); }
-            return await _media.RegisterAsync(grant, registration, source, cancellationToken).ConfigureAwait(false);
+            try
+            {
+                var grant = Authorize(principal, caller);
+                lock (_sync) { CheckEnabled(); }
+                return await _media.RegisterAsync(grant, registration, source, cancellationToken).ConfigureAwait(false);
+            }
+            catch (Exception error) { throw SceneIntakeErrors.Sanitize(error, cancellationToken); }
         }, cancellationToken);
     }
 
@@ -281,7 +293,7 @@ public sealed class SceneService : IAsyncDisposable
             }
             throw new SceneException("operation_unsupported");
         }
-        catch (OperationCanceledException) { throw; }
+        catch (OperationCanceledException canceled) { throw SceneIntakeErrors.Cancellation(canceled, token); }
         catch (SceneException ex) { return Failure(envelope, ex.Code); }
         catch (Exception) { return Failure(envelope, "invalid_request"); }
     }
@@ -634,7 +646,7 @@ public sealed class SceneService : IAsyncDisposable
                 : _clock.GetUtcNow() - _probedAt > _options.ReadinessMaxAge && _options.Enabled
                     ? _readiness with { State = "unavailable", ReasonCode = "probe_required", DeploymentVerified = false }
                     : _active >= _options.MaxConcurrentInference ? _readiness with { State = "busy", ReasonCode = "inference_capacity", RetryAfterMs = 1000 } : _readiness;
-            return new(CapabilityId, "scene-catalog.v1", "0.1.4-dev6",
+            return new(CapabilityId, "scene-catalog.v1", "0.1.4-dev7",
                 ["scene.analyze", "scene.status", "scene.cancel", "scene.invalidate", "scene.capabilities"],
                 "request_json", ResultMetadataKey, ["image/png"], false, true,
                 "image-normalized; origin=top-left; x=right; y=down; orientation=stored-pixels; no-3d",
@@ -652,8 +664,11 @@ public sealed class SceneService : IAsyncDisposable
         return new(request.InvocationId, request.CapabilityId, succeeded, SceneJson.Hash(json), null, null, request.ReplayLogHash,
             new Dictionary<string, string> { [ResultMetadataKey] = json });
     }
-    private static CapabilityInvocationResult Failure(CapabilityInvocationRequest request, string code)
-        => new(request.InvocationId, request.CapabilityId, false, null, code, code, request.ReplayLogHash, new Dictionary<string, string>());
+    private static CapabilityInvocationResult Failure(CapabilityInvocationRequest request, string? code)
+    {
+        var safeCode = SceneIntakeErrors.Code(code);
+        return new(request.InvocationId, request.CapabilityId, false, null, safeCode, safeCode, request.ReplayLogHash, new Dictionary<string, string>());
+    }
 
     public async ValueTask DisposeAsync()
     {
