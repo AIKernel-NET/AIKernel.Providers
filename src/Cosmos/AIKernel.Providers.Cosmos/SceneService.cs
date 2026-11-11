@@ -178,13 +178,17 @@ public sealed class SceneService : IAsyncDisposable
             lock (_sync)
             {
                 if (_active != 0) throw new SceneException("backend_still_active");
-                // Resolve host identity before clearing/persisting physical-work evidence.
-                // A failed recovery operation must not acknowledge release of quarantine.
-                var identity = _backend.Identity;
+                // Prepare recovery without changing the live entries. A failed save
+                // must leave leases intact for later host and background writes.
+                var readiness = new SceneReadiness("unavailable", "probe_required", false, _backend.Identity);
+                var recovered = _jobs.Values.Select(job =>
+                    (Job: job, Entry: job.Entry with { PhysicalOutstanding = false })).ToArray();
+                Persist(recovered.Select(update => update.Entry));
+                // Publish only after the complete snapshot is durable, under the
+                // same lock as other writers. No host callbacks follow the save.
+                foreach (var update in recovered) update.Job.Entry = update.Entry;
                 _quarantined = false;
-                foreach (var job in _jobs.Values) job.Entry = job.Entry with { PhysicalOutstanding = false };
-                Persist();
-                _readiness = new("unavailable", "probe_required", false, identity);
+                _readiness = readiness;
             }
         }
         catch (Exception error) { throw SceneHostErrors.Sanitize(error); }
@@ -655,9 +659,11 @@ public sealed class SceneService : IAsyncDisposable
         foreach (var pair in _jobs.Where(p => !p.Value.Active && !p.Value.Entry.PhysicalOutstanding && Terminal(p.Value.Entry.Result.Status) && p.Value.Entry.RetainUntilUtc <= _clock.GetUtcNow()).ToArray())
             _jobs.Remove(pair.Key);
     }
-    private void Persist()
+    private void Persist() => Persist(_jobs.Values.Select(j => j.Entry));
+
+    private void Persist(IEnumerable<SceneJournalEntry> entries)
     {
-        try { _journal.Save(_jobs.Values.Select(j => j.Entry)); }
+        try { _journal.Save(entries); }
         catch { _quarantined = true; throw new SceneException("journal_unavailable"); }
     }
     private void TryPersistBackground()
@@ -672,7 +678,7 @@ public sealed class SceneService : IAsyncDisposable
                 : _clock.GetUtcNow() - _probedAt > _options.ReadinessMaxAge && _options.Enabled
                     ? _readiness with { State = "unavailable", ReasonCode = "probe_required", DeploymentVerified = false }
                     : _active >= _options.MaxConcurrentInference ? _readiness with { State = "busy", ReasonCode = "inference_capacity", RetryAfterMs = 1000 } : _readiness;
-            return new(CapabilityId, "scene-catalog.v1", "0.1.4-dev9",
+            return new(CapabilityId, "scene-catalog.v1", "0.1.4-dev10",
                 ["scene.analyze", "scene.status", "scene.cancel", "scene.invalidate", "scene.capabilities"],
                 "request_json", ResultMetadataKey, ["image/png"], false, true,
                 "image-normalized; origin=top-left; x=right; y=down; orientation=stored-pixels; no-3d",

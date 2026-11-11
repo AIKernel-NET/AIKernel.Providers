@@ -1,6 +1,6 @@
 # Scene v1 状態・エラーコード一覧
 
-更新: 2026-11-12 / AIKernel.Providers.Cosmos 0.1.4-dev9（ホスト運用APIの許可リストと例外詳細の除去）。
+更新: 2026-11-12 / AIKernel.Providers.Cosmos 0.1.4-dev10（停止確認の保存失敗後も物理処理フラグを保持。新コード追加なし）。
 受付失敗は envelope.ErrorCode、受付後は result.ErrorCode、稼働状態は readiness.ReasonCode を確認する。
 status は COSMOS_SCENE_P0.md と result.schema.json に従う。未知のコードを成功に読み替えない。
 以下は標準実装のコード。独自バックエンド・認可アダプターも短い非機密コードだけを返すこと。
@@ -117,6 +117,16 @@ ConfirmBackendQuiescentはbackend identityを取得してから隔離解除を�
 DisposeAsyncは従来どおり物理処理を待つ。例外を受けたホストは停止/失効通知/復旧の完了を仮定せず、状態確認と再試行を管理する。
 host_operation_failedは受付・ジョブの許可リストへ追加しない。ホスト操作をSceneSessionのoperationとして公開しない。
 SDK例外のスタックトレースや設定済みidentityをHTTP応答へ無条件にコピーしてよいという契約ではない。
+
+## dev10の停止確認と保存失敗
+
+ConfirmBackendQuiescentは解除後の記録を別に作り、台帳保存が成功してからメモリへ反映する。
+処理中は同じサービスロックを保持し、保存完了まで元のPhysicalOutstandingと隔離を解除しない。
+失敗時は従来どおりjournal_unavailableを返す。元の記録が後続のホスト操作や取消応答の書込みにも使われるため、
+物理処理の未確認状態が台帳から消えず、サービス再起動と保持期限切れを経ても隔離が維持される。
+停止確認の保存が成功した場合にだけフラグを解除し、readinessはunavailable / probe_requiredへ戻す。
+稼働中のbackend_still_active、既存の例外許可リスト、結果・終端状態・OutputHashは維持する。
+公開DTO、台帳v1形式、hash計算式は変更しない。台帳の手動削除や巻き戻しによる復旧を許可する変更ではない。
 
 ## 標準実装全体のコード
 
