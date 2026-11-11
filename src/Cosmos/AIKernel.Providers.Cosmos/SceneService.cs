@@ -35,7 +35,9 @@ public sealed class SceneService : IAsyncDisposable
         internal required SceneJournalEntry Entry;
         internal string Caller = "";
         internal SceneRequest? Request;
-        internal SceneGrant? Grant;
+        // In-memory credentials only; never serialized into the job journal.
+        internal ClaimsPrincipal? Principal;
+        internal TaskCompletionSource? DispatchRegistered;
         internal long Start;
         internal TimeSpan Budget;
         internal TimeSpan FreshnessBudget;
@@ -220,7 +222,9 @@ public sealed class SceneService : IAsyncDisposable
                     {
                         Entry = new(key, SceneJson.Scope(grant), inputHash, generation,
                             _clock.GetUtcNow() + _options.IdempotencyRetention, initial),
-                        Caller = grant.CallerId, Request = request, Grant = grant, Start = _clock.GetTimestamp(), Budget = budget,
+                        Caller = grant.CallerId, Request = request,
+                        Principal = new ClaimsPrincipal(principal.Identities.Select(identity => new ClaimsIdentity(identity))),
+                        Start = _clock.GetTimestamp(), Budget = budget,
                         FreshnessBudget = freshnessBudget, HasMonotonicOrigin = true, ClockVerified = verified
                     };
                     _jobs.Add(key, job);
@@ -331,7 +335,7 @@ public sealed class SceneService : IAsyncDisposable
         if (Terminal(job.Entry.Result.Status)) return;
         job.Timer?.Dispose();
         job.Entry = job.Entry with { Result = job.Entry.Result with { Status = state, ErrorCode = code, FreshnessVerified = false, Proposals = [] } };
-        if (job.Active)
+        if (job.DispatchRegistered is { } dispatch)
         {
             job.Entry = job.Entry with { Result = job.Entry.Result with { BackendCancellation = "requested" } };
             _ = Task.Run(async () =>
@@ -339,6 +343,9 @@ public sealed class SceneService : IAsyncDisposable
                 string receipt;
                 try
                 {
+                    // Do not let cancellation overtake registration of the
+                    // inference call after the final dispatch check.
+                    await dispatch.Task.ConfigureAwait(false);
                     using var limit = new CancellationTokenSource(TimeSpan.FromSeconds(5));
                     receipt = await _backend.RequestCancellationAsync(job.Entry.Result.RequestId, limit.Token).ConfigureAwait(false);
                     if (receipt is not ("unsupported" or "requested" or "confirmed")) receipt = "unconfirmed";
@@ -352,7 +359,37 @@ public sealed class SceneService : IAsyncDisposable
                 }
             });
         }
+        if (!job.Active) { job.Request = null; job.Principal = null; }
         Persist();
+    }
+
+    private SceneGrant? ReauthorizeForDispatch(Job job)
+    {
+        string state, reason;
+        try
+        {
+            // The host resolves current permissions for the original submitter.
+            // Never hold _sync while invoking host authorization code.
+            var grant = Authorize(job.Principal!);
+            if (grant.CallerId != job.Caller || SceneJson.Scope(grant) != job.Entry.Scope)
+                throw new SceneException("permission_denied");
+            SceneJson.Validate(job.Request!, grant, _options);
+            return grant;
+        }
+        catch (SceneException ex) when (ex.Code is "permission_denied" or "unauthenticated"
+            or "actor_revision_mismatch" or "action_not_authorized" or "target_not_authorized")
+        {
+            state = "rejected"; reason = ex.Code;
+        }
+        catch
+        {
+            // No backend work has started. An authorization outage (including
+            // its own cancellation) must fail closed without quarantining GPUs
+            // or exposing provider exception details.
+            state = "failed"; reason = "authorization_unavailable";
+        }
+        lock (_sync) { Finish(job, state, reason); }
+        return null;
     }
 
     private void Pump()
@@ -386,11 +423,23 @@ public sealed class SceneService : IAsyncDisposable
             var readiness = await ProbeAsync().ConfigureAwait(false);
             if (readiness.State != "ready" || !readiness.DeploymentVerified) throw new SceneException(readiness.ReasonCode);
             lock (_sync) { if (Terminal(job.Entry.Result.Status)) return; }
-            images = _media.Resolve(job.Request!, job.Grant!);
+            var grant = ReauthorizeForDispatch(job);
+            if (grant is null) return;
+            images = _media.Resolve(job.Request!, grant);
+            lock (_sync)
+            {
+                if (Terminal(job.Entry.Result.Status)) return;
+                if (_clock.GetElapsedTime(job.Start) >= job.Budget) { Finish(job, "timed_out", "observation_deadline"); return; }
+                CheckEnabled();
+                job.DispatchRegistered = new(TaskCreationOptions.RunContinuationsAsynchronously);
+            }
             var prepared = _clock.GetTimestamp();
             // Logical cancellation does not abort this await. The backend owns
             // physical completion; releasing its slot early would amplify load.
-            var reply = await _backend.AnalyzeAsync(new(job.Request!, images), CancellationToken.None).ConfigureAwait(false);
+            Task<SceneBackendReply> inference;
+            try { inference = _backend.AnalyzeAsync(new(job.Request!, images), CancellationToken.None); }
+            finally { job.DispatchRegistered.TrySetResult(); }
+            var reply = await inference.ConfigureAwait(false);
             var inferred = _clock.GetTimestamp();
             if (SceneJson.Write(reply.Provider) != SceneJson.Write(_backend.Identity)) throw new SceneException("model_revision_mismatch");
             var parsed = SceneJson.ValidateOutput(reply.ResultJson, job.Request!, _options);
@@ -446,7 +495,7 @@ public sealed class SceneService : IAsyncDisposable
             {
                 job.Active = false; _active--;
                 job.Entry = job.Entry with { PhysicalOutstanding = job.UnknownPhysical };
-                job.Request = null; job.Grant = null;
+                job.Request = null; job.Principal = null;
                 TryPersistBackground();
                 if (!_disposed) { try { Pump(); } catch (SceneException) { _quarantined = true; } }
             }
@@ -475,7 +524,7 @@ public sealed class SceneService : IAsyncDisposable
                 : _clock.GetUtcNow() - _probedAt > _options.ReadinessMaxAge && _options.Enabled
                     ? _readiness with { State = "unavailable", ReasonCode = "probe_required", DeploymentVerified = false }
                     : _active >= _options.MaxConcurrentInference ? _readiness with { State = "busy", ReasonCode = "inference_capacity", RetryAfterMs = 1000 } : _readiness;
-            return new(CapabilityId, "scene-catalog.v1", "0.1.4-dev2",
+            return new(CapabilityId, "scene-catalog.v1", "0.1.4-dev3",
                 ["scene.analyze", "scene.status", "scene.cancel", "scene.invalidate", "scene.capabilities"],
                 "request_json", ResultMetadataKey, ["image/png"], false, true,
                 "image-normalized; origin=top-left; x=right; y=down; orientation=stored-pixels; no-3d",

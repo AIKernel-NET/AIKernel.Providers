@@ -1,12 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <PackageId>AIKernel.Providers.Cosmos</PackageId>
-    <Version>0.1.4-dev2</Version>
-    <PackageVersion>0.1.4-dev2</PackageVersion>
-    <InformationalVersion>0.1.4-dev2</InformationalVersion>
+    <Version>0.1.4-dev3</Version>
+    <PackageVersion>0.1.4-dev3</PackageVersion>
+    <InformationalVersion>0.1.4-dev3</InformationalVersion>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <PackageReadmeFile>COSMOS_SCENE_P0.md</PackageReadmeFile>
-    <PackageReleaseNotes>Prevent expired context candidates from becoming current after camera, model or asset settings return to an earlier value. Scene v1 contracts and official 0.1.3-dev1 dependencies are retained. Real deployment acceptance is pending.</PackageReleaseNotes>
+    <PackageReleaseNotes>Reauthorize queued scene jobs after readiness and immediately before inference preparation. Reject revoked grants, fail closed on authorization outages, and preserve cancellation, deadlines and durable idempotency. Scene v1 contracts and official 0.1.3-dev1 dependencies are retained. Real deployment acceptance is pending.</PackageReleaseNotes>
     <Description>Optional, authenticated scene observation jobs and NVIDIA Cosmos Reasoner transport. Does not execute proposed actions.</Description>
   </PropertyGroup>
   <ItemGroup>

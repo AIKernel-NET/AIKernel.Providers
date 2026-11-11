@@ -50,8 +50,13 @@ internal sealed class FakeBackend : ISceneReasonerBackend
     internal string State = "ready";
     internal string? Output;
     internal SceneException? Failure;
+    internal Func<Task>? BeforeProbe;
     public SceneBackendIdentity Identity { get; internal set; } = new("test-double", "test-model", "test-revision", "fp32", "offline", "test-endpoint", ["test-gpu"], true);
-    public ValueTask<SceneReadiness> ProbeAsync(CancellationToken cancellationToken) => ValueTask.FromResult(new SceneReadiness(State, State == "ready" ? "ready" : "backend_" + State, State == "ready", Identity));
+    public async ValueTask<SceneReadiness> ProbeAsync(CancellationToken cancellationToken)
+    {
+        if (BeforeProbe is not null) await BeforeProbe();
+        return new(State, State == "ready" ? "ready" : "backend_" + State, State == "ready", Identity);
+    }
     public async Task<SceneBackendReply> AnalyzeAsync(SceneBackendInput input, CancellationToken cancellationToken)
     {
         Interlocked.Increment(ref Count);
@@ -91,6 +96,7 @@ internal sealed class SceneFixture : IAsyncDisposable, ISceneAuthorizer
     internal bool ClockKnown = true;
     internal string Policy = "public-policy-3";
     internal long ActorRevision = 12;
+    internal Func<ClaimsPrincipal, SceneGrant, SceneGrant>? Authorization;
     internal SceneOptions Options;
     internal ClaimsPrincipal Principal(string id = "caller-a") => new(new ClaimsIdentity([new Claim(ClaimTypes.NameIdentifier, id)], "test-auth"));
     internal SceneFixture(bool enabled = true, int maxJobs = 1000)
@@ -99,11 +105,15 @@ internal sealed class SceneFixture : IAsyncDisposable, ISceneAuthorizer
         Service = new(Options, Backend, this, Clock);
         Session = Service.OpenSession(Principal());
     }
-    public SceneGrant Authorize(ClaimsPrincipal authenticatedCaller) => new(
+    public SceneGrant Authorize(ClaimsPrincipal authenticatedCaller)
+    {
+        var grant = new SceneGrant(
         authenticatedCaller.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? throw new SceneException("permission_denied"),
         "public", Policy, new Dictionary<string, long> { ["actor-a"] = ActorRevision, ["actor-b"] = 7 },
         new HashSet<string> { "look_at", "move_to" }, new HashSet<string> { "board-a", "spot-a" },
         ClockKnown ? new(TimeSpan.Zero, TimeSpan.FromMilliseconds(1), Clock.GetUtcNow().AddHours(1)) : null);
+        return Authorization is null ? grant : Authorization(authenticatedCaller, grant);
+    }
 
     internal async Task<SceneRequest> Request(string id = "req-1", SceneSession? session = null, int offset = 0)
     {
