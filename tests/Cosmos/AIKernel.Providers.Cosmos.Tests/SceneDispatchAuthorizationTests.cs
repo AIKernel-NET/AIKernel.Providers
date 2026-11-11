@@ -85,7 +85,8 @@ public sealed class SceneDispatchAuthorizationTests
         f.Backend.Block = false; f.Backend.ReleaseAll();
         var result = await Terminal(f, monitor);
         Assert.Equal("completed", result.Status); Assert.Single(result.Proposals);
-        Assert.True(result.FreshnessVerified); Assert.Equal(1, checks); Assert.Equal(2, f.Backend.Count);
+        // Current authority is checked before dispatch and before publication.
+        Assert.True(result.FreshnessVerified); Assert.Equal(2, checks); Assert.Equal(2, f.Backend.Count);
         Assert.Equal(request.CapturedAtUtc.AddMilliseconds(request.MaxObservationAgeMs), result.ExpiresAtUtc);
         Assert.Equal(SceneJson.Write(request), SceneJson.Write((await f.Backend.Calls.Reader.ReadAsync(TestContext.Current.CancellationToken)).Request));
     }

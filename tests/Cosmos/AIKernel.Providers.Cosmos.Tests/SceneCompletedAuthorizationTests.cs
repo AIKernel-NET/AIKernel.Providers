@@ -38,12 +38,19 @@ public sealed class SceneCompletedAuthorizationTests
         Assert.True(retry.Succeeded); AssertRevoked(original, SceneFixture.Parse(retry));
         var anotherSession = f.Service.OpenSession(f.Principal());
         AssertRevoked(original, await f.Status(session: anotherSession));
+        // Wait for final journal bookkeeping before opening it for inspection;
+        // a test reader must not obstruct the worker's atomic replacement.
+        await SceneFixture.Eventually(async () => SceneJson.Read<SceneCapabilityCatalog>(
+            (await f.Invoke("scene.capabilities")).Metadata[SceneService.ResultMetadataKey], 128 * 1024).ActiveInference == 0);
         var journal = SceneJson.Read<SceneJournalDocument>(await File.ReadAllTextAsync(Path.Combine(f.Directory, "jobs.json"), TestContext.Current.CancellationToken), 1024 * 1024);
         AssertRevoked(original, Assert.Single(journal.Entries).Result);
+        Assert.False(journal.Entries[0].PhysicalOutstanding);
         Assert.Equal(1, f.Backend.Count); Assert.Equal(0, f.Backend.CancelCount);
         await f.Restart();
         AssertRevoked(original, await f.Status());
-        AssertRevoked(original, SceneFixture.Parse(await f.Submit(request)));
+        var restartedRetry = await f.Submit(request);
+        Assert.True(restartedRetry.Succeeded, restartedRetry.ErrorCode);
+        AssertRevoked(original, SceneFixture.Parse(restartedRetry));
         Assert.Equal(1, f.Backend.Count);
         await f.Submit(await f.Request("new-authorized-observation"));
         Assert.Single((await f.Completed("new-authorized-observation")).Proposals);

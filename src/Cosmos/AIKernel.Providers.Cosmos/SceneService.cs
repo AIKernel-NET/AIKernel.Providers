@@ -44,6 +44,7 @@ public sealed class SceneService : IAsyncDisposable
         internal bool HasMonotonicOrigin;
         internal bool ClockVerified;
         internal bool Active;
+        internal bool InferenceFinished;
         internal bool UnknownPhysical;
         internal ITimer? Timer;
         internal Task Work = Task.CompletedTask;
@@ -398,7 +399,7 @@ public sealed class SceneService : IAsyncDisposable
         if (Terminal(job.Entry.Result.Status)) return;
         job.Timer?.Dispose();
         job.Entry = job.Entry with { Result = job.Entry.Result with { Status = state, ErrorCode = code, FreshnessVerified = false, Proposals = [] } };
-        if (job.DispatchRegistered is { } dispatch)
+        if (job.DispatchRegistered is { } dispatch && !job.InferenceFinished)
         {
             job.Entry = job.Entry with { Result = job.Entry.Result with { BackendCancellation = "requested" } };
             _ = Task.Run(async () =>
@@ -426,7 +427,7 @@ public sealed class SceneService : IAsyncDisposable
         Persist();
     }
 
-    private SceneGrant? ReauthorizeForDispatch(Job job)
+    private SceneGrant? ReauthorizeJob(Job job)
     {
         string state, reason;
         try
@@ -446,9 +447,9 @@ public sealed class SceneService : IAsyncDisposable
         }
         catch
         {
-            // No backend work has started. An authorization outage (including
-            // its own cancellation) must fail closed without quarantining GPUs
-            // or exposing provider exception details.
+            // Called before dispatch or after a successful backend return. An
+            // authorization outage is not evidence of outstanding GPU work,
+            // and must not expose provider exception details.
             state = "failed"; reason = "authorization_unavailable";
         }
         lock (_sync) { Finish(job, state, reason); }
@@ -486,7 +487,7 @@ public sealed class SceneService : IAsyncDisposable
             var readiness = await ProbeAsync().ConfigureAwait(false);
             if (readiness.State != "ready" || !readiness.DeploymentVerified) throw new SceneException(readiness.ReasonCode);
             lock (_sync) { if (Terminal(job.Entry.Result.Status)) return; }
-            var grant = ReauthorizeForDispatch(job);
+            var grant = ReauthorizeJob(job);
             if (grant is null) return;
             images = _media.Resolve(job.Request!, grant);
             lock (_sync)
@@ -504,8 +505,17 @@ public sealed class SceneService : IAsyncDisposable
             finally { job.DispatchRegistered.TrySetResult(); }
             var reply = await inference.ConfigureAwait(false);
             var inferred = _clock.GetTimestamp();
+            lock (_sync)
+            {
+                job.InferenceFinished = true;
+                if (Terminal(job.Entry.Result.Status)) return;
+                if (_clock.GetElapsedTime(job.Start) >= job.Budget) { Finish(job, "timed_out", "observation_deadline"); return; }
+            }
             if (SceneJson.Write(reply.Provider) != SceneJson.Write(_backend.Identity)) throw new SceneException("model_revision_mismatch");
             var parsed = SceneJson.ValidateOutput(reply.ResultJson, job.Request!, _options);
+            // Validate the original submitter's current authority before any
+            // observations or candidates become a durable completed result.
+            if (ReauthorizeJob(job) is null) return;
             var validated = _clock.GetTimestamp();
             lock (_sync)
             {
@@ -587,7 +597,7 @@ public sealed class SceneService : IAsyncDisposable
                 : _clock.GetUtcNow() - _probedAt > _options.ReadinessMaxAge && _options.Enabled
                     ? _readiness with { State = "unavailable", ReasonCode = "probe_required", DeploymentVerified = false }
                     : _active >= _options.MaxConcurrentInference ? _readiness with { State = "busy", ReasonCode = "inference_capacity", RetryAfterMs = 1000 } : _readiness;
-            return new(CapabilityId, "scene-catalog.v1", "0.1.4-dev4",
+            return new(CapabilityId, "scene-catalog.v1", "0.1.4-dev5",
                 ["scene.analyze", "scene.status", "scene.cancel", "scene.invalidate", "scene.capabilities"],
                 "request_json", ResultMetadataKey, ["image/png"], false, true,
                 "image-normalized; origin=top-left; x=right; y=down; orientation=stored-pixels; no-3d",

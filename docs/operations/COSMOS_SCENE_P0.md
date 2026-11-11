@@ -1,7 +1,7 @@
 # Cosmos シーン観測 API v1 — AIKernel 実装・接続契約
 
 更新: 2026-11-11。TheoriaCast の P0 要望に対するローカル開発版。
-パッケージ: `AIKernel.Providers.Cosmos` **0.1.4-dev4** / .NET 10。
+パッケージ: `AIKernel.Providers.Cosmos` **0.1.4-dev5** / .NET 10。
 実装・オフライン試験と実機受入は別の段階です。実 Cosmos による B01〜B06 の受入は未完了です。
 
 ## 1. 配置と責任
@@ -69,6 +69,16 @@ scope/policyが変わった照会には従来どおりrequest_not_foundを返し
 不正な能力・引数・異なる入力hashの再送は、この失効処理の対象にしません。
 既存Scene v1と台帳v1の形式は維持します。失効した候補の応答内容とOutputHashは変わりますが、hashの計算式は変えません。
 
+dev5 は、正常なモデル応答の検証後、completed結果を台帳へ確定する直前にも、元の受付主体の現在の認可を再取得します。
+CallerId、scope、policy、要求中のactor/assetRevision、action、targetを照合します。推論中に変更されたままなら
+rejectedとなり、観測・候補を保存しません。認可処理の障害・内部取消・不正grantはfailed / authorization_unavailableです。
+これらも終端状態として保存し、権限を戻して同じIDを再送しても推論を再開せず、候補を復活させません。
+先に完了済みとなった記録の権限変更はdev4の規約どおりcompletedの履歴を維持して候補を失効させます。
+完了時の認可処理中も取消・期限切れ・scene.invalidateを受け付け、先に確定した終端状態を優先します。
+撮影期限・受付時の単調時計予算を延長せず、成功結果のvalidationMsには完了時の認可時間を含めます。
+認可処理が戻るまで予約スロットを保持します。バックエンドが既に正常終了したと確認できた場合は取消通知を送りません。
+
+
 
 `Succeeded=true` は API 処理の成功です。解析が failed/canceled でも照会成功なら true です。
 不正入力・認可不成立・容量不足など受付拒否は `Succeeded=false` と `ErrorCode` を返し、推論しません。
@@ -85,7 +95,7 @@ scope/policyが変わった照会には従来どおりrequest_not_foundを返し
 | superseded | 最新優先による待機置換、または場面・世代の失効 |
 | failed | readiness、認可情報取得、推論、応答検証などの失敗 |
 | interrupted | 再起動時に完了を確定できなかったジョブ |
-| rejected | 受付後、推論前の再認可で拒否。受付時の拒否は envelope の失敗 |
+| rejected | 受付後、推論前または推論完了時の再認可で拒否。受付時の拒否は envelope の失敗 |
 
 終端状態は後から成功へ変更しません。取得済みの結果を取り消す通信はないため、採用前の期限・世代検証は
 TheoriaCast が行います。status 照会では古い結果の候補を空にした投影を返します。
@@ -118,7 +128,7 @@ actionId、targetId を照合します。別の利用者や別scopeへの移し�
 認可拒否は rejected、取得障害・不正grantは failed / authorization_unavailable となり、推論・候補返却は行いません。
 認可アダプターの例外本文は記録せず、認可処理だけの障害でGPUの残存推論扱いにはしません。
 認証主体・claimsは台帳・応答・バックエンド入力へ渡さず、処理終了後にジョブから参照を外します。
-dev3の再認可は推論開始時点、dev4の候補失効は完了済みジョブの照会・同一入力再送で行います。
+dev3は推論開始前、dev5は推論完了後に再認可します。dev4の候補失効は完了済みジョブの照会・同一入力再送で行います。
 通知も照会もない間の権限変化を自動監視する機能はありません。既に返却した候補を遠隔消去する機能もないため、実行前のTheoriaCast側の再検証は必要です。
 
 
@@ -200,7 +210,7 @@ InvokeAsync は検証・台帳書込みを ThreadPool に送り、推論を待�
 将来撮影・期限切れを拒否します。再起動前の結果は再照会できても freshness を再保証しません。
 
 待機枠が満杯なら古い queued を superseded とし、最新を待機させます。実行中の物理スロットは別に数えます。
-推論開始後のscene.cancel/期限切れ/失効はバックエンドの RequestCancellationAsync に伝播します。
+推論がまだ物理的に完了していないときのscene.cancel/期限切れ/失効はバックエンドの RequestCancellationAsync に伝播します。
 再認可中の取消・期限切れは推論を開始しません。認可処理が戻るまで予約スロットを保持し、次の要求の無制限投入を防ぎます。
 推論の登録より先にバックエンド取消が届かないように同期します。撮影期限と受付時の単調時計予算は再認可で延長しません。
 現在の NIM Chat Completions アダプターはジョブ取消確認 API を利用していないため `unsupported` を返します。
@@ -270,7 +280,7 @@ dotnet run --project samples/Cosmos.SceneClient -c Release -- --nim host-config.
 このリポジトリには TheoriaCast 本体がないため、実際の AssistantObservationCapability との統合試験は未実施です。
 独立 capability と公式型の検証、既存 Chat テストは自動試験で確認します。
 
-新パッケージだけ 0.1.4-dev4。公式 Abstractions/Dtos/Enums は **[0.1.3-dev1]** に固定します。
+新パッケージだけ 0.1.4-dev5。公式 Abstractions/Dtos/Enums は **[0.1.3-dev1]** に固定します。
 パッケージ消費サンプルは Common/Core も [0.1.3-dev1] とし、既存5パッケージをアップグレードしません。
 既存 public interface/DTO/enum を変更せず、新しい型は AIKernel.Providers.Cosmos 名前空間に追加します。
 Scene v1 preview の破壊的変更は別 schemaVersion/パッケージ版とし、黙って意味を変更しません。
@@ -302,7 +312,7 @@ OpenMDW-1.1 に分かれます。実際に選んだ image の LICENSE/MODEL_LICE
 | P0-3 | strict JSON、観測/候補分離、複数actor、根拠、カタログ/版/サイズ検証 | 正しい視覚的判断は実機・人手評価が必要 |
 | P0-4 | 非同期、有界最新優先、取消伝播、遅い結果破棄、永続冪等性、単調期限 | NIMの物理取消確認は非対応。多ホストactive-activeは非対応 |
 | P0-5 | readonly readiness、配置証跡照合、IP/GPU固定、負荷上限、retry目安 | 起動/停止/配置は外部運用。実VRAM/競合測定は未実施 |
-| P0-6 | 認証主体/grant照合・推論直前再認可・完了候補の失効永続化、私的本文非要求、原画像非永続、固定接続先 | ホスト認証・ACL・公開範囲選別・APM設定は接続側で必要 |
+| P0-6 | 認証主体/grant照合・推論前後の再認可・完了候補の失効永続化、私的本文非要求、原画像非永続、固定接続先 | ホスト認証・ACL・公開範囲選別・APM設定は接続側で必要 |
 | P1 時間的連続性 | 時刻付きPNG列、motion根拠2フレーム以上 | codec/fps・動画コンテナ未対応。定量評価未実施 |
 | P1 複数演者 | ID/asset照合、未知保留、2actor自動試験 | 17モデルの識別・遮蔽評価は未実施 |
 | P1 実行feedback | 未実装 | performed/rejected/canceled は TheoriaCast が正、観測で上書きしない |
@@ -314,7 +324,7 @@ OpenMDW-1.1 に分かれます。実際に選んだ image の LICENSE/MODEL_LICE
 
 ## 9. 自動検証・実機評価
 
-最新の検証は `COSMOS_SCENE_DEV4_VALIDATION.md`。dev3は `COSMOS_SCENE_DEV3_VALIDATION.md`、dev2は `COSMOS_SCENE_DEV2_VALIDATION.md`、初版dev1は `COSMOS_SCENE_VALIDATION.md` を参照してください。
+最新の検証は `COSMOS_SCENE_DEV5_VALIDATION.md`。dev4は `COSMOS_SCENE_DEV4_VALIDATION.md`、dev3は `COSMOS_SCENE_DEV3_VALIDATION.md`、dev2は `COSMOS_SCENE_DEV2_VALIDATION.md`、初版dev1は `COSMOS_SCENE_VALIDATION.md` を参照してください。
 NimProtocolTests は HTTP handler を差し替えるプロトコル試験です。backend=cosmos の型を通ることは、
 実 GPU で推論した証明ではありません。偽バックエンドの試験と実機 B01 を混同しません。
 
@@ -325,7 +335,7 @@ NimProtocolTests は HTTP handler を差し替えるプロトコル試験です�
 | A03 | 不正JSON/重複キー/未知フィールド/巨大結果/非有限数/未知ID/版違い、length/content_filter |
 | A04 | 同一ID同時再送/競合、取消伝播、再認可中の取消・期限切れ、遅い返答、再起動、未完了物理処理の保持 |
 | A05 | 古い/未来撮影、未知時計、期限切れ、時計巻戻し、epoch失効、policy変更、照会時の権限往復・別セッション・再起動で失効維持 |
-| A06 | 未認証、待機中/readiness中の権限変更・認可障害、別主体blob、hash、CRC、期限、URL/UNC/path、禁止接続先 |
+| A06 | 未認証、待機中/readiness中/推論中の権限変更・認可障害、別主体blob、hash、CRC、期限、URL/UNC/path、禁止接続先 |
 | A07 | 許可外の動作を返す敵対的モデル出力を拒否。画像中命令へのモデル自身の耐性はB02で評価 |
 | A08 | unavailable/busy/不正応答、transport断の隔離。既存会話との性能共存はB05 |
 | A09 | loading/warming_upの照会、別GPU証跡を拒否。配置変更操作なし |
