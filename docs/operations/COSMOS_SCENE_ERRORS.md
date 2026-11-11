@@ -1,6 +1,6 @@
 # Scene v1 状態・エラーコード一覧
 
-更新: 2026-11-11 / AIKernel.Providers.Cosmos 0.1.4-dev3（dev3で推論前の再認可を追加）。
+更新: 2026-11-11 / AIKernel.Providers.Cosmos 0.1.4-dev4（dev4で照会時の候補失効を永続化。理由コード追加なし）。
 受付失敗は envelope.ErrorCode、受付後は result.ErrorCode、稼働状態は readiness.ReasonCode を確認する。
 status は COSMOS_SCENE_P0.md と result.schema.json に従う。未知のコードを成功に読み替えない。
 以下は標準実装のコード。独自バックエンド・認可アダプターも短い非機密コードだけを返すこと。
@@ -37,3 +37,9 @@ action_not_authorized / target_not_authorized を rejected の理由として返
 failed とする。API呼出元の CancellationToken と認可アダプター内部の取消を混同しない。
 再認可中にscene.cancelまたは元の期限が先に確定した場合、そのcanceled/timed_outを維持する。
 これらは全て推論前の終端でありbackendCancellation=not_requested。照会のSucceeded=trueは解析成功を意味しない。
+
+dev4は完了済み候補の権限不一致を検知すると、stale_context / freshnessVerified=false / proposals=[]を台帳へ保存する。
+completedは解析履歴として維持する。scope/policy不一致の照会は従来どおりrequest_not_found、
+固定したセッションCallerIdと現在grantのCallerIdの不一致はpermission_denied。
+認可情報取得に失敗した照会・同一入力再送でも既存候補を失効させるが、受付エラーのコードと例外伝播は維持する。
+保存不能ならjournal_unavailableを返し、候補返却・新規推論を停止する。台帳を削除して再実行しない。

@@ -1,7 +1,7 @@
 # Cosmos シーン観測 API v1 — AIKernel 実装・接続契約
 
 更新: 2026-11-11。TheoriaCast の P0 要望に対するローカル開発版。
-パッケージ: `AIKernel.Providers.Cosmos` **0.1.4-dev3** / .NET 10。
+パッケージ: `AIKernel.Providers.Cosmos` **0.1.4-dev4** / .NET 10。
 実装・オフライン試験と実機受入は別の段階です。実 Cosmos による B01〜B06 の受入は未完了です。
 
 ## 1. 配置と責任
@@ -56,6 +56,20 @@ dev2 では、設定内容が等しいことと、その設定が途切れず継
 freshnessVerified=false / stale_context を返します。再推論は開始しません。
 内部の世代番号は InputHash/OutputHash/proposalId の計算へ追加していません。
 
+dev4 では、完了済みジョブのscene.status/scene.cancelまたは同じ入力のscene.analyze再送で現在の権限を検査し、
+actor/assetRevision、action、target、scope、policyが不一致なら候補を台帳から消去します。
+認可情報を取得できなかった場合も、セッションに結び付いた同じジョブの候補を失効させます。
+status=completed、observations、provider、timings、元の撮影期限は保持し、proposals=[]、freshnessVerified=false、
+ErrorCode=stale_contextを保存します。権限復旧後・別セッション・同一ID再送・再起動後も候補は復活せず、再推論もしません。
+一候補の権限が失われた場合も、そのジョブの候補一式を失効させます。候補に関係しない権限の変更だけでは失効しません。
+scope/policyが変わった照会には従来どおりrequest_not_foundを返し、権限のない結果を開示しません。
+失効の保存に失敗した照会はjournal_unavailableとなり、候補を返さず、新規推論も停止します。
+セッションのCallerIdはOpenSessionで確認した値に固定します。認可処理が別CallerIdを返したらpermission_deniedとなり、
+新しいID側のジョブには触れません。正当に呼出元を変更するときは認証済みの新セッションを開いてください。
+不正な能力・引数・異なる入力hashの再送は、この失効処理の対象にしません。
+既存Scene v1と台帳v1の形式は維持します。失効した候補の応答内容とOutputHashは変わりますが、hashの計算式は変えません。
+
+
 `Succeeded=true` は API 処理の成功です。解析が failed/canceled でも照会成功なら true です。
 不正入力・認可不成立・容量不足など受付拒否は `Succeeded=false` と `ErrorCode` を返し、推論しません。
 `status=completed` は解析完了のみです。`performed` という実行結果は生成しません。
@@ -104,7 +118,8 @@ actionId、targetId を照合します。別の利用者や別scopeへの移し�
 認可拒否は rejected、取得障害・不正grantは failed / authorization_unavailable となり、推論・候補返却は行いません。
 認可アダプターの例外本文は記録せず、認可処理だけの障害でGPUの残存推論扱いにはしません。
 認証主体・claimsは台帳・応答・バックエンド入力へ渡さず、処理終了後にジョブから参照を外します。
-この検査は推論開始時点の権限確認です。開始後の権限変更の自動監視はせず、実行前のTheoriaCast側の再検証も必要です。
+dev3の再認可は推論開始時点、dev4の候補失効は完了済みジョブの照会・同一入力再送で行います。
+通知も照会もない間の権限変化を自動監視する機能はありません。既に返却した候補を遠隔消去する機能もないため、実行前のTheoriaCast側の再検証は必要です。
 
 
 同一 snapshot は sessionEpoch、snapshotId、captureSource、capturedAtUtc、sceneRevision、layoutRevision、cameraId
@@ -255,7 +270,7 @@ dotnet run --project samples/Cosmos.SceneClient -c Release -- --nim host-config.
 このリポジトリには TheoriaCast 本体がないため、実際の AssistantObservationCapability との統合試験は未実施です。
 独立 capability と公式型の検証、既存 Chat テストは自動試験で確認します。
 
-新パッケージだけ 0.1.4-dev3。公式 Abstractions/Dtos/Enums は **[0.1.3-dev1]** に固定します。
+新パッケージだけ 0.1.4-dev4。公式 Abstractions/Dtos/Enums は **[0.1.3-dev1]** に固定します。
 パッケージ消費サンプルは Common/Core も [0.1.3-dev1] とし、既存5パッケージをアップグレードしません。
 既存 public interface/DTO/enum を変更せず、新しい型は AIKernel.Providers.Cosmos 名前空間に追加します。
 Scene v1 preview の破壊的変更は別 schemaVersion/パッケージ版とし、黙って意味を変更しません。
@@ -287,7 +302,7 @@ OpenMDW-1.1 に分かれます。実際に選んだ image の LICENSE/MODEL_LICE
 | P0-3 | strict JSON、観測/候補分離、複数actor、根拠、カタログ/版/サイズ検証 | 正しい視覚的判断は実機・人手評価が必要 |
 | P0-4 | 非同期、有界最新優先、取消伝播、遅い結果破棄、永続冪等性、単調期限 | NIMの物理取消確認は非対応。多ホストactive-activeは非対応 |
 | P0-5 | readonly readiness、配置証跡照合、IP/GPU固定、負荷上限、retry目安 | 起動/停止/配置は外部運用。実VRAM/競合測定は未実施 |
-| P0-6 | 認証主体/grant照合・推論直前再認可、私的本文非要求、原画像非永続、固定接続先 | ホスト認証・ACL・公開範囲選別・APM設定は接続側で必要 |
+| P0-6 | 認証主体/grant照合・推論直前再認可・完了候補の失効永続化、私的本文非要求、原画像非永続、固定接続先 | ホスト認証・ACL・公開範囲選別・APM設定は接続側で必要 |
 | P1 時間的連続性 | 時刻付きPNG列、motion根拠2フレーム以上 | codec/fps・動画コンテナ未対応。定量評価未実施 |
 | P1 複数演者 | ID/asset照合、未知保留、2actor自動試験 | 17モデルの識別・遮蔽評価は未実施 |
 | P1 実行feedback | 未実装 | performed/rejected/canceled は TheoriaCast が正、観測で上書きしない |
@@ -299,7 +314,7 @@ OpenMDW-1.1 に分かれます。実際に選んだ image の LICENSE/MODEL_LICE
 
 ## 9. 自動検証・実機評価
 
-最新の検証は `COSMOS_SCENE_DEV3_VALIDATION.md`。dev2は `COSMOS_SCENE_DEV2_VALIDATION.md`、初版dev1は `COSMOS_SCENE_VALIDATION.md` を参照してください。
+最新の検証は `COSMOS_SCENE_DEV4_VALIDATION.md`。dev3は `COSMOS_SCENE_DEV3_VALIDATION.md`、dev2は `COSMOS_SCENE_DEV2_VALIDATION.md`、初版dev1は `COSMOS_SCENE_VALIDATION.md` を参照してください。
 NimProtocolTests は HTTP handler を差し替えるプロトコル試験です。backend=cosmos の型を通ることは、
 実 GPU で推論した証明ではありません。偽バックエンドの試験と実機 B01 を混同しません。
 
@@ -309,7 +324,7 @@ NimProtocolTests は HTTP handler を差し替えるプロトコル試験です�
 | A02 | PNG＋状態、空結果、multimodal HTTP組立、時刻付き列 |
 | A03 | 不正JSON/重複キー/未知フィールド/巨大結果/非有限数/未知ID/版違い、length/content_filter |
 | A04 | 同一ID同時再送/競合、取消伝播、再認可中の取消・期限切れ、遅い返答、再起動、未完了物理処理の保持 |
-| A05 | 古い/未来撮影、未知時計、期限切れ、時計巻戻し、epoch失効、policy変更 |
+| A05 | 古い/未来撮影、未知時計、期限切れ、時計巻戻し、epoch失効、policy変更、照会時の権限往復・別セッション・再起動で失効維持 |
 | A06 | 未認証、待機中/readiness中の権限変更・認可障害、別主体blob、hash、CRC、期限、URL/UNC/path、禁止接続先 |
 | A07 | 許可外の動作を返す敵対的モデル出力を拒否。画像中命令へのモデル自身の耐性はB02で評価 |
 | A08 | unavailable/busy/不正応答、transport断の隔離。既存会話との性能共存はB05 |

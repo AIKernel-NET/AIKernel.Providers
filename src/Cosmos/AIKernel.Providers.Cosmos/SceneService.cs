@@ -91,15 +91,16 @@ public sealed class SceneService : IAsyncDisposable
     public SceneSession OpenSession(ClaimsPrincipal authenticatedCaller)
     {
         var principal = new ClaimsPrincipal(authenticatedCaller.Identities.Select(identity => new ClaimsIdentity(identity)));
-        Authorize(principal);
-        return new(this, principal);
+        var grant = Authorize(principal);
+        return new(this, principal, grant.CallerId);
     }
 
-    private SceneGrant Authorize(ClaimsPrincipal principal)
+    private SceneGrant Authorize(ClaimsPrincipal principal, string? expectedCaller = null)
     {
         if (principal.Identity?.IsAuthenticated != true) throw new SceneException("unauthenticated");
         var grant = _authorizer.Authorize(principal) ?? throw new SceneException("permission_denied");
         SceneJson.Id(grant.CallerId); SceneJson.Id(grant.PolicyRevision); SceneJson.Id(grant.PermissionScope);
+        if (expectedCaller is not null && grant.CallerId != expectedCaller) throw new SceneException("permission_denied");
         return grant with
         {
             ActorRevisions = grant.ActorRevisions.ToDictionary(p => p.Key, p => p.Value, StringComparer.Ordinal),
@@ -108,12 +109,12 @@ public sealed class SceneService : IAsyncDisposable
         };
     }
 
-    internal Task<SceneMediaReceipt> RegisterAsync(ClaimsPrincipal principal, SceneMediaRegistration registration,
+    internal Task<SceneMediaReceipt> RegisterAsync(ClaimsPrincipal principal, string caller, SceneMediaRegistration registration,
         Stream source, CancellationToken cancellationToken)
     {
         return Task.Run(async () =>
         {
-            var grant = Authorize(principal);
+            var grant = Authorize(principal, caller);
             lock (_sync) { CheckEnabled(); }
             return await _media.RegisterAsync(grant, registration, source, cancellationToken).ConfigureAwait(false);
         }, cancellationToken);
@@ -154,18 +155,28 @@ public sealed class SceneService : IAsyncDisposable
         }
     }
 
-    internal async ValueTask<CapabilityInvocationResult> InvokeAsync(ClaimsPrincipal principal, CapabilityInvocationRequest envelope, CancellationToken token)
+    internal async ValueTask<CapabilityInvocationResult> InvokeAsync(ClaimsPrincipal principal, string caller, CapabilityInvocationRequest envelope, CancellationToken token)
     {
         // Validation, hashing, and durable journal writes run away from the UI caller.
-        return await Task.Run(() => InvokeCore(principal, envelope, token), token).ConfigureAwait(false);
+        return await Task.Run(() => InvokeCore(principal, caller, envelope, token), token).ConfigureAwait(false);
     }
 
-    private CapabilityInvocationResult InvokeCore(ClaimsPrincipal principal, CapabilityInvocationRequest envelope, CancellationToken token)
+    private CapabilityInvocationResult InvokeCore(ClaimsPrincipal principal, string caller, CapabilityInvocationRequest envelope, CancellationToken token)
     {
         try
         {
             token.ThrowIfCancellationRequested();
-            var grant = Authorize(principal);
+            SceneGrant grant;
+            try { grant = Authorize(principal, caller); }
+            catch
+            {
+                // The session identity was authenticated when opened. Failure
+                // to obtain current authority must not leave its known completed
+                // candidates available for revival after authority returns.
+                if (!token.IsCancellationRequested) RevokeCompletedLookup(caller, envelope, null);
+                throw;
+            }
+            RevokeCompletedLookup(caller, envelope, grant);
             if (envelope.CapabilityId != CapabilityId) throw new SceneException("capability_unsupported");
             SceneJson.Id(envelope.InvocationId);
             if (envelope.Arguments is null || envelope.Metadata is null) throw new SceneException("invalid_request");
@@ -240,8 +251,10 @@ public sealed class SceneService : IAsyncDisposable
                 SceneJson.Id(id);
                 lock (_sync)
                 {
-                    if (!_jobs.TryGetValue(Key(grant, id), out var job) || job.Entry.Scope != SceneJson.Scope(grant)
+                    if (!_jobs.TryGetValue(Key(grant, id), out var job)
                         || job.Entry.RetainUntilUtc <= _clock.GetUtcNow()) throw new SceneException("request_not_found");
+                    RevokeIfUnauthorized(job, grant);
+                    if (job.Entry.Scope != SceneJson.Scope(grant)) throw new SceneException("request_not_found");
                     if (envelope.Operation == "scene.cancel" && !Terminal(job.Entry.Result.Status))
                     { Finish(job, "canceled", "caller_canceled"); Pump(); }
                     return Reply(envelope, Present(job, grant), true);
@@ -254,7 +267,56 @@ public sealed class SceneService : IAsyncDisposable
         catch (Exception) { return Failure(envelope, "invalid_request"); }
     }
 
-    private static string Key(SceneGrant grant, string id) => SceneJson.Hash(SceneJson.Write(new { grant.CallerId, requestId = id }));
+    private static string Key(SceneGrant grant, string id) => Key(grant.CallerId, id);
+    private static string Key(string caller, string id) => SceneJson.Hash(SceneJson.Write(new { CallerId = caller, requestId = id }));
+
+    private void RevokeCompletedLookup(string caller, CapabilityInvocationRequest envelope, SceneGrant? grant)
+    {
+        string id;
+        string? inputHash = null;
+        // Validate only the lookup identity here. A denied or malformed request
+        // must neither reveal a record nor invalidate a different input/owner.
+        try
+        {
+            if (envelope.CapabilityId != CapabilityId || envelope.Arguments is null || envelope.Metadata is null) return;
+            SceneJson.Id(envelope.InvocationId);
+            if (envelope.Arguments.Count != 1) return;
+            if (envelope.Operation is "scene.status" or "scene.cancel")
+            {
+                if (!envelope.Arguments.TryGetValue("requestId", out id!)) return;
+            }
+            else if (envelope.Operation == "scene.analyze")
+            {
+                if (!envelope.Arguments.TryGetValue("request_json", out var json)) return;
+                id = SceneJson.Read<SceneRequest>(json, _options.MaxRequestBytes).RequestId;
+                inputHash = SceneJson.Hash(json);
+                if (envelope.InputHash is not null && envelope.InputHash != inputHash) return;
+            }
+            else return;
+            SceneJson.Id(id);
+        }
+        catch { return; }
+        lock (_sync)
+        {
+            if (_disposed) throw new SceneException("disabled");
+            if (!_jobs.TryGetValue(Key(caller, id), out var job) || job.Entry.RetainUntilUtc <= _clock.GetUtcNow()
+                || (inputHash is not null && inputHash != job.Entry.InputHash)) return;
+            RevokeIfUnauthorized(job, grant);
+        }
+    }
+
+    // Called under _sync, including at the final result projection. Persist
+    // before acknowledging revocation; older concurrent grants cannot undo it.
+    private void RevokeIfUnauthorized(Job job, SceneGrant? grant)
+    {
+        var result = job.Entry.Result;
+        if (result.Status != "completed" || result.Proposals.Count == 0) return;
+        if (grant is not null && job.Entry.Scope == SceneJson.Scope(grant) && result.Proposals.All(p =>
+            grant.ActorRevisions.TryGetValue(p.ActorId, out var revision) && revision == p.AssetRevision
+            && grant.ActionIds.Contains(p.ActionId) && grant.TargetIds.Contains(p.TargetId))) return;
+        job.Entry = job.Entry with { Result = result with { Proposals = [], FreshnessVerified = false, ErrorCode = result.ErrorCode ?? "stale_context" } };
+        Persist();
+    }
     private static bool Terminal(string state) => state is not ("accepted" or "queued" or "running");
     private void CheckEnabled()
     {
@@ -306,6 +368,7 @@ public sealed class SceneService : IAsyncDisposable
 
     private SceneAnalysisResult Present(Job job, SceneGrant grant)
     {
+        RevokeIfUnauthorized(job, grant);
         var result = job.Entry.Result;
         var calibration = grant.ClockCalibration;
         bool fresh = job.HasMonotonicOrigin && _clock.GetElapsedTime(job.Start) < job.FreshnessBudget
@@ -524,7 +587,7 @@ public sealed class SceneService : IAsyncDisposable
                 : _clock.GetUtcNow() - _probedAt > _options.ReadinessMaxAge && _options.Enabled
                     ? _readiness with { State = "unavailable", ReasonCode = "probe_required", DeploymentVerified = false }
                     : _active >= _options.MaxConcurrentInference ? _readiness with { State = "busy", ReasonCode = "inference_capacity", RetryAfterMs = 1000 } : _readiness;
-            return new(CapabilityId, "scene-catalog.v1", "0.1.4-dev3",
+            return new(CapabilityId, "scene-catalog.v1", "0.1.4-dev4",
                 ["scene.analyze", "scene.status", "scene.cancel", "scene.invalidate", "scene.capabilities"],
                 "request_json", ResultMetadataKey, ["image/png"], false, true,
                 "image-normalized; origin=top-left; x=right; y=down; orientation=stored-pixels; no-3d",
@@ -565,9 +628,10 @@ public sealed class SceneSession : ICapabilityModuleInvoker
 {
     private readonly SceneService service;
     private readonly ClaimsPrincipal principal;
-    internal SceneSession(SceneService service, ClaimsPrincipal principal) { this.service = service; this.principal = principal; }
+    private readonly string caller;
+    internal SceneSession(SceneService service, ClaimsPrincipal principal, string caller) { this.service = service; this.principal = principal; this.caller = caller; }
     public Task<SceneMediaReceipt> RegisterMediaAsync(SceneMediaRegistration registration, Stream data, CancellationToken cancellationToken = default)
-        => service.RegisterAsync(principal, registration, data, cancellationToken);
+        => service.RegisterAsync(principal, caller, registration, data, cancellationToken);
     public ValueTask<CapabilityInvocationResult> InvokeAsync(CapabilityInvocationRequest request, CancellationToken cancellationToken = default)
-        => service.InvokeAsync(principal, request, cancellationToken);
+        => service.InvokeAsync(principal, caller, request, cancellationToken);
 }
