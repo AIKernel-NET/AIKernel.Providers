@@ -1,7 +1,7 @@
 # Cosmos シーン観測 API v1 — AIKernel 実装・接続契約
 
 更新: 2026-11-12。TheoriaCast の P0 要望に対するローカル開発版。
-パッケージ: `AIKernel.Providers.Cosmos` **0.1.4-dev7** / .NET 10。
+パッケージ: `AIKernel.Providers.Cosmos` **0.1.4-dev8** / .NET 10。
 実装・オフライン試験と実機受入は別の段階です。実 Cosmos による B01〜B06 の受入は未完了です。
 
 ## 1. 配置と責任
@@ -113,6 +113,17 @@ ErrorMessageも許可されたコードのみとし、失敗時のMetadataは空
 認可ホスト内部の取消トークン・Task・機密情報は渡しません。既知要求の失効記録、取消、再送・再起動時の非復活は維持します。
 以前の独自理由コードやinvalid_identifierで不正grantを区別していた接続は、authorization_unavailableで処理してください。
 許可リストを呼出元のJSONや設定で拡張する機能は設けません。公開したい新コードは契約と試験の更新が必要です。
+
+dev8 は受付後にも適用し、ジョブErrorCodeを77種類、readinessのReasonCodeを25種類の完全一致リストで制限します。
+未知・改変・空文字・不正なnullのジョブ理由はinvalid_backend_responseへ置換し、台帳へ保存する前と応答前に処理します。
+旧台帳も起動時に正規化します。既知コードの記録は変えず、不正コードのある記録は候補を除去してfreshnessVerified=falseにします。
+解析履歴・終端状態・元の期限・冪等性・物理処理フラグは維持し、コード置換で失敗を成功へ変更しません。
+未知のreadiness理由はprobe_failedとし、既知の非ready状態は維持します。readyを主張する不正応答や未知状態はunavailableへ落とし、
+deploymentVerified=false、retryAfterMs=nullとします。readyとして採用するにはstate=ready、reasonCode=ready、deploymentVerified=trueが必要です。
+正常な既知readinessの再試行目安と、backend_busy/unavailable/oomのジョブ再試行目安は維持します。
+WorkMayStillBeRunningによる物理処理の隔離はコードの正規化と独立に保持し、未知コードでも隔離を解除しません。
+probeの取消は取消例外のまま、例外詳細を除去して呼出元トークンを保持します。モデルの起動・再配置・停止を追加しません。
+独自バックエンドは許可リストへ合わせてください。オフラインサンプルもreasonCode=readyとし、backend/isMockでモックを区別します。
 
 
 
@@ -316,7 +327,7 @@ dotnet run --project samples/Cosmos.SceneClient -c Release -- --nim host-config.
 このリポジトリには TheoriaCast 本体がないため、実際の AssistantObservationCapability との統合試験は未実施です。
 独立 capability と公式型の検証、既存 Chat テストは自動試験で確認します。
 
-新パッケージだけ 0.1.4-dev7。公式 Abstractions/Dtos/Enums は **[0.1.3-dev1]** に固定します。
+新パッケージだけ 0.1.4-dev8。公式 Abstractions/Dtos/Enums は **[0.1.3-dev1]** に固定します。
 パッケージ消費サンプルは Common/Core も [0.1.3-dev1] とし、既存5パッケージをアップグレードしません。
 既存 public interface/DTO/enum を変更せず、新しい型は AIKernel.Providers.Cosmos 名前空間に追加します。
 Scene v1 preview の破壊的変更は別 schemaVersion/パッケージ版とし、黙って意味を変更しません。
@@ -360,7 +371,7 @@ OpenMDW-1.1 に分かれます。実際に選んだ image の LICENSE/MODEL_LICE
 
 ## 9. 自動検証・実機評価
 
-最新の検証は `COSMOS_SCENE_DEV7_VALIDATION.md`。dev6は `COSMOS_SCENE_DEV6_VALIDATION.md`、dev5は `COSMOS_SCENE_DEV5_VALIDATION.md`、dev4は `COSMOS_SCENE_DEV4_VALIDATION.md`、dev3は `COSMOS_SCENE_DEV3_VALIDATION.md`、dev2は `COSMOS_SCENE_DEV2_VALIDATION.md`、初版dev1は `COSMOS_SCENE_VALIDATION.md` を参照してください。
+最新の検証は `COSMOS_SCENE_DEV8_VALIDATION.md`。dev7は `COSMOS_SCENE_DEV7_VALIDATION.md`、dev6は `COSMOS_SCENE_DEV6_VALIDATION.md`、dev5は `COSMOS_SCENE_DEV5_VALIDATION.md`、dev4は `COSMOS_SCENE_DEV4_VALIDATION.md`、dev3は `COSMOS_SCENE_DEV3_VALIDATION.md`、dev2は `COSMOS_SCENE_DEV2_VALIDATION.md`、初版dev1は `COSMOS_SCENE_VALIDATION.md` を参照してください。
 NimProtocolTests は HTTP handler を差し替えるプロトコル試験です。backend=cosmos の型を通ることは、
 実 GPU で推論した証明ではありません。偽バックエンドの試験と実機 B01 を混同しません。
 

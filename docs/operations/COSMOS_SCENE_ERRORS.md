@@ -1,6 +1,6 @@
 # Scene v1 状態・エラーコード一覧
 
-更新: 2026-11-12 / AIKernel.Providers.Cosmos 0.1.4-dev7（受付エラーの許可リスト。理由コード追加なし）。
+更新: 2026-11-12 / AIKernel.Providers.Cosmos 0.1.4-dev8（受付後ジョブとreadinessにも許可リストを適用）。
 受付失敗は envelope.ErrorCode、受付後は result.ErrorCode、稼働状態は readiness.ReasonCode を確認する。
 status は COSMOS_SCENE_P0.md と result.schema.json に従う。未知のコードを成功に読み替えない。
 以下は標準実装のコード。独自バックエンド・認可アダプターも短い非機密コードだけを返すこと。
@@ -41,8 +41,53 @@ Task.Run開始前に呼出元が取り消していた場合は、.NETの既定�
 通常の入力JSONのinvalid_identifier等は維持し、不正grant由来はauthorization_unavailableとなる。
 保存失敗のjournal_unavailableを認可エラーで上書きせず、従来どおり候補・新規推論を停止する。
 
-この許可リストは受付境界に適用する。受付後のjob result.ErrorCode、readiness.ReasonCode、ホスト運用APIは下記の別契約であり、
-カスタムバックエンドの理由コードを一括して正規化する改修ではない。HTTPホストはSDK例外のスタックトレースを公開応答へ転写しないこと。
+この許可リストは受付境界に適用する。受付後のjob result.ErrorCodeとreadiness.ReasonCodeには次のdev8契約を適用する。
+HTTPホストはSDK例外のスタックトレースを公開応答へ転写しないこと。
+
+## dev8のreadiness理由コード（25種類）
+
+| 分類 | 許可コード |
+|---|---|
+| 正常 | ready |
+| 稼働・probe | disabled, not_probed, probe_required, probe_timed_out, probe_failed |
+| 負荷・物理処理 | backend_not_ready, inference_capacity, backend_busy, backend_unavailable, backend_oom, backend_work_unconfirmed |
+| 配置・接続 | model_revision_mismatch, endpoint_not_allowed, deployment_evidence_invalid, deployment_mismatch, deployment_state_unknown, runtime_mismatch, model_mismatch |
+| 配置状態 | deployment_disabled, deployment_loading, deployment_warming_up, deployment_busy, deployment_degraded, deployment_unavailable |
+
+stateもdisabled/loading/warming_up/ready/busy/degraded/unavailableの7種類に限る。
+理由は大文字小文字を区別した完全一致。未知理由はprobe_failedとし、既知の非ready状態は維持する。
+未知state、null応答、不正なready主張はunavailable / probe_failedにし、deploymentVerified=false、retryAfterMs=nullとする。
+ready主張はstate=ready、reasonCode=ready、deploymentVerified=trueがそろう場合だけ受け付ける。
+非ready状態でreasonCode=readyも不整合としてprobe_failedにする。正しい既知の組合せとretryAfterMsは維持する。
+providerの一致検査も維持し、不一致はdegraded / model_revision_mismatchとして設定済みidentityを返す。
+直接ProbeAsyncとscene.capabilitiesの両方に適用し、unknownを成功・実行可能と解釈しない。
+probeの通常例外はprobe_failed。取消例外は例外本文・InnerException・Dataを除去し、呼出元トークンで取消として伝播する。
+
+## dev8のジョブ理由コード（77種類）
+
+上記readiness理由からreadyを除いた24種類と、次の53種類だけを許可する。
+
+| 分類 | 追加で許可するジョブコード |
+|---|---|
+| 認可 | unauthenticated, permission_denied, actor_revision_mismatch, action_not_authorized, target_not_authorized, authorization_unavailable |
+| 形式・容量 | invalid_request, invalid_json, duplicate_field, invalid_identifier, duplicate_identifier, schema_unsupported, mode_unsupported, payload_too_large, input_limit, output_limit |
+| 整合 | inconsistent_snapshot, catalog_mismatch, hash_mismatch, invalid_deadline |
+| メディア | media_unsupported, media_unavailable, media_expired, invalid_media, media_too_large |
+| 観測・候補 | invalid_evidence, unknown_actor, unknown_target, invalid_unknown, invalid_region, duplicate_proposal, temporal_evidence_required |
+| 推論応答 | invalid_backend_response, response_truncated, content_filtered, completion_incomplete, unexpected_tool_call, backend_response_too_large, backend_request_rejected |
+| 物理処理 | backend_transport_unconfirmed, backend_failed_unconfirmed, backend_canceled |
+| 期限・履歴 | observation_deadline, clock_unverified, freshness_unverified_or_expired, stale_context, context_changed, context_invalidated, newer_observation, caller_canceled, service_stopping, runtime_restarted |
+| 台帳 | journal_unavailable |
+
+未知コード、大小文字違い、接頭辞・空白・改行付き、空文字はinvalid_backend_responseへ置換する。
+nullはaccepted/queued/running/completedでは正常な「理由なし」。その他の状態でのnullは不正理由として置換する。
+Finishで保存前に、応答生成で返却前に正規化する。旧台帳は起動時に正規化して保存する。
+不正コードを置換した記録は候補を空にしてfreshnessVerified=falseにするが、観測履歴・状態・期限・物理処理フラグは維持する。
+既知コードの台帳バイト列・hashは変更しない。不正コードを置換した記録の応答内容とOutputHashは変わるが、hash計算式と台帳v1形式は変えない。
+backend_busyは1000ms、backend_unavailable/backend_oomは5000msという既存のジョブ再試行目安を維持する。
+WorkMayStillBeRunningは未知コードでも保持し、物理処理の隔離を解除しない。通常例外・内部取消によるbackend_failed_unconfirmedも維持する。
+先に確定したcanceled/timed_out/supersededは遅い失敗で上書きしない。
+backendCancellationは既存どおり許可値以外をunconfirmedにする。モデル観測のreasonCodeも従来の別許可リストで検証する。
 
 ## 標準実装全体のコード
 

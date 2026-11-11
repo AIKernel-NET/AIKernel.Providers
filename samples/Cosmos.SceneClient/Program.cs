@@ -111,7 +111,7 @@ sealed class PublicSceneAuthorizer : ISceneAuthorizer
 sealed class OfflineBackend : ISceneReasonerBackend
 {
     public SceneBackendIdentity Identity { get; } = new("offline-demo", "none", "none", "none", "sample", "none", [], true);
-    public ValueTask<SceneReadiness> ProbeAsync(CancellationToken token) => ValueTask.FromResult(new SceneReadiness("ready", "offline_demo", true, Identity));
+    public ValueTask<SceneReadiness> ProbeAsync(CancellationToken token) => ValueTask.FromResult(new SceneReadiness("ready", "ready", true, Identity));
     public async Task<SceneBackendReply> AnalyzeAsync(SceneBackendInput input, CancellationToken token)
     { await Task.Delay(200, token); return new("{\"observations\":[],\"proposals\":[]}", Identity); }
     public ValueTask<string> RequestCancellationAsync(string id, CancellationToken token) => ValueTask.FromResult("unsupported");

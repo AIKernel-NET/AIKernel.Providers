@@ -75,7 +75,7 @@ public sealed class SceneService : IAsyncDisposable
             foreach (var stored in _journal.Load())
             {
                 if (stored.RetainUntilUtc <= _clock.GetUtcNow() && !stored.PhysicalOutstanding && stored.Result.Status != "running") continue;
-                var entry = stored;
+                var entry = stored with { Result = SceneRuntimeErrors.Result(stored.Result) };
                 if (entry.PhysicalOutstanding) _quarantined = true;
                 if (entry.Result.Status is "running" or "queued" or "accepted")
                 {
@@ -141,16 +141,25 @@ public sealed class SceneService : IAsyncDisposable
             if (_disposed || !_options.Enabled) return _readiness with { State = "disabled", ReasonCode = "disabled" };
             if (_quarantined) return _readiness with { State = "degraded", ReasonCode = "backend_work_unconfirmed", DeploymentVerified = false };
         }
-        SceneReadiness result;
-        try { result = await _backend.ProbeAsync(cancellationToken).ConfigureAwait(false); }
-        catch (OperationCanceledException) { throw; }
-        catch { result = new("unavailable", "probe_failed", false, _backend.Identity); }
-        lock (_sync)
+        try
         {
-            if (result.Provider != _backend.Identity && SceneJson.Write(result.Provider) != SceneJson.Write(_backend.Identity))
-                result = new("degraded", "model_revision_mismatch", false, _backend.Identity);
-            _readiness = result; _probedAt = _clock.GetUtcNow();
-            return result;
+            var result = await _backend.ProbeAsync(cancellationToken).ConfigureAwait(false);
+            lock (_sync)
+            {
+                _readiness = SceneRuntimeErrors.Readiness(result, _backend.Identity);
+                _probedAt = _clock.GetUtcNow();
+                return _readiness;
+            }
+        }
+        catch (OperationCanceledException canceled) { throw SceneIntakeErrors.Cancellation(canceled, cancellationToken); }
+        catch
+        {
+            lock (_sync)
+            {
+                _readiness = new("unavailable", "probe_failed", false, _readiness.Provider);
+                _probedAt = _clock.GetUtcNow();
+                return _readiness;
+            }
         }
     }
 
@@ -439,11 +448,11 @@ public sealed class SceneService : IAsyncDisposable
         }
     }
 
-    private void Finish(Job job, string state, string code)
+    private void Finish(Job job, string state, string? code)
     {
         if (Terminal(job.Entry.Result.Status)) return;
         job.Timer?.Dispose();
-        job.Entry = job.Entry with { Result = job.Entry.Result with { Status = state, ErrorCode = code, FreshnessVerified = false, Proposals = [] } };
+        job.Entry = job.Entry with { Result = job.Entry.Result with { Status = state, ErrorCode = SceneRuntimeErrors.JobCode(code), FreshnessVerified = false, Proposals = [] } };
         if (job.DispatchRegistered is { } dispatch && !job.InferenceFinished)
         {
             job.Entry = job.Entry with { Result = job.Entry.Result with { BackendCancellation = "requested" } };
@@ -646,20 +655,21 @@ public sealed class SceneService : IAsyncDisposable
                 : _clock.GetUtcNow() - _probedAt > _options.ReadinessMaxAge && _options.Enabled
                     ? _readiness with { State = "unavailable", ReasonCode = "probe_required", DeploymentVerified = false }
                     : _active >= _options.MaxConcurrentInference ? _readiness with { State = "busy", ReasonCode = "inference_capacity", RetryAfterMs = 1000 } : _readiness;
-            return new(CapabilityId, "scene-catalog.v1", "0.1.4-dev7",
+            return new(CapabilityId, "scene-catalog.v1", "0.1.4-dev8",
                 ["scene.analyze", "scene.status", "scene.cancel", "scene.invalidate", "scene.capabilities"],
                 "request_json", ResultMetadataKey, ["image/png"], false, true,
                 "image-normalized; origin=top-left; x=right; y=down; orientation=stored-pixels; no-3d",
                 _options.MaxFrames, _options.MaxActors, _options.MaxProposals, _options.MaxImageBytes, _options.MaxImagePixels,
                 _options.MaxStoredMediaBytes, _options.MaxRequestBytes, _options.MaxResponseBytes, _options.MaxRunningPerCaller, _options.MaxPendingPerCaller,
                 _options.MaxConcurrentInference, _options.MaxJobs, _options.MaxObservationAgeMs, _options.MediaRetention.TotalSeconds,
-                _options.IdempotencyRetention.TotalSeconds, readiness, _active, _jobs.Values.Count(j => j.Entry.Result.Status == "queued"), false,
+                _options.IdempotencyRetention.TotalSeconds, SceneRuntimeErrors.Readiness(readiness, readiness.Provider), _active, _jobs.Values.Count(j => j.Entry.Result.Status == "queued"), false,
                 _options.MaxConcurrentUploads);
         }
     }
 
     private static CapabilityInvocationResult Reply(CapabilityInvocationRequest request, object result, bool succeeded)
     {
+        if (result is SceneAnalysisResult analysis) result = SceneRuntimeErrors.Result(analysis);
         var json = SceneJson.Write(result);
         return new(request.InvocationId, request.CapabilityId, succeeded, SceneJson.Hash(json), null, null, request.ReplayLogHash,
             new Dictionary<string, string> { [ResultMetadataKey] = json });

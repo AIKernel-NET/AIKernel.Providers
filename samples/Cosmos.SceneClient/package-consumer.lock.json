@@ -26,9 +26,9 @@
       },
       "AIKernel.Providers.Cosmos": {
         "type": "Direct",
-        "requested": "[0.1.4-dev7, 0.1.4-dev7]",
-        "resolved": "0.1.4-dev7",
-        "contentHash": "IYHpzibPhwfrNf/cCZAS96YYeXRCuI51uiI39QnLNUW/RIjmqhJuo61yuFeLH6sIVsSHVUfGUEUb6Lb0fslPpg==",
+        "requested": "[0.1.4-dev8, 0.1.4-dev8]",
+        "resolved": "0.1.4-dev8",
+        "contentHash": "1pT+MXfWhLx78CGZvlNCqLeAbu9OtmVPK37AMn+Ci75t052cF+1jh8E7yh3+qQh9MCCT4MmEfJsyxaqQ83A5Hw==",
         "dependencies": {
           "AIKernel.Abstractions": "[0.1.3-dev1]",
           "AIKernel.Dtos": "[0.1.3-dev1]",
