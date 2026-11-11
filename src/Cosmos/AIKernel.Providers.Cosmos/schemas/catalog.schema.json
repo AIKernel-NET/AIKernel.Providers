@@ -1,0 +1,232 @@
+{
+  "type": "object",
+  "properties": {
+    "capabilityId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$",
+      "maxLength": 128,
+      "const": "vision.scene.reasoning"
+    },
+    "schemaVersion": {
+      "type": "string",
+      "const": "scene-catalog.v1"
+    },
+    "packageVersion": {
+      "type": "string"
+    },
+    "operations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "requestArgumentKey": {
+      "type": "string"
+    },
+    "resultMetadataKey": {
+      "type": "string"
+    },
+    "imageMimeTypes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "videoSupported": {
+      "type": "boolean",
+      "const": false
+    },
+    "timestampedImagesSupported": {
+      "type": "boolean"
+    },
+    "coordinates": {
+      "type": "string"
+    },
+    "maxFrames": {
+      "type": "integer"
+    },
+    "maxActors": {
+      "type": "integer"
+    },
+    "maxProposals": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "maxImageBytes": {
+      "type": "integer"
+    },
+    "maxImagePixels": {
+      "type": "integer"
+    },
+    "maxStoredMediaBytes": {
+      "type": "integer"
+    },
+    "maxRequestBytes": {
+      "type": "integer"
+    },
+    "maxResponseBytes": {
+      "type": "integer"
+    },
+    "maxRunningPerCaller": {
+      "type": "integer"
+    },
+    "maxPendingPerCaller": {
+      "type": "integer"
+    },
+    "maxConcurrentInference": {
+      "type": "integer"
+    },
+    "maxJobs": {
+      "type": "integer"
+    },
+    "maxObservationAgeMs": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 600000
+    },
+    "mediaRetentionSeconds": {
+      "type": "number"
+    },
+    "idempotencyRetentionSeconds": {
+      "type": "number"
+    },
+    "readiness": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "type": "string",
+          "enum": [
+            "disabled",
+            "loading",
+            "warming_up",
+            "ready",
+            "busy",
+            "degraded",
+            "unavailable"
+          ]
+        },
+        "reasonCode": {
+          "type": "string"
+        },
+        "deploymentVerified": {
+          "type": "boolean"
+        },
+        "provider": {
+          "type": "object",
+          "properties": {
+            "backend": {
+              "type": "string"
+            },
+            "model": {
+              "type": "string"
+            },
+            "revision": {
+              "type": "string"
+            },
+            "precision": {
+              "type": "string"
+            },
+            "runtime": {
+              "type": "string"
+            },
+            "endpointId": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$",
+              "maxLength": 128
+            },
+            "gpuIds": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "isMock": {
+              "type": "boolean"
+            },
+            "imageDigest": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "default": null
+            }
+          },
+          "required": [
+            "backend",
+            "model",
+            "revision",
+            "precision",
+            "runtime",
+            "endpointId",
+            "gpuIds",
+            "isMock"
+          ],
+          "additionalProperties": false
+        },
+        "retryAfterMs": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "state",
+        "reasonCode",
+        "deploymentVerified",
+        "provider"
+      ],
+      "additionalProperties": false
+    },
+    "activeInference": {
+      "type": "integer"
+    },
+    "queued": {
+      "type": "integer"
+    },
+    "executesActions": {
+      "type": "boolean",
+      "const": false
+    },
+    "maxConcurrentUploads": {
+      "type": "integer",
+      "default": 2
+    }
+  },
+  "required": [
+    "capabilityId",
+    "schemaVersion",
+    "packageVersion",
+    "operations",
+    "requestArgumentKey",
+    "resultMetadataKey",
+    "imageMimeTypes",
+    "videoSupported",
+    "timestampedImagesSupported",
+    "coordinates",
+    "maxFrames",
+    "maxActors",
+    "maxProposals",
+    "maxImageBytes",
+    "maxImagePixels",
+    "maxStoredMediaBytes",
+    "maxRequestBytes",
+    "maxResponseBytes",
+    "maxRunningPerCaller",
+    "maxPendingPerCaller",
+    "maxConcurrentInference",
+    "maxJobs",
+    "maxObservationAgeMs",
+    "mediaRetentionSeconds",
+    "idempotencyRetentionSeconds",
+    "readiness",
+    "activeInference",
+    "queued",
+    "executesActions"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:aikernel:cosmos:scene-v1:catalog",
+  "description": "Wire shape. Cross-field authorization, catalog, snapshot, duplicate keys, byte limits and configured limits are additionally enforced by SceneService. See COSMOS_SCENE_P0.md."
+}
