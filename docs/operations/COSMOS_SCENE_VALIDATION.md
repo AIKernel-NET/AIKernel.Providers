@@ -1,5 +1,7 @@
 # Cosmos P0 ローカル検証・引渡し記録
 
+これは初版 **0.1.4-dev1** の記録です。追補版は [COSMOS_SCENE_DEV2_VALIDATION.md](COSMOS_SCENE_DEV2_VALIDATION.md) を参照してください。
+
 日付: 2026-11-11。対象: AIKernel.Providers / review/COSMOS-P0。
 基点: dev `db7e989`。新パッケージ `AIKernel.Providers.Cosmos 0.1.4-dev1`。
 Windows / .NET SDK 10.0.401 / net10.0。Linux と実 GPU の試験は未実施。

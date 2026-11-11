@@ -50,7 +50,7 @@ internal sealed class FakeBackend : ISceneReasonerBackend
     internal string State = "ready";
     internal string? Output;
     internal SceneException? Failure;
-    public SceneBackendIdentity Identity { get; } = new("test-double", "test-model", "test-revision", "fp32", "offline", "test-endpoint", ["test-gpu"], true);
+    public SceneBackendIdentity Identity { get; internal set; } = new("test-double", "test-model", "test-revision", "fp32", "offline", "test-endpoint", ["test-gpu"], true);
     public ValueTask<SceneReadiness> ProbeAsync(CancellationToken cancellationToken) => ValueTask.FromResult(new SceneReadiness(State, State == "ready" ? "ready" : "backend_" + State, State == "ready", Identity));
     public async Task<SceneBackendReply> AnalyzeAsync(SceneBackendInput input, CancellationToken cancellationToken)
     {
@@ -90,6 +90,7 @@ internal sealed class SceneFixture : IAsyncDisposable, ISceneAuthorizer
     internal SceneSession Session;
     internal bool ClockKnown = true;
     internal string Policy = "public-policy-3";
+    internal long ActorRevision = 12;
     internal SceneOptions Options;
     internal ClaimsPrincipal Principal(string id = "caller-a") => new(new ClaimsIdentity([new Claim(ClaimTypes.NameIdentifier, id)], "test-auth"));
     internal SceneFixture(bool enabled = true, int maxJobs = 1000)
@@ -100,7 +101,7 @@ internal sealed class SceneFixture : IAsyncDisposable, ISceneAuthorizer
     }
     public SceneGrant Authorize(ClaimsPrincipal authenticatedCaller) => new(
         authenticatedCaller.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? throw new SceneException("permission_denied"),
-        "public", Policy, new Dictionary<string, long> { ["actor-a"] = 12, ["actor-b"] = 7 },
+        "public", Policy, new Dictionary<string, long> { ["actor-a"] = ActorRevision, ["actor-b"] = 7 },
         new HashSet<string> { "look_at", "move_to" }, new HashSet<string> { "board-a", "spot-a" },
         ClockKnown ? new(TimeSpan.Zero, TimeSpan.FromMilliseconds(1), Clock.GetUtcNow().AddHours(1)) : null);
 

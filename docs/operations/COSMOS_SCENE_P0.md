@@ -1,7 +1,7 @@
 # Cosmos シーン観測 API v1 — AIKernel 実装・接続契約
 
 更新: 2026-11-11。TheoriaCast の P0 要望に対するローカル開発版。
-パッケージ: `AIKernel.Providers.Cosmos` **0.1.4-dev1** / .NET 10。
+パッケージ: `AIKernel.Providers.Cosmos` **0.1.4-dev2** / .NET 10。
 実装・オフライン試験と実機受入は別の段階です。実 Cosmos による B01〜B06 の受入は未完了です。
 
 ## 1. 配置と責任
@@ -49,6 +49,12 @@ CapabilityId は **`vision.scene.reasoning`** です。すべての正常な応�
 `scene.invalidate` 後は新しい sessionEpoch を使います。接続先や GPU を変更する操作は能力に含めません。
 状態・カメラ・asset の変更を検知した TheoriaCast は直ちに invalidate するか、新しい観測を投入します。
 AIKernel には未通知の描画変更を知る手段がないため、実行直前の検証は必須です。
+
+dev2 では、設定内容が等しいことと、その設定が途切れず継続している世代を別に管理します。
+カメラ・モデル版・assetRevision が A→B→A と戻っても、最初の A の候補は失効したままです。
+過去ジョブの status=completed と元の撮影期限は保持し、照会・同一ID再送では候補を空にして
+freshnessVerified=false / stale_context を返します。再推論は開始しません。
+内部の世代番号は InputHash/OutputHash/proposalId の計算へ追加していません。
 
 `Succeeded=true` は API 処理の成功です。解析が failed/canceled でも照会成功なら true です。
 不正入力・認可不成立・容量不足など受付拒否は `Succeeded=false` と `ErrorCode` を返し、推論しません。
@@ -235,7 +241,7 @@ dotnet run --project samples/Cosmos.SceneClient -c Release -- --nim host-config.
 このリポジトリには TheoriaCast 本体がないため、実際の AssistantObservationCapability との統合試験は未実施です。
 独立 capability と公式型の検証、既存 Chat テストは自動試験で確認します。
 
-新パッケージだけ 0.1.4-dev1。公式 Abstractions/Dtos/Enums は **[0.1.3-dev1]** に固定します。
+新パッケージだけ 0.1.4-dev2。公式 Abstractions/Dtos/Enums は **[0.1.3-dev1]** に固定します。
 パッケージ消費サンプルは Common/Core も [0.1.3-dev1] とし、既存5パッケージをアップグレードしません。
 既存 public interface/DTO/enum を変更せず、新しい型は AIKernel.Providers.Cosmos 名前空間に追加します。
 Scene v1 preview の破壊的変更は別 schemaVersion/パッケージ版とし、黙って意味を変更しません。
@@ -279,7 +285,7 @@ OpenMDW-1.1 に分かれます。実際に選んだ image の LICENSE/MODEL_LICE
 
 ## 9. 自動検証・実機評価
 
-自動検証の具体的件数・全リポジトリ結果は `COSMOS_SCENE_VALIDATION.md` に記録します。
+最新の検証は `COSMOS_SCENE_DEV2_VALIDATION.md`、初版dev1の記録は `COSMOS_SCENE_VALIDATION.md` を参照してください。
 NimProtocolTests は HTTP handler を差し替えるプロトコル試験です。backend=cosmos の型を通ることは、
 実 GPU で推論した証明ではありません。偽バックエンドの試験と実機 B01 を混同しません。
 

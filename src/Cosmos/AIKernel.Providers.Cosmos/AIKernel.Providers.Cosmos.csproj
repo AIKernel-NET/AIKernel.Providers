@@ -1,12 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <PackageId>AIKernel.Providers.Cosmos</PackageId>
-    <Version>0.1.4-dev1</Version>
-    <PackageVersion>0.1.4-dev1</PackageVersion>
-    <InformationalVersion>0.1.4-dev1</InformationalVersion>
+    <Version>0.1.4-dev2</Version>
+    <PackageVersion>0.1.4-dev2</PackageVersion>
+    <InformationalVersion>0.1.4-dev2</InformationalVersion>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <PackageReadmeFile>COSMOS_SCENE_P0.md</PackageReadmeFile>
-    <PackageReleaseNotes>Optional scene reasoning v1 preview. Official 0.1.3-dev1 capability contracts; no action execution. Real deployment acceptance is pending.</PackageReleaseNotes>
+    <PackageReleaseNotes>Prevent expired context candidates from becoming current after camera, model or asset settings return to an earlier value. Scene v1 contracts and official 0.1.3-dev1 dependencies are retained. Real deployment acceptance is pending.</PackageReleaseNotes>
     <Description>Optional, authenticated scene observation jobs and NVIDIA Cosmos Reasoner transport. Does not execute proposed actions.</Description>
   </PropertyGroup>
   <ItemGroup>

@@ -16,7 +16,7 @@ public sealed class SceneService : IAsyncDisposable
     private readonly SceneJournal _journal;
     private readonly object _sync = new();
     private readonly Dictionary<string, Job> _jobs = new(StringComparer.Ordinal);
-    private readonly Dictionary<string, string> _generations = new(StringComparer.Ordinal);
+    private readonly Dictionary<string, ContextGeneration> _generations = new(StringComparer.Ordinal);
     private readonly Dictionary<string, SceneRequest> _latest = new(StringComparer.Ordinal);
     private readonly Dictionary<string, HashSet<string>> _retiredEpochs = new(StringComparer.Ordinal);
     private bool _quarantined;
@@ -24,6 +24,11 @@ public sealed class SceneService : IAsyncDisposable
     private int _active;
     private SceneReadiness _readiness;
     private DateTimeOffset _probedAt;
+
+    // A fingerprint identifies equal settings; an incarnation identifies a
+    // continuous lifetime of those settings. Returning to A after B must not
+    // make results from the earlier A lifetime current again.
+    private sealed record ContextGeneration(string Fingerprint, string Incarnation);
 
     private sealed class Job
     {
@@ -172,7 +177,8 @@ public sealed class SceneService : IAsyncDisposable
                 if (envelope.Arguments.Count != 0) throw new SceneException("unknown_argument");
                 lock (_sync)
                 {
-                    _generations[grant.CallerId] = Guid.NewGuid().ToString("N");
+                    var fingerprint = _generations.TryGetValue(grant.CallerId, out var prior) ? prior.Fingerprint : "";
+                    _generations[grant.CallerId] = new(fingerprint, Guid.NewGuid().ToString("N"));
                     if (_latest.TryGetValue(grant.CallerId, out var latest)) Retire(grant.CallerId, latest.SessionEpoch);
                     foreach (var job in _jobs.Values.Where(j => j.Caller == grant.CallerId && !Terminal(j.Entry.Result.Status)).ToArray())
                         Finish(job, "superseded", "context_invalidated");
@@ -201,7 +207,7 @@ public sealed class SceneService : IAsyncDisposable
                     if (_jobs.Count >= _options.MaxJobs) throw new SceneException("job_capacity");
                     _media.Resolve(request, grant, copy: false);
                     token.ThrowIfCancellationRequested();
-                    UpdateGeneration(request, grant);
+                    var generation = UpdateGeneration(request, grant);
                     var waiting = _jobs.Values.Where(j => j.Caller == grant.CallerId && j.Entry.Result.Status == "queued").OrderBy(j => j.Start).ToArray();
                     foreach (var old in waiting.Take(Math.Max(0, waiting.Length - _options.MaxPendingPerCaller + 1)))
                         Finish(old, "superseded", "newer_observation");
@@ -212,7 +218,7 @@ public sealed class SceneService : IAsyncDisposable
                         new(0, 0, 0, 0, age), "not_requested", request.Mode);
                     var job = new Job
                     {
-                        Entry = new(key, SceneJson.Scope(grant), inputHash, SceneJson.Generation(request, _backend.Identity),
+                        Entry = new(key, SceneJson.Scope(grant), inputHash, generation,
                             _clock.GetUtcNow() + _options.IdempotencyRetention, initial),
                         Caller = grant.CallerId, Request = request, Grant = grant, Start = _clock.GetTimestamp(), Budget = budget,
                         FreshnessBudget = freshnessBudget, HasMonotonicOrigin = true, ClockVerified = verified
@@ -267,7 +273,7 @@ public sealed class SceneService : IAsyncDisposable
         return (TimeSpan.FromMilliseconds(remaining), TimeSpan.FromMilliseconds(freshness), known, Math.Max(0, age));
     }
 
-    private void UpdateGeneration(SceneRequest request, SceneGrant grant)
+    private string UpdateGeneration(SceneRequest request, SceneGrant grant)
     {
         if (!_latest.ContainsKey(grant.CallerId) && _latest.Count >= _options.MaxJobs) throw new SceneException("caller_capacity");
         if (_retiredEpochs.TryGetValue(grant.CallerId, out var epochs) && epochs.Contains(request.SessionEpoch)) throw new SceneException("stale_context");
@@ -277,11 +283,14 @@ public sealed class SceneService : IAsyncDisposable
             else if (request.SceneRevision < latest.SceneRevision || request.LayoutRevision < latest.LayoutRevision || request.CapturedAtUtc < latest.CapturedAtUtc)
                 throw new SceneException("stale_context");
         }
-        var generation = SceneJson.Generation(request, _backend.Identity);
+        var fingerprint = SceneJson.Generation(request, _backend.Identity);
+        if (!_generations.TryGetValue(grant.CallerId, out var current) || current.Fingerprint != fingerprint)
+            _generations[grant.CallerId] = current = new(fingerprint, Guid.NewGuid().ToString("N"));
+        var generation = current.Incarnation;
         _latest[grant.CallerId] = request;
-        _generations[grant.CallerId] = generation;
         foreach (var old in _jobs.Values.Where(j => j.Caller == grant.CallerId && j.Entry.Generation != generation && !Terminal(j.Entry.Result.Status)).ToArray())
             Finish(old, "superseded", "context_changed");
+        return generation;
     }
 
     private void Retire(string caller, string epoch)
@@ -299,7 +308,7 @@ public sealed class SceneService : IAsyncDisposable
             && calibration is not null && calibration.ValidUntilUtc > _clock.GetUtcNow()
             && calibration.Uncertainty >= TimeSpan.Zero && calibration.Uncertainty <= TimeSpan.FromMilliseconds(250)
             && _clock.GetUtcNow() + calibration.Uncertainty < result.ExpiresAtUtc + calibration.Offset;
-        bool current = _generations.TryGetValue(grant.CallerId, out var generation) && generation == job.Entry.Generation;
+        bool current = _generations.TryGetValue(grant.CallerId, out var generation) && generation.Incarnation == job.Entry.Generation;
         bool assets = result.Proposals.All(p => grant.ActorRevisions.TryGetValue(p.ActorId, out var revision) && revision == p.AssetRevision
             && grant.ActionIds.Contains(p.ActionId) && grant.TargetIds.Contains(p.TargetId));
         if (!fresh || !current || !assets || SceneJson.Scope(grant) != job.Entry.Scope)
@@ -466,7 +475,7 @@ public sealed class SceneService : IAsyncDisposable
                 : _clock.GetUtcNow() - _probedAt > _options.ReadinessMaxAge && _options.Enabled
                     ? _readiness with { State = "unavailable", ReasonCode = "probe_required", DeploymentVerified = false }
                     : _active >= _options.MaxConcurrentInference ? _readiness with { State = "busy", ReasonCode = "inference_capacity", RetryAfterMs = 1000 } : _readiness;
-            return new(CapabilityId, "scene-catalog.v1", "0.1.4-dev1",
+            return new(CapabilityId, "scene-catalog.v1", "0.1.4-dev2",
                 ["scene.analyze", "scene.status", "scene.cancel", "scene.invalidate", "scene.capabilities"],
                 "request_json", ResultMetadataKey, ["image/png"], false, true,
                 "image-normalized; origin=top-left; x=right; y=down; orientation=stored-pixels; no-3d",
