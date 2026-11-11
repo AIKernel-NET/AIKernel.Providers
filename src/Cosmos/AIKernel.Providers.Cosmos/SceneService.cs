@@ -68,8 +68,10 @@ public sealed class SceneService : IAsyncDisposable
             || options.IdempotencyRetention > TimeSpan.FromDays(7) || options.ReadinessMaxAge <= TimeSpan.Zero)
             throw new ArgumentException("Invalid bounded scene service options.", nameof(options));
         _media = new(options, _clock);
-        _journal = new(options.JournalDirectory, options.MaxJobs, options.MaxResponseBytes);
-        _readiness = new(options.Enabled ? "unavailable" : "disabled", "not_probed", false, backend.Identity);
+        try { _readiness = new(options.Enabled ? "unavailable" : "disabled", "not_probed", false, backend.Identity); }
+        catch (Exception error) { throw SceneHostErrors.Sanitize(error); }
+        try { _journal = new(options.JournalDirectory, options.MaxJobs, options.MaxResponseBytes); }
+        catch (Exception error) { throw SceneHostErrors.Sanitize(error, "journal_unavailable"); }
         try
         {
             foreach (var stored in _journal.Load())
@@ -86,7 +88,11 @@ public sealed class SceneService : IAsyncDisposable
             }
             Persist();
         }
-        catch { _journal.Dispose(); throw; }
+        catch (Exception error)
+        {
+            try { _journal.Dispose(); } catch { /* Preserve the sanitized initialization failure. */ }
+            throw SceneHostErrors.Sanitize(error, "journal_unavailable");
+        }
     }
 
     public SceneSession OpenSession(ClaimsPrincipal authenticatedCaller)
@@ -167,14 +173,21 @@ public sealed class SceneService : IAsyncDisposable
     // The host must establish that previous backend work has actually stopped.
     public void ConfirmBackendQuiescent()
     {
-        lock (_sync)
+        try
         {
-            if (_active != 0) throw new SceneException("backend_still_active");
-            _quarantined = false;
-            foreach (var job in _jobs.Values) job.Entry = job.Entry with { PhysicalOutstanding = false };
-            Persist();
-            _readiness = new("unavailable", "probe_required", false, _backend.Identity);
+            lock (_sync)
+            {
+                if (_active != 0) throw new SceneException("backend_still_active");
+                // Resolve host identity before clearing/persisting physical-work evidence.
+                // A failed recovery operation must not acknowledge release of quarantine.
+                var identity = _backend.Identity;
+                _quarantined = false;
+                foreach (var job in _jobs.Values) job.Entry = job.Entry with { PhysicalOutstanding = false };
+                Persist();
+                _readiness = new("unavailable", "probe_required", false, identity);
+            }
         }
+        catch (Exception error) { throw SceneHostErrors.Sanitize(error); }
     }
 
     // Trusted host API, intentionally absent from SceneSession/capabilities.
@@ -182,17 +195,21 @@ public sealed class SceneService : IAsyncDisposable
     // This does not require the revoked caller to remain authorized to cancel.
     public void RevokeRequestAuthorization(string callerId, string requestId)
     {
-        SceneJson.Id(callerId); SceneJson.Id(requestId);
-        lock (_sync)
+        try
         {
-            if (_disposed) throw new SceneException("disabled");
-            if (!_jobs.TryGetValue(Key(callerId, requestId), out var job)
-                || job.Entry.RetainUntilUtc <= _clock.GetUtcNow()) throw new SceneException("request_not_found");
-            RevokeIfUnauthorized(job, null);
-            // Also retry durability for an already-terminal in-memory record.
-            // A failed journal write must never be acknowledged as persisted.
-            Persist();
+            SceneJson.Id(callerId); SceneJson.Id(requestId);
+            lock (_sync)
+            {
+                if (_disposed) throw new SceneException("disabled");
+                if (!_jobs.TryGetValue(Key(callerId, requestId), out var job)
+                    || job.Entry.RetainUntilUtc <= _clock.GetUtcNow()) throw new SceneException("request_not_found");
+                RevokeIfUnauthorized(job, null);
+                // Also retry durability for an already-terminal in-memory record.
+                // A failed journal write must never be acknowledged as persisted.
+                Persist();
+            }
         }
+        catch (Exception error) { throw SceneHostErrors.Sanitize(error); }
     }
 
     internal async ValueTask<CapabilityInvocationResult> InvokeAsync(ClaimsPrincipal principal, string caller, CapabilityInvocationRequest envelope, CancellationToken token)
@@ -655,7 +672,7 @@ public sealed class SceneService : IAsyncDisposable
                 : _clock.GetUtcNow() - _probedAt > _options.ReadinessMaxAge && _options.Enabled
                     ? _readiness with { State = "unavailable", ReasonCode = "probe_required", DeploymentVerified = false }
                     : _active >= _options.MaxConcurrentInference ? _readiness with { State = "busy", ReasonCode = "inference_capacity", RetryAfterMs = 1000 } : _readiness;
-            return new(CapabilityId, "scene-catalog.v1", "0.1.4-dev8",
+            return new(CapabilityId, "scene-catalog.v1", "0.1.4-dev9",
                 ["scene.analyze", "scene.status", "scene.cancel", "scene.invalidate", "scene.capabilities"],
                 "request_json", ResultMetadataKey, ["image/png"], false, true,
                 "image-normalized; origin=top-left; x=right; y=down; orientation=stored-pixels; no-3d",
@@ -682,17 +699,21 @@ public sealed class SceneService : IAsyncDisposable
 
     public async ValueTask DisposeAsync()
     {
-        Task[] work;
-        lock (_sync)
+        try
         {
-            if (_disposed) return;
-            foreach (var job in _jobs.Values.Where(j => !Terminal(j.Entry.Result.Status)).ToArray())
-                try { Finish(job, "canceled", "service_stopping"); } catch (SceneException) { _quarantined = true; }
-            _disposed = true;
-            work = _jobs.Values.Select(j => j.Work).ToArray();
+            Task[] work;
+            lock (_sync)
+            {
+                if (_disposed) return;
+                foreach (var job in _jobs.Values.Where(j => !Terminal(j.Entry.Result.Status)).ToArray())
+                    try { Finish(job, "canceled", "service_stopping"); } catch (SceneException) { _quarantined = true; }
+                _disposed = true;
+                work = _jobs.Values.Select(j => j.Work).ToArray();
+            }
+            try { await Task.WhenAll(work).ConfigureAwait(false); }
+            finally { _media.Clear(); _journal.Dispose(); }
         }
-        try { await Task.WhenAll(work).ConfigureAwait(false); }
-        finally { _media.Clear(); _journal.Dispose(); }
+        catch (Exception error) { throw SceneHostErrors.Sanitize(error); }
     }
 }
 

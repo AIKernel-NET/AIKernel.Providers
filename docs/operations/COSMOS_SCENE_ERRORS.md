@@ -1,6 +1,6 @@
 # Scene v1 状態・エラーコード一覧
 
-更新: 2026-11-12 / AIKernel.Providers.Cosmos 0.1.4-dev8（受付後ジョブとreadinessにも許可リストを適用）。
+更新: 2026-11-12 / AIKernel.Providers.Cosmos 0.1.4-dev9（ホスト運用APIの許可リストと例外詳細の除去）。
 受付失敗は envelope.ErrorCode、受付後は result.ErrorCode、稼働状態は readiness.ReasonCode を確認する。
 status は COSMOS_SCENE_P0.md と result.schema.json に従う。未知のコードを成功に読み替えない。
 以下は標準実装のコード。独自バックエンド・認可アダプターも短い非機密コードだけを返すこと。
@@ -89,6 +89,35 @@ WorkMayStillBeRunningは未知コードでも保持し、物理処理の隔離�
 先に確定したcanceled/timed_out/supersededは遅い失敗で上書きしない。
 backendCancellationは既存どおり許可値以外をunconfirmedにする。モデル観測のreasonCodeも従来の別許可リストで検証する。
 
+## dev9のホスト運用エラー（9種類）
+
+許可コードはinvalid_identifier、request_not_found、disabled、backend_still_active、
+journal_invalid、journal_capacity、journal_unavailable、deployment_evidence_invalid、host_operation_failedのみ。
+大文字小文字を区別した完全一致であり、接頭辞・空白・独自コード・空文字・nullは認めない。
+ホストの元例外を再throwせず、新しい例外を作り、Message/InnerException/Data/Task/内部取消トークンを引き継がない。
+SceneExceptionのMessageはCodeと同じ。WorkMayStillBeRunningだけは公開された安全判断の真偽値として保持する。
+
+| 境界 | 未知の失敗の扱い |
+|---|---|
+| SceneService初期化のbackend identity取得、ConfirmBackendQuiescent、RevokeRequestAuthorization、DisposeAsync | host_operation_failed |
+| 台帳作成・読込みを伴う初期化 | journal_unavailable。既知のjournal_invalid等は維持 |
+| SceneDeploymentFileSource.ReadAsync | deployment_evidence_invalid。原パス・I/O例外・JSON内容は返さない |
+| CosmosNimBackend.Dispose | host_operation_failed |
+| CosmosNimBackend設定・SceneDeploymentFileSourceのパス設定 | ArgumentExceptionの固定メッセージと固定ParamName。元の例外は保持しない |
+
+SceneServiceのnull引数・上限制約のArgumentException系は従来の固定文を維持する。
+台帳初期化から出ていた生のIOException/パス例外等はjournal_unavailableへ変わるため、その型に依存した接続はCodeで処理すること。
+取消はOperationCanceledException/TaskCanceledExceptionのまま。トークンを受け取るAPIでは呼出元トークンを保持し、
+同期運用APIやDisposeAsyncには呼出元トークンがないためNoneにする。直接CosmosNimBackend.ProbeAsyncの取消にも適用する。
+既存のprobe内部timeoutはprobe_timed_out、その他のprobe例外はprobe_failedのまま。
+
+ConfirmBackendQuiescentはbackend identityを取得してから隔離解除を保存する。取得失敗で物理処理フラグや隔離を消さない。
+初期化のidentity取得は台帳lease取得前に行い、読込み失敗時はleaseを解放する。
+既知のbackend_still_active、request_not_found、disabled、journal_unavailable等を維持し、例外を成功や停止完了へ読み替えない。
+DisposeAsyncは従来どおり物理処理を待つ。例外を受けたホストは停止/失効通知/復旧の完了を仮定せず、状態確認と再試行を管理する。
+host_operation_failedは受付・ジョブの許可リストへ追加しない。ホスト操作をSceneSessionのoperationとして公開しない。
+SDK例外のスタックトレースや設定済みidentityをHTTP応答へ無条件にコピーしてよいという契約ではない。
+
 ## 標準実装全体のコード
 
 | 分類 | コード | 呼出側の扱い |
@@ -111,11 +140,13 @@ backendCancellationは既存どおり許可値以外をunconfirmedにする。�
 | 配置証跡 | deployment_evidence_invalid, deployment_mismatch, deployment_state_unknown, runtime_mismatch, model_mismatch | 証跡/期限/実配置/runtime APIを確認 |
 | 配置の状態 | deployment_disabled, deployment_loading, deployment_warming_up, deployment_busy, deployment_degraded, deployment_unavailable | 短いprobe失敗で再起動しない |
 | 台帳 | journal_invalid, journal_capacity, journal_unavailable | fail closed。台帳削除で重複実行を許さない |
+| ホスト操作 | host_operation_failed | 独自コード・予期しない例外。操作完了と扱わず運用状態を確認 |
 | 終了理由 | caller_canceled, service_stopping, runtime_restarted | 元の要求の終端状態を保持 |
 
 ready は正常な readiness 理由。backendCancellation は not_requested / requested / unsupported / confirmed / unconfirmed。
 API用 CancellationToken の OperationCanceledException/TaskCanceledException は例外として伝播し、成功に変換しない。
-メディア登録・ホスト運用APIのエラーは SceneException(Code) で返る。モデル本文・HTTPエラー本文を理由へ転写しない。
+メディア登録・ホスト運用APIの失敗は上記のSceneException(Code)で返る。設定引数の固定ArgumentExceptionと取消は別扱い。
+モデル本文・HTTPエラー本文を理由へ転写しない。
 
 dev3の推論前再認可では、unauthenticated / permission_denied / actor_revision_mismatch /
 action_not_authorized / target_not_authorized を rejected の理由として返す。

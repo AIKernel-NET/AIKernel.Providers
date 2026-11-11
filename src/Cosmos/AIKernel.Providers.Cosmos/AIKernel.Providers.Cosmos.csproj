@@ -1,12 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <PackageId>AIKernel.Providers.Cosmos</PackageId>
-    <Version>0.1.4-dev8</Version>
-    <PackageVersion>0.1.4-dev8</PackageVersion>
-    <InformationalVersion>0.1.4-dev8</InformationalVersion>
+    <Version>0.1.4-dev9</Version>
+    <PackageVersion>0.1.4-dev9</PackageVersion>
+    <InformationalVersion>0.1.4-dev9</InformationalVersion>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <PackageReadmeFile>COSMOS_SCENE_P0.md</PackageReadmeFile>
-    <PackageReleaseNotes>Allowlist post-admission job errors and readiness reasons, including legacy journal results. Unknown job codes become invalid_backend_response; unknown readiness fails closed with probe_failed. Sanitize probe cancellation exceptions while retaining physical-work quarantine, terminal states, retry hints, Scene v1 and official 0.1.3-dev1 dependencies. Real deployment acceptance is pending.</PackageReleaseNotes>
+    <PackageReleaseNotes>Allowlist host operation errors and remove private exception details from initialization, quiescence confirmation, authorization revocation, shutdown, deployment evidence and NIM configuration/disposal. Preserve cancellation, physical-work evidence and known errors. Failed quiescence identity lookup cannot release quarantine. Scene v1 and official 0.1.3-dev1 dependencies are retained. Real deployment acceptance is pending.</PackageReleaseNotes>
     <Description>Optional, authenticated scene observation jobs and NVIDIA Cosmos Reasoner transport. Does not execute proposed actions.</Description>
   </PropertyGroup>
   <ItemGroup>

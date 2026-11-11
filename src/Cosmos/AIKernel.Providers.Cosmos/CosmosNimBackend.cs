@@ -50,11 +50,15 @@ public sealed class CosmosNimBackend : ISceneReasonerBackend, IDisposable
     internal CosmosNimBackend(CosmosNimOptions options, ISceneDeploymentEvidenceSource evidence,
         HttpMessageHandler handler, TimeProvider? timeProvider = null)
     {
-        ValidateOptions(options);
-        _options = options; _evidence = evidence; _clock = timeProvider ?? TimeProvider.System;
-        _client = new HttpClient(handler, disposeHandler: true) { Timeout = Timeout.InfiniteTimeSpan };
-        Identity = new("cosmos", options.Model, options.Revision, options.Precision, options.Runtime,
-            options.EndpointId, options.GpuIds.ToArray(), false, options.ImageDigest);
+        try
+        {
+            ValidateOptions(options);
+            _options = options; _evidence = evidence; _clock = timeProvider ?? TimeProvider.System;
+            Identity = new("cosmos", options.Model, options.Revision, options.Precision, options.Runtime,
+                options.EndpointId, options.GpuIds.ToArray(), false, options.ImageDigest);
+            _client = new HttpClient(handler, disposeHandler: true) { Timeout = Timeout.InfiniteTimeSpan };
+        }
+        catch (Exception error) { throw SceneHostErrors.Configuration(error, nameof(options)); }
     }
 
     private static void ValidateOptions(CosmosNimOptions options)
@@ -86,6 +90,12 @@ public sealed class CosmosNimBackend : ISceneReasonerBackend, IDisposable
     }
 
     private static HttpMessageHandler CreatePinnedHandler(CosmosNimOptions options)
+    {
+        try { return CreatePinnedHandlerCore(options); }
+        catch (Exception error) { throw SceneHostErrors.Configuration(error, nameof(options)); }
+    }
+
+    private static HttpMessageHandler CreatePinnedHandlerCore(CosmosNimOptions options)
     {
         ValidateOptions(options);
         var pins = options.AllowedAddresses.Select(a => a.IsIPv4MappedToIPv6 ? a.MapToIPv4() : a).ToHashSet();
@@ -141,7 +151,7 @@ public sealed class CosmosNimBackend : ISceneReasonerBackend, IDisposable
         }
         catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
         { return new("unavailable", "probe_timed_out", false, Identity, 1000); }
-        catch (OperationCanceledException) { throw; }
+        catch (OperationCanceledException canceled) { throw SceneIntakeErrors.Cancellation(canceled, cancellationToken); }
         catch { return new("unavailable", "probe_failed", false, Identity, 1000); }
     }
 
@@ -248,5 +258,9 @@ public sealed class CosmosNimBackend : ISceneReasonerBackend, IDisposable
         Never propose for an unknown observation. Return empty arrays when no supported observation/proposal exists. Obey maxProposals.
         """;
 
-    public void Dispose() => _client.Dispose();
+    public void Dispose()
+    {
+        try { _client.Dispose(); }
+        catch (Exception error) { throw SceneHostErrors.Sanitize(error); }
+    }
 }
