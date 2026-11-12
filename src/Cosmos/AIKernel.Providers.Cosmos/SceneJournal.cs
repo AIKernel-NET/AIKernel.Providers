@@ -12,6 +12,8 @@ internal sealed class SceneJournal : IDisposable
     private readonly string _recoveryPath;
     private readonly FileStream _lease;
     private readonly int _maxBytes;
+    private readonly object _sync = new();
+    private bool _closed;
     internal bool RecoveryRequired { get; private set; }
 
     internal SceneJournal(string directory, int maxJobs, int maxResponseBytes)
@@ -47,6 +49,11 @@ internal sealed class SceneJournal : IDisposable
 
     internal IReadOnlyList<SceneJournalEntry> Load()
     {
+        lock (_sync) { CheckOpen(); return LoadCore(); }
+    }
+
+    private IReadOnlyList<SceneJournalEntry> LoadCore()
+    {
         if (!File.Exists(_path)) return [];
         if (new FileInfo(_path).Length > _maxBytes) throw new SceneException("journal_invalid");
         try
@@ -60,9 +67,17 @@ internal sealed class SceneJournal : IDisposable
 
     internal void Save(IEnumerable<SceneJournalEntry> entries, bool quarantined = false, bool confirmRecovery = false)
     {
+        lock (_sync) { CheckOpen(); SaveCore(entries, quarantined, confirmRecovery); }
+    }
+
+    private void SaveCore(IEnumerable<SceneJournalEntry> entries, bool quarantined, bool confirmRecovery)
+    {
         try
         {
             var bytes = System.Text.Encoding.UTF8.GetBytes(SceneJson.Write(new SceneJournalDocument("scene-journal.v1", entries.ToArray())));
+            // Enumeration can reenter disposal on this thread. Never write
+            // after ownership was released, even while holding this monitor.
+            CheckOpen();
             if (bytes.Length > _maxBytes) throw new SceneException("journal_capacity");
             string temporary = Path.Combine(_directory, ".jobs-" + Guid.NewGuid().ToString("N") + ".tmp");
             try
@@ -85,14 +100,32 @@ internal sealed class SceneJournal : IDisposable
 
     internal void Close(bool quarantined)
     {
-        try
+        lock (_sync)
         {
-            if (!quarantined && !RecoveryRequired) File.Delete(_recoveryPath);
+            if (_closed) return;
+            _closed = true;
+            try
+            {
+                if (!quarantined && !RecoveryRequired) File.Delete(_recoveryPath);
+            }
+            catch { throw new SceneException("journal_unavailable"); }
+            finally { _lease.Dispose(); }
         }
-        catch { throw new SceneException("journal_unavailable"); }
-        finally { _lease.Dispose(); }
     }
 
     // Initialization failures and unclean exits must keep the checkpoint.
-    public void Dispose() => _lease.Dispose();
+    public void Dispose()
+    {
+        lock (_sync)
+        {
+            if (_closed) return;
+            _closed = true;
+            _lease.Dispose();
+        }
+    }
+
+    private void CheckOpen()
+    {
+        if (_closed) throw new SceneException("journal_unavailable");
+    }
 }

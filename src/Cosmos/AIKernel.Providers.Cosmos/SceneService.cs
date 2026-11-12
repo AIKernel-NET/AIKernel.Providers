@@ -21,6 +21,7 @@ public sealed class SceneService : IAsyncDisposable
     private readonly Dictionary<string, HashSet<string>> _retiredEpochs = new(StringComparer.Ordinal);
     private bool _quarantined;
     private bool _disposed;
+    private Task? _shutdown;
     private int _active;
     private SceneReadiness _readiness;
     private DateTimeOffset _probedAt;
@@ -100,9 +101,10 @@ public sealed class SceneService : IAsyncDisposable
     {
         try
         {
+            lock (_sync) { CheckNotDisposed(); }
             var principal = new ClaimsPrincipal(authenticatedCaller.Identities.Select(identity => new ClaimsIdentity(identity)));
             var grant = Authorize(principal);
-            return new(this, principal, grant.CallerId);
+            lock (_sync) { CheckNotDisposed(); return new(this, principal, grant.CallerId); }
         }
         catch (Exception error) { throw SceneIntakeErrors.Sanitize(error); }
     }
@@ -132,6 +134,7 @@ public sealed class SceneService : IAsyncDisposable
         {
             try
             {
+                lock (_sync) { CheckNotDisposed(); }
                 var grant = Authorize(principal, caller);
                 lock (_sync) { CheckEnabled(); }
                 return await _media.RegisterAsync(grant, registration, source, cancellationToken).ConfigureAwait(false);
@@ -145,7 +148,7 @@ public sealed class SceneService : IAsyncDisposable
     {
         lock (_sync)
         {
-            if (_disposed || !_options.Enabled) return _readiness with { State = "disabled", ReasonCode = "disabled" };
+            if (_disposed || !_options.Enabled) return DisabledReadiness();
             if (_quarantined) return _readiness with { State = "degraded", ReasonCode = "backend_work_unconfirmed", DeploymentVerified = false };
         }
         try
@@ -153,9 +156,14 @@ public sealed class SceneService : IAsyncDisposable
             var result = await _backend.ProbeAsync(cancellationToken).ConfigureAwait(false);
             lock (_sync)
             {
+                if (_disposed) return DisabledReadiness();
                 if (_quarantined) return _readiness with { State = "degraded", ReasonCode = "backend_work_unconfirmed", DeploymentVerified = false };
-                _readiness = SceneRuntimeErrors.Readiness(result, _backend.Identity);
-                _probedAt = _clock.GetUtcNow();
+                var readiness = SceneRuntimeErrors.Readiness(result, _backend.Identity);
+                var probedAt = _clock.GetUtcNow();
+                if (_disposed) return DisabledReadiness();
+                if (_quarantined) return _readiness with { State = "degraded", ReasonCode = "backend_work_unconfirmed", DeploymentVerified = false };
+                _readiness = readiness;
+                _probedAt = probedAt;
                 return _readiness;
             }
         }
@@ -164,6 +172,7 @@ public sealed class SceneService : IAsyncDisposable
         {
             lock (_sync)
             {
+                if (_disposed) return DisabledReadiness();
                 _readiness = new("unavailable", "probe_failed", false, _readiness.Provider);
                 _probedAt = _clock.GetUtcNow();
                 return _readiness;
@@ -179,10 +188,12 @@ public sealed class SceneService : IAsyncDisposable
         {
             lock (_sync)
             {
+                CheckNotDisposed();
                 if (_active != 0) throw new SceneException("backend_still_active");
                 // Prepare recovery without changing the live entries. A failed save
                 // must leave leases intact for later host and background writes.
                 var readiness = new SceneReadiness("unavailable", "probe_required", false, _backend.Identity);
+                CheckNotDisposed(); // Host identity lookup may reenter shutdown.
                 var recovered = _jobs.Values.Select(job =>
                     (Job: job, Entry: job.Entry with { PhysicalOutstanding = false })).ToArray();
                 Persist(recovered.Select(update => update.Entry), confirmRecovery: true);
@@ -206,7 +217,7 @@ public sealed class SceneService : IAsyncDisposable
             SceneJson.Id(callerId); SceneJson.Id(requestId);
             lock (_sync)
             {
-                if (_disposed) throw new SceneException("disabled");
+                CheckNotDisposed();
                 if (!_jobs.TryGetValue(Key(callerId, requestId), out var job)
                     || job.Entry.RetainUntilUtc <= _clock.GetUtcNow()) throw new SceneException("request_not_found");
                 RevokeIfUnauthorized(job, null);
@@ -229,6 +240,7 @@ public sealed class SceneService : IAsyncDisposable
         try
         {
             token.ThrowIfCancellationRequested();
+            lock (_sync) { CheckNotDisposed(); }
             SceneGrant grant;
             try { grant = Authorize(principal, caller); }
             catch (Exception error)
@@ -239,6 +251,7 @@ public sealed class SceneService : IAsyncDisposable
                 if (!token.IsCancellationRequested) RevokeLookup(caller, envelope, null, error);
                 throw;
             }
+            lock (_sync) { CheckNotDisposed(); }
             RevokeLookup(caller, envelope, grant);
             if (envelope.CapabilityId != CapabilityId) throw new SceneException("capability_unsupported");
             SceneJson.Id(envelope.InvocationId);
@@ -253,6 +266,7 @@ public sealed class SceneService : IAsyncDisposable
                 if (envelope.Arguments.Count != 0) throw new SceneException("unknown_argument");
                 lock (_sync)
                 {
+                    CheckNotDisposed();
                     var fingerprint = _generations.TryGetValue(grant.CallerId, out var prior) ? prior.Fingerprint : "";
                     _generations[grant.CallerId] = new(fingerprint, Guid.NewGuid().ToString("N"));
                     if (_latest.TryGetValue(grant.CallerId, out var latest)) Retire(grant.CallerId, latest.SessionEpoch);
@@ -329,6 +343,7 @@ public sealed class SceneService : IAsyncDisposable
                 SceneJson.Id(id);
                 lock (_sync)
                 {
+                    CheckNotDisposed();
                     if (!_jobs.TryGetValue(Key(grant, id), out var job)
                         || job.Entry.RetainUntilUtc <= _clock.GetUtcNow()) throw new SceneException("request_not_found");
                     RevokeIfUnauthorized(job, grant);
@@ -411,6 +426,14 @@ public sealed class SceneService : IAsyncDisposable
         Persist();
     }
     private static bool Terminal(string state) => state is not ("accepted" or "queued" or "running");
+    // Called under _sync. Stopping is already closed to new callers, while
+    // accepted physical work retains journal ownership until shutdown drains.
+    private void CheckNotDisposed()
+    {
+        if (_disposed) throw new SceneException("disabled");
+    }
+    private SceneReadiness DisabledReadiness() => _readiness with
+    { State = "disabled", ReasonCode = "disabled", DeploymentVerified = false, RetryAfterMs = null };
     private void CheckEnabled()
     {
         if (_disposed || !_options.Enabled) throw new SceneException("disabled");
@@ -692,11 +715,12 @@ public sealed class SceneService : IAsyncDisposable
     {
         lock (_sync)
         {
+            CheckNotDisposed();
             var readiness = _quarantined ? _readiness with { State = "degraded", ReasonCode = "backend_work_unconfirmed", DeploymentVerified = false }
                 : _clock.GetUtcNow() - _probedAt > _options.ReadinessMaxAge && _options.Enabled
                     ? _readiness with { State = "unavailable", ReasonCode = "probe_required", DeploymentVerified = false }
                     : _active >= _options.MaxConcurrentInference ? _readiness with { State = "busy", ReasonCode = "inference_capacity", RetryAfterMs = 1000 } : _readiness;
-            return new(CapabilityId, "scene-catalog.v1", "0.1.4-dev11",
+            return new(CapabilityId, "scene-catalog.v1", "0.1.4-dev12",
                 ["scene.analyze", "scene.status", "scene.cancel", "scene.invalidate", "scene.capabilities"],
                 "request_json", ResultMetadataKey, ["image/png"], false, true,
                 "image-normalized; origin=top-left; x=right; y=down; orientation=stored-pixels; no-3d",
@@ -721,19 +745,37 @@ public sealed class SceneService : IAsyncDisposable
         return new(request.InvocationId, request.CapabilityId, false, null, safeCode, safeCode, request.ReplayLogHash, new Dictionary<string, string>());
     }
 
-    public async ValueTask DisposeAsync()
+    public ValueTask DisposeAsync()
     {
         try
         {
-            Task[] work;
             lock (_sync)
             {
-                if (_disposed) return;
+                if (_shutdown is not null) return new(_shutdown);
                 foreach (var job in _jobs.Values.Where(j => !Terminal(j.Entry.Result.Status)).ToArray())
                     try { Finish(job, "canceled", "service_stopping"); } catch (SceneException) { _quarantined = true; }
                 _disposed = true;
-                work = _jobs.Values.Select(j => j.Work).ToArray();
+                // All callers await the same drain and close, including a
+                // failed close. Never acknowledge release of a live lease.
+                _shutdown = CompleteShutdownAsync(_jobs.Values.Select(j => j.Work).ToArray());
+                return new(_shutdown);
             }
+        }
+        catch (Exception error) { return ShutdownPreparationFailureAsync(error); }
+    }
+
+    private static async ValueTask ShutdownPreparationFailureAsync(Exception error)
+    {
+        // An async builder preserves a canceled task for cancellation errors;
+        // FromException would silently change that state to Faulted.
+        await Task.CompletedTask.ConfigureAwait(false);
+        throw SceneHostErrors.Sanitize(error);
+    }
+
+    private async Task CompleteShutdownAsync(Task[] work)
+    {
+        try
+        {
             try { await Task.WhenAll(work).ConfigureAwait(false); }
             finally { _media.Clear(); _journal.Close(_quarantined); }
         }

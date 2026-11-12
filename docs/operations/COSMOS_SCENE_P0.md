@@ -1,7 +1,7 @@
 # Cosmos シーン観測 API v1 — AIKernel 実装・接続契約
 
 更新: 2026-11-12。TheoriaCast の P0 要望に対するローカル開発版。
-パッケージ: `AIKernel.Providers.Cosmos` **0.1.4-dev11** / .NET 10。
+パッケージ: `AIKernel.Providers.Cosmos` **0.1.4-dev12** / .NET 10。
 実装・オフライン試験と実機受入は別の段階です。実 Cosmos による B01〜B06 の受入は未完了です。
 
 ## 1. 配置と責任
@@ -157,6 +157,23 @@ dev11 は受付・取消・完了時の保存失敗にも適用します。受�
 補助記録は画像・要求・認証情報を含みません。旧jobs.json v1は読めますが、バックアップは補助記録を含むディレクトリ単位とし、
 補助記録がある状態で旧版へ戻さないでください。旧版はこの記録を認識しません。手動削除を回復手順にしません。
 記録作成に失敗した初期化はサービスを返さず、推論を受け付けません。ストレージ消失・手動改変・実機電源断への保証ではありません。
+
+dev12 は停止済みインスタンスの境界を固定します。ConfirmBackendQuiescentは停止開始確定後にdisabledとなり、
+旧インスタンスから台帳を再保存しません。RevokeRequestAuthorizationの停止済み拒否も維持します（識別子検証の優先順位は従来どおり）。
+停止後のOpenSession、既存SceneSessionの能力呼出し・メディア登録もdisabledとなり、認可やメディア読込みを開始しません。
+停止前に開始済みの認可は終了時に再確認します。probeは開始時・応答時・ホスト情報取得後に停止を検査し、
+停止済みならstate/reasonCode=disabled、deploymentVerified=false、retryAfterMs=nullです。取消例外の意味と秘匿は維持します。
+
+停止開始確定後のDisposeAsyncは同じ物理処理の終了・台帳クローズを待ちます。二回目だけ先に成功したり、
+クローズ失敗を再呼出しで成功へ変えたりしません。最初の停止完了までwriter.lockを保持し、新インスタンスは開けません。
+停止準備のホストタイマー処理で例外が起きた場合は従来どおり停止未確定で所有権を保持します。原因を直して再試行してください。
+停止確定後のクローズ失敗は同じ失敗を返し、旧インスタンスで後片付けを再試行せず、復旧は新インスタンスの運用手順へ移します。
+SceneServiceは渡された推論バックエンド自体を破棄・停止しません。モデルや接続の所有権はホストが管理します。
+
+内部台帳にも閉鎖状態を追加し、閉鎖後のLoad/Saveはjournal_unavailable、Close/Disposeの反復は副作用なしにします。
+読書きとクローズを同じロックで保護し、スナップショット列挙中に停止が再入しても、保存直前に所有権を再確認します。
+新しい所有者のjobs.json、PhysicalOutstanding、recovery-required、writer.lockに旧ハンドルは干渉しません。
+Scene v1・台帳v1・補助記録形式・hash計算式・エラー許可リストは変えません。
 
 `Succeeded=true` は API 処理の成功です。解析が failed/canceled でも照会成功なら true です。
 不正入力・認可不成立・容量不足など受付拒否は `Succeeded=false` と `ErrorCode` を返し、推論しません。
@@ -358,7 +375,7 @@ dotnet run --project samples/Cosmos.SceneClient -c Release -- --nim host-config.
 このリポジトリには TheoriaCast 本体がないため、実際の AssistantObservationCapability との統合試験は未実施です。
 独立 capability と公式型の検証、既存 Chat テストは自動試験で確認します。
 
-新パッケージだけ 0.1.4-dev11。公式 Abstractions/Dtos/Enums は **[0.1.3-dev1]** に固定します。
+新パッケージだけ 0.1.4-dev12。公式 Abstractions/Dtos/Enums は **[0.1.3-dev1]** に固定します。
 パッケージ消費サンプルは Common/Core も [0.1.3-dev1] とし、既存5パッケージをアップグレードしません。
 既存 public interface/DTO/enum を変更せず、新しい型は AIKernel.Providers.Cosmos 名前空間に追加します。
 Scene v1 preview の破壊的変更は別 schemaVersion/パッケージ版とし、黙って意味を変更しません。
@@ -402,7 +419,7 @@ OpenMDW-1.1 に分かれます。実際に選んだ image の LICENSE/MODEL_LICE
 
 ## 9. 自動検証・実機評価
 
-最新の検証は `COSMOS_SCENE_DEV11_VALIDATION.md`。dev9は `COSMOS_SCENE_DEV9_VALIDATION.md`、dev8は `COSMOS_SCENE_DEV8_VALIDATION.md`、dev7は `COSMOS_SCENE_DEV7_VALIDATION.md`、dev6は `COSMOS_SCENE_DEV6_VALIDATION.md`、dev5は `COSMOS_SCENE_DEV5_VALIDATION.md`、dev4は `COSMOS_SCENE_DEV4_VALIDATION.md`、dev3は `COSMOS_SCENE_DEV3_VALIDATION.md`、dev2は `COSMOS_SCENE_DEV2_VALIDATION.md`、初版dev1は `COSMOS_SCENE_VALIDATION.md` を参照してください。
+最新の検証は `COSMOS_SCENE_DEV12_VALIDATION.md`。dev9は `COSMOS_SCENE_DEV9_VALIDATION.md`、dev8は `COSMOS_SCENE_DEV8_VALIDATION.md`、dev7は `COSMOS_SCENE_DEV7_VALIDATION.md`、dev6は `COSMOS_SCENE_DEV6_VALIDATION.md`、dev5は `COSMOS_SCENE_DEV5_VALIDATION.md`、dev4は `COSMOS_SCENE_DEV4_VALIDATION.md`、dev3は `COSMOS_SCENE_DEV3_VALIDATION.md`、dev2は `COSMOS_SCENE_DEV2_VALIDATION.md`、初版dev1は `COSMOS_SCENE_VALIDATION.md` を参照してください。
 NimProtocolTests は HTTP handler を差し替えるプロトコル試験です。backend=cosmos の型を通ることは、
 実 GPU で推論した証明ではありません。偽バックエンドの試験と実機 B01 を混同しません。
 
