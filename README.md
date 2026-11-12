@@ -1,5 +1,7 @@
 # AIKernel.Providers
 
+CUDA Driver defaults (0.1.4 preparation): [migration and compatibility](docs/CUDA-DRIVER-MIGRATION.md).
+
 [日本語 README](README-ja.md)
 
 AIKernel.Providers is the official extension provider workspace for

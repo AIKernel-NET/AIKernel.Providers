@@ -18,9 +18,9 @@
     "deterministic_frame_sampling": "host-frame-token-sample-ticks",
     "fallback": "fail-closed",
     "deviceProfile": "cuda13",
-    "entryPoint": "libtorch_bridge",
+    "entryPoint": "ak_create",
     "loaderJson": "rom://providers/cuda/loader.json",
-    "nativeModuleRef": "aikernel-cuda://cuda13.0/modules/libtorch_bridge",
+    "nativeModuleRef": "aikernel-cuda://cuda13.0/modules/aikernel_cuda_driver",
     "gpu_bypass": "native-cuda-buffer-dispatch",
     "native_js_bridge": "not-required-native-provider",
     "pass_bridge": "native-abi",
@@ -28,7 +28,10 @@
     "invokerType": "AIKernel.Providers.CudaCompute.CudaComputeInvoker",
     "raw_capture_source": "none",
     "canonical": "true",
-    "zero_copy_buffer_handling": "native-cuda-device-buffer"
+    "zero_copy_buffer_handling": "native-cuda-device-buffer",
+    "moduleId": "aikernel_cuda_driver",
+    "packageId": "AIKernel.Kernel",
+    "abiVersion": "1"
   },
   "cli": {
     "command": "cuda",

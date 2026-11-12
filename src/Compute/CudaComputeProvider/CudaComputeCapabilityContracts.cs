@@ -25,7 +25,7 @@ public static class CudaComputeCapabilityContracts
             CapabilityModuleKind.NativeLibrary,
             CapabilityInvocationMode.NativeAbi,
             GetRequiredMetadataValue(descriptor.Metadata, GpuProviderMetadataKeys.Version, "0.1.3"),
-            GetMetadataValue(descriptor.Metadata, "entry_point", "libtorch_bridge"),
+            GetMetadataValue(descriptor.Metadata, "entry_point", "ak_create"),
             GetMetadataValue(descriptor.Metadata, "loader_json", null),
             GetMetadataValue(descriptor.Metadata, "artifact_hash", null),
             [

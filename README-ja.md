@@ -1,5 +1,7 @@
 # AIKernel.Providers
 
+CUDA Driverの既定値（0.1.4準備）：[移行と互換性](docs/CUDA-DRIVER-MIGRATION.md)。
+
 [English README](README.md)
 
 AIKernel.Providers は、AIKernel.NET 向けの公式拡張 Provider ワークスペースです。
