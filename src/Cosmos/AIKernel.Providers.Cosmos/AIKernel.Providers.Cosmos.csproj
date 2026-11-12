@@ -1,12 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <PackageId>AIKernel.Providers.Cosmos</PackageId>
-    <Version>0.1.4-dev10</Version>
-    <PackageVersion>0.1.4-dev10</PackageVersion>
-    <InformationalVersion>0.1.4-dev10</InformationalVersion>
+    <Version>0.1.4-dev11</Version>
+    <PackageVersion>0.1.4-dev11</PackageVersion>
+    <InformationalVersion>0.1.4-dev11</InformationalVersion>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <PackageReadmeFile>COSMOS_SCENE_P0.md</PackageReadmeFile>
-    <PackageReleaseNotes>Persist the complete quiescence recovery snapshot before clearing live physical-work flags or quarantine. Failed saves retain leases through later host writes, delayed cancellation receipts, retention expiry and restarts. Preserve known errors, result hashes, Scene v1, journal v1 and official 0.1.3-dev1 dependencies. Real deployment acceptance is pending.</PackageReleaseNotes>
+    <PackageReleaseNotes>Protect intake, cancellation and completion against journal failures. Persist completion and lease release before publication. Establish a durable lifetime recovery checkpoint before accepting work; preserve quarantine through ordinary writes and restarts. Explicit quiescence confirmation and clean shutdown are required to clear a failed checkpoint. Scene v1, jobs.json v1, known errors and official 0.1.3-dev1 dependencies remain unchanged. Do not downgrade with a checkpoint present. Real deployment acceptance is pending.</PackageReleaseNotes>
     <Description>Optional, authenticated scene observation jobs and NVIDIA Cosmos Reasoner transport. Does not execute proposed actions.</Description>
   </PropertyGroup>
   <ItemGroup>

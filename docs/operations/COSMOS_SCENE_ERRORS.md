@@ -1,6 +1,6 @@
 # Scene v1 状態・エラーコード一覧
 
-更新: 2026-11-12 / AIKernel.Providers.Cosmos 0.1.4-dev10（停止確認の保存失敗後も物理処理フラグを保持。新コード追加なし）。
+更新: 2026-11-12 / AIKernel.Providers.Cosmos 0.1.4-dev11（停止確認の保存失敗後も物理処理フラグを保持。新コード追加なし）。
 受付失敗は envelope.ErrorCode、受付後は result.ErrorCode、稼働状態は readiness.ReasonCode を確認する。
 status は COSMOS_SCENE_P0.md と result.schema.json に従う。未知のコードを成功に読み替えない。
 以下は標準実装のコード。独自バックエンド・認可アダプターも短い非機密コードだけを返すこと。
@@ -183,3 +183,10 @@ dev6は未完了要求の照会・同一入力再送で失効を検知した時�
 完了済みならcompletedの履歴を維持し、候補を除きstale_contextとする。他の終端状態は上書きしない。
 通知は対象なしならrequest_not_found、保存失敗ならjournal_unavailableをthrowする。後者を通知成功と扱わない。
 この操作はCapabilityのoperationではなく、認可ホストが管理する受付済み要求への通知である。
+
+## dev11: 受付・取消・完了時の台帳障害
+
+新しい公開理由コードは追加しません。受付/予約/完了保存の失敗はjournal_unavailable、隔離中の受付/readinessはbackend_work_unconfirmedです。
+取消・期限切れ・失効の終端状態を成功へ戻さず、保存前の完了候補を返しません。読み取り専用probeの進行中に隔離された場合もreadyと返しません。
+recovery-requiredはサービス公開前から保持し、通常の再保存・再起動では消しません。失敗後はホストの停止確認の保存成功と正常終了が必要です。
+補助記録除去に失敗した終了もjournal_unavailableとなり、書込ロックは解放します。旧版は補助記録を認識しないため、存在中のダウングレードは禁止です。

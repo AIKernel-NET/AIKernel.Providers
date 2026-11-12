@@ -74,6 +74,7 @@ public sealed class SceneService : IAsyncDisposable
         catch (Exception error) { throw SceneHostErrors.Sanitize(error, "journal_unavailable"); }
         try
         {
+            _quarantined = _journal.RecoveryRequired;
             foreach (var stored in _journal.Load())
             {
                 if (stored.RetainUntilUtc <= _clock.GetUtcNow() && !stored.PhysicalOutstanding && stored.Result.Status != "running") continue;
@@ -152,6 +153,7 @@ public sealed class SceneService : IAsyncDisposable
             var result = await _backend.ProbeAsync(cancellationToken).ConfigureAwait(false);
             lock (_sync)
             {
+                if (_quarantined) return _readiness with { State = "degraded", ReasonCode = "backend_work_unconfirmed", DeploymentVerified = false };
                 _readiness = SceneRuntimeErrors.Readiness(result, _backend.Identity);
                 _probedAt = _clock.GetUtcNow();
                 return _readiness;
@@ -183,7 +185,7 @@ public sealed class SceneService : IAsyncDisposable
                 var readiness = new SceneReadiness("unavailable", "probe_required", false, _backend.Identity);
                 var recovered = _jobs.Values.Select(job =>
                     (Job: job, Entry: job.Entry with { PhysicalOutstanding = false })).ToArray();
-                Persist(recovered.Select(update => update.Entry));
+                Persist(recovered.Select(update => update.Entry), confirmRecovery: true);
                 // Publish only after the complete snapshot is durable, under the
                 // same lock as other writers. No host callbacks follow the save.
                 foreach (var update in recovered) update.Job.Entry = update.Entry;
@@ -300,9 +302,24 @@ public sealed class SceneService : IAsyncDisposable
                         FreshnessBudget = freshnessBudget, HasMonotonicOrigin = true, ClockVerified = verified
                     };
                     _jobs.Add(key, job);
-                    Persist(); // Durable identity is established before any inference dispatch.
-                    job.Timer = _clock.CreateTimer(_ => Expire(job), null, budget, Timeout.InfiniteTimeSpan);
-                    Pump();
+                    try
+                    {
+                        Persist(); // Durable identity is established before any inference dispatch.
+                        job.Timer = _clock.CreateTimer(_ => Expire(job), null, budget, Timeout.InfiniteTimeSpan);
+                        Pump();
+                    }
+                    catch (SceneException error) when (error.Code == "journal_unavailable")
+                    {
+                        // Never dispatch an intake whose durable acceptance or
+                        // reservation failed, even after explicit host recovery.
+                        if (!job.Active && !Terminal(job.Entry.Result.Status))
+                        {
+                            job.Timer?.Dispose();
+                            job.Entry = job.Entry with { Result = job.Entry.Result with { Status = "failed", ErrorCode = "journal_unavailable" } };
+                            job.Request = null; job.Principal = null;
+                        }
+                        throw;
+                    }
                     return Reply(envelope, Present(job, grant), true);
                 }
             }
@@ -544,15 +561,8 @@ public sealed class SceneService : IAsyncDisposable
                 && _jobs.Values.Count(a => a.Caller == j.Caller && a.Active) < _options.MaxRunningPerCaller).OrderBy(j => j.Start).FirstOrDefault();
             if (next is null) return;
             if (_clock.GetElapsedTime(next.Start) >= next.Budget) { Finish(next, "timed_out", "observation_deadline"); continue; }
+            PersistUpdate(next, next.Entry with { Result = next.Entry.Result with { Status = "running" }, PhysicalOutstanding = true });
             next.Active = true; _active++;
-            next.Entry = next.Entry with { Result = next.Entry.Result with { Status = "running" }, PhysicalOutstanding = true };
-            try { Persist(); }
-            catch
-            {
-                next.Active = false; _active--;
-                next.Entry = next.Entry with { PhysicalOutstanding = false };
-                throw;
-            }
             next.Work = Task.Run(() => RunAsync(next));
         }
     }
@@ -605,7 +615,7 @@ public sealed class SceneService : IAsyncDisposable
                     "proposal-" + SceneJson.Hash("scene-proposal.v1\n" + job.Entry.Key + "\n" + job.Entry.InputHash + "\n" + index + "\n" + SceneJson.Write(p))[7..],
                     p.ActorId, p.AssetRevision, p.ActionId, p.TargetId, p.ObservationIds, job.Entry.Result.ExpiresAtUtc)).ToArray();
                 job.Timer?.Dispose();
-                job.Entry = job.Entry with { Result = job.Entry.Result with
+                var completed = job.Entry with { Result = job.Entry.Result with
                 {
                     Status = "completed", Observations = parsed.Observations, Proposals = proposals,
                     FreshnessVerified = job.ClockVerified,
@@ -615,9 +625,9 @@ public sealed class SceneService : IAsyncDisposable
                         _clock.GetElapsedTime(inferred, validated).TotalMilliseconds,
                         job.Entry.Result.Timings.ObservationAgeMs + _clock.GetElapsedTime(job.Start).TotalMilliseconds)
                 } };
-                if (System.Text.Encoding.UTF8.GetByteCount(SceneJson.Write(job.Entry.Result)) > _options.MaxResponseBytes)
-                    job.Entry = job.Entry with { Result = job.Entry.Result with { Status = "failed", ErrorCode = "output_limit", Observations = [], Proposals = [], FreshnessVerified = false } };
-                Persist();
+                if (System.Text.Encoding.UTF8.GetByteCount(SceneJson.Write(completed.Result)) > _options.MaxResponseBytes)
+                    completed = completed with { Result = completed.Result with { Status = "failed", ErrorCode = "output_limit", Observations = [], Proposals = [], FreshnessVerified = false } };
+                PersistUpdate(job, completed);
             }
         }
         catch (SceneException ex)
@@ -646,9 +656,11 @@ public sealed class SceneService : IAsyncDisposable
             lock (_sync)
             {
                 job.Active = false; _active--;
-                job.Entry = job.Entry with { PhysicalOutstanding = job.UnknownPhysical };
+                // A failed transition cannot be repaired implicitly by later
+                // physical completion. Keep the lease until explicit recovery.
+                var finalized = job.Entry with { PhysicalOutstanding = job.UnknownPhysical || (_quarantined && job.Entry.PhysicalOutstanding) };
                 job.Request = null; job.Principal = null;
-                TryPersistBackground();
+                try { PersistUpdate(job, finalized); } catch (SceneException) { /* Preserve the live lease and quarantine. */ }
                 if (!_disposed) { try { Pump(); } catch (SceneException) { _quarantined = true; } }
             }
         }
@@ -661,9 +673,15 @@ public sealed class SceneService : IAsyncDisposable
     }
     private void Persist() => Persist(_jobs.Values.Select(j => j.Entry));
 
-    private void Persist(IEnumerable<SceneJournalEntry> entries)
+    private void PersistUpdate(Job job, SceneJournalEntry entry)
     {
-        try { _journal.Save(entries); }
+        Persist(_jobs.Values.Select(existing => ReferenceEquals(existing, job) ? entry : existing.Entry));
+        job.Entry = entry;
+    }
+
+    private void Persist(IEnumerable<SceneJournalEntry> entries, bool confirmRecovery = false)
+    {
+        try { _journal.Save(entries, _quarantined, confirmRecovery); }
         catch { _quarantined = true; throw new SceneException("journal_unavailable"); }
     }
     private void TryPersistBackground()
@@ -678,7 +696,7 @@ public sealed class SceneService : IAsyncDisposable
                 : _clock.GetUtcNow() - _probedAt > _options.ReadinessMaxAge && _options.Enabled
                     ? _readiness with { State = "unavailable", ReasonCode = "probe_required", DeploymentVerified = false }
                     : _active >= _options.MaxConcurrentInference ? _readiness with { State = "busy", ReasonCode = "inference_capacity", RetryAfterMs = 1000 } : _readiness;
-            return new(CapabilityId, "scene-catalog.v1", "0.1.4-dev10",
+            return new(CapabilityId, "scene-catalog.v1", "0.1.4-dev11",
                 ["scene.analyze", "scene.status", "scene.cancel", "scene.invalidate", "scene.capabilities"],
                 "request_json", ResultMetadataKey, ["image/png"], false, true,
                 "image-normalized; origin=top-left; x=right; y=down; orientation=stored-pixels; no-3d",
@@ -717,7 +735,7 @@ public sealed class SceneService : IAsyncDisposable
                 work = _jobs.Values.Select(j => j.Work).ToArray();
             }
             try { await Task.WhenAll(work).ConfigureAwait(false); }
-            finally { _media.Clear(); _journal.Dispose(); }
+            finally { _media.Clear(); _journal.Close(_quarantined); }
         }
         catch (Exception error) { throw SceneHostErrors.Sanitize(error); }
     }
