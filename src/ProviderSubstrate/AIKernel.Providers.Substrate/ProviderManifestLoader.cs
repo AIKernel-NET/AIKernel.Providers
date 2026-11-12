@@ -138,10 +138,6 @@ public sealed class ProviderManifestLoader : IProviderManifestLoader
             var json = await File.ReadAllTextAsync(path, cancellationToken).ConfigureAwait(false);
             return LoadJson(json, path);
         }
-        catch (OperationCanceledException)
-        {
-            throw;
-        }
         catch (Exception exception) when (exception is IOException or UnauthorizedAccessException)
         {
             return Failure(
@@ -183,10 +179,6 @@ public sealed class ProviderManifestLoader : IProviderManifestLoader
             using var reader = new StreamReader(stream, leaveOpen: true);
             var json = await reader.ReadToEndAsync(cancellationToken).ConfigureAwait(false);
             return LoadJson(json, source);
-        }
-        catch (OperationCanceledException)
-        {
-            throw;
         }
         catch (IOException exception)
         {

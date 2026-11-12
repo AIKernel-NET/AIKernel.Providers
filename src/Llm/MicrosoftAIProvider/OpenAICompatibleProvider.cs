@@ -206,7 +206,7 @@ public sealed class OpenAICompatibleProvider : IModelProvider
 
             return primaryText;
         }
-        catch (OperationCanceledException)
+        catch (Exception ex) when (AIKernel.Common.Results.CancellationExceptionClassifier.IsCancellation(ex))
         {
             throw;
         }
