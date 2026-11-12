@@ -1,6 +1,6 @@
 # Scene v1 状態・エラーコード一覧
 
-更新: 2026-11-12 / AIKernel.Providers.Cosmos 0.1.4-dev12（停止確認の保存失敗後も物理処理フラグを保持。新コード追加なし）。
+更新: 2026-11-12 / AIKernel.Providers.Cosmos 0.1.4-dev13（停止確認の保存失敗後も物理処理フラグを保持。新コード追加なし）。
 受付失敗は envelope.ErrorCode、受付後は result.ErrorCode、稼働状態は readiness.ReasonCode を確認する。
 status は COSMOS_SCENE_P0.md と result.schema.json に従う。未知のコードを成功に読み替えない。
 以下は標準実装のコード。独自バックエンド・認可アダプターも短い非機密コードだけを返すこと。
@@ -197,3 +197,10 @@ recovery-requiredはサービス公開前から保持し、通常の再保存・
 停止後の内部台帳Load/Saveはjournal_unavailableで、例外本文やパスを公開しません。Close/Disposeの反復は新所有者へ作用しません。
 停止開始確定後のDisposeAsyncは完了・失敗を共有し、遅い物理処理が残る間に二回目だけ成功を返しません。
 停止準備で発生するホストタイマー例外は従来の秘匿・取消の扱いを保ち、所有権を保持して再試行可能とします。新しい理由コードは追加しません。
+
+## dev13: readiness障害処理内の時計例外
+
+失敗時刻の取得が通常例外/独自コードで失敗してもunavailable / probe_failedとし、承認・再試行目安・例外詳細を返しません。
+時計のOperationCanceledException/TaskCanceledExceptionはCanceled状態の取消として伝播し、本文・内部例外・Data・内部トークンを除きます。
+backend等の失敗確定後は時計を読む前に過去の承認を無効化し、時刻取得不能を新鮮な判定にしません。時計復旧後は正常probeで再確認します。
+停止・隔離時はdisabled / backend_work_unconfirmedを優先し、台帳や復旧記録を変更しません。新しい理由コードは追加しません。

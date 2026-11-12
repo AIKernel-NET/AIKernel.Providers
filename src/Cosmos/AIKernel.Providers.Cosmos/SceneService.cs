@@ -173,9 +173,21 @@ public sealed class SceneService : IAsyncDisposable
             lock (_sync)
             {
                 if (_disposed) return DisabledReadiness();
-                _readiness = new("unavailable", "probe_failed", false, _readiness.Provider);
-                _probedAt = _clock.GetUtcNow();
-                return _readiness;
+                if (_quarantined) return _readiness with { State = "degraded", ReasonCode = "backend_work_unconfirmed", DeploymentVerified = false };
+                var failed = new SceneReadiness("unavailable", "probe_failed", false, _readiness.Provider);
+                // Revoke cached approval before consulting a host clock that
+                // can itself fail, cancel, or reenter service operations.
+                _readiness = failed;
+                _probedAt = default;
+                var failedAt = default(DateTimeOffset);
+                try { failedAt = _clock.GetUtcNow(); }
+                catch (OperationCanceledException canceled) { throw SceneIntakeErrors.Cancellation(canceled, cancellationToken); }
+                catch { /* A missing timestamp cannot turn probe failure into readiness. */ }
+                if (_disposed) return DisabledReadiness();
+                if (_quarantined) return _readiness with { State = "degraded", ReasonCode = "backend_work_unconfirmed", DeploymentVerified = false };
+                _readiness = failed;
+                _probedAt = failedAt;
+                return failed;
             }
         }
     }
@@ -720,7 +732,7 @@ public sealed class SceneService : IAsyncDisposable
                 : _clock.GetUtcNow() - _probedAt > _options.ReadinessMaxAge && _options.Enabled
                     ? _readiness with { State = "unavailable", ReasonCode = "probe_required", DeploymentVerified = false }
                     : _active >= _options.MaxConcurrentInference ? _readiness with { State = "busy", ReasonCode = "inference_capacity", RetryAfterMs = 1000 } : _readiness;
-            return new(CapabilityId, "scene-catalog.v1", "0.1.4-dev12",
+            return new(CapabilityId, "scene-catalog.v1", "0.1.4-dev13",
                 ["scene.analyze", "scene.status", "scene.cancel", "scene.invalidate", "scene.capabilities"],
                 "request_json", ResultMetadataKey, ["image/png"], false, true,
                 "image-normalized; origin=top-left; x=right; y=down; orientation=stored-pixels; no-3d",

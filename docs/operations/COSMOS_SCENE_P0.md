@@ -1,7 +1,7 @@
 # Cosmos シーン観測 API v1 — AIKernel 実装・接続契約
 
 更新: 2026-11-12。TheoriaCast の P0 要望に対するローカル開発版。
-パッケージ: `AIKernel.Providers.Cosmos` **0.1.4-dev12** / .NET 10。
+パッケージ: `AIKernel.Providers.Cosmos` **0.1.4-dev13** / .NET 10。
 実装・オフライン試験と実機受入は別の段階です。実 Cosmos による B01〜B06 の受入は未完了です。
 
 ## 1. 配置と責任
@@ -174,6 +174,19 @@ SceneServiceは渡された推論バックエンド自体を破棄・停止し�
 読書きとクローズを同じロックで保護し、スナップショット列挙中に停止が再入しても、保存直前に所有権を再確認します。
 新しい所有者のjobs.json、PhysicalOutstanding、recovery-required、writer.lockに旧ハンドルは干渉しません。
 Scene v1・台帳v1・補助記録形式・hash計算式・エラー許可リストは変えません。
+
+dev13 はreadinessの障害処理内の時計例外を保護します。backend/identityの取得失敗後、失敗時刻を読む時計が
+通常例外や独自SceneExceptionを投げても、unavailable / probe_failed、deploymentVerified=false、retryAfterMs=nullを返します。
+例外本文・内部例外・Data・独自コード・内部取消トークンは返しません。時計は失敗処理内で一度だけ読み、例外で再帰的に再試行しません。
+OperationCanceledException/TaskCanceledExceptionは取消とタスクのCanceled状態を維持し、固定本文と呼出元トークンだけを返します。
+
+backend等の失敗が確定したら、障害処理内の時計を呼ぶ前に過去のreadiness承認と時刻を無効化します。
+時刻を得られなければ失敗したprobeを新鮮な判定として記録しません。時計復旧後の照会はprobe_requiredとなる場合があり、
+readyへの復旧には新しい正常probeが必要です。時計を正常に読める通常の障害は、従来のprobe_failedのJSONとhashを維持します。
+主経路でのprobe取消は、既存のreadinessを維持する従来の扱いです。失敗処理内で時計が取消を投げた場合は、既に無効化した承認を戻しません。
+停止・隔離を時計取得前後にも確認し、時計から停止が再入した場合や、進行中probeの失敗より先に隔離された場合も、
+disabledまたはbackend_work_unconfirmedを維持します。台帳・物理処理フラグ・復旧記録はprobeから書き換えません。
+新しい理由コード、公開DTO、Scene v1/台帳形式、hash計算式の変更はありません。
 
 `Succeeded=true` は API 処理の成功です。解析が failed/canceled でも照会成功なら true です。
 不正入力・認可不成立・容量不足など受付拒否は `Succeeded=false` と `ErrorCode` を返し、推論しません。
@@ -375,7 +388,7 @@ dotnet run --project samples/Cosmos.SceneClient -c Release -- --nim host-config.
 このリポジトリには TheoriaCast 本体がないため、実際の AssistantObservationCapability との統合試験は未実施です。
 独立 capability と公式型の検証、既存 Chat テストは自動試験で確認します。
 
-新パッケージだけ 0.1.4-dev12。公式 Abstractions/Dtos/Enums は **[0.1.3-dev1]** に固定します。
+新パッケージだけ 0.1.4-dev13。公式 Abstractions/Dtos/Enums は **[0.1.3-dev1]** に固定します。
 パッケージ消費サンプルは Common/Core も [0.1.3-dev1] とし、既存5パッケージをアップグレードしません。
 既存 public interface/DTO/enum を変更せず、新しい型は AIKernel.Providers.Cosmos 名前空間に追加します。
 Scene v1 preview の破壊的変更は別 schemaVersion/パッケージ版とし、黙って意味を変更しません。
@@ -419,7 +432,7 @@ OpenMDW-1.1 に分かれます。実際に選んだ image の LICENSE/MODEL_LICE
 
 ## 9. 自動検証・実機評価
 
-最新の検証は `COSMOS_SCENE_DEV12_VALIDATION.md`。dev9は `COSMOS_SCENE_DEV9_VALIDATION.md`、dev8は `COSMOS_SCENE_DEV8_VALIDATION.md`、dev7は `COSMOS_SCENE_DEV7_VALIDATION.md`、dev6は `COSMOS_SCENE_DEV6_VALIDATION.md`、dev5は `COSMOS_SCENE_DEV5_VALIDATION.md`、dev4は `COSMOS_SCENE_DEV4_VALIDATION.md`、dev3は `COSMOS_SCENE_DEV3_VALIDATION.md`、dev2は `COSMOS_SCENE_DEV2_VALIDATION.md`、初版dev1は `COSMOS_SCENE_VALIDATION.md` を参照してください。
+最新の検証は `COSMOS_SCENE_DEV13_VALIDATION.md`。dev9は `COSMOS_SCENE_DEV9_VALIDATION.md`、dev8は `COSMOS_SCENE_DEV8_VALIDATION.md`、dev7は `COSMOS_SCENE_DEV7_VALIDATION.md`、dev6は `COSMOS_SCENE_DEV6_VALIDATION.md`、dev5は `COSMOS_SCENE_DEV5_VALIDATION.md`、dev4は `COSMOS_SCENE_DEV4_VALIDATION.md`、dev3は `COSMOS_SCENE_DEV3_VALIDATION.md`、dev2は `COSMOS_SCENE_DEV2_VALIDATION.md`、初版dev1は `COSMOS_SCENE_VALIDATION.md` を参照してください。
 NimProtocolTests は HTTP handler を差し替えるプロトコル試験です。backend=cosmos の型を通ることは、
 実 GPU で推論した証明ではありません。偽バックエンドの試験と実機 B01 を混同しません。
 
