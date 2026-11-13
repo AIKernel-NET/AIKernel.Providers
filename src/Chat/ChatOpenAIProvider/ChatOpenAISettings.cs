@@ -30,6 +30,10 @@ public sealed record ChatOpenAISettings
     /// <summary>[EN] Request timeout. [JA] request timeout です。</summary>
     public TimeSpan Timeout { get; init; } = TimeSpan.FromSeconds(60);
 
+    /// <summary>[EN] Optional server-controlled completion token cap, including reasoning tokens.
+    /// [JA] 推論トークンを含む出力上限です。サーバー側で設定します。</summary>
+    public int? MaxCompletionTokens { get; init; }
+
     /// <summary>[EN] Returns deterministic metadata for capability export. [JA] capability export 用の決定論的 metadata を返します。</summary>
     public IReadOnlyDictionary<string, string> ToMetadata()
     {

@@ -99,6 +99,13 @@ public sealed class ChatOpenAIProvider(
         CancellationToken cancellationToken = default)
         => GetClient().CompleteAsync(messages, cancellationToken);
 
+    /// <summary>[EN] Generates text with reported usage and finish reason for budget accounting.
+    /// [JA] 予算管理に必要な使用量と終了理由を含めて生成結果を返します。</summary>
+    public Task<ChatCompletionResult> GenerateDetailedAsync(
+        IReadOnlyList<IModelMessage> messages,
+        CancellationToken cancellationToken = default)
+        => GetClient().CompleteDetailedAsync(messages, cancellationToken);
+
     /// <summary>
     /// [EN] Provides the StreamGenerateAsync provider contract member.
     /// [JA] StreamGenerateAsync の provider contract member を提供します。
