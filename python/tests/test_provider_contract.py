@@ -1,6 +1,4 @@
-from aikernel_providers import __version__
-
-PACKAGE_VERSION = __version__.replace("rc", "-rc.")
+from aikernel_providers.native import _PROVIDER_PACKAGE_VERSION as PACKAGE_VERSION
 
 from aikernel_providers import (
     ChatOpenAICapability,
