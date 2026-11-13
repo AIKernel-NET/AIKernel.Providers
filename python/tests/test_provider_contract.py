@@ -1,3 +1,7 @@
+from aikernel_providers import __version__
+
+PACKAGE_VERSION = __version__.replace("rc", "-rc.")
+
 from aikernel_providers import (
     ChatOpenAICapability,
     ChatOpenAIClient,
@@ -129,19 +133,19 @@ def test_provider_and_invoker_wrappers_create_managed_objects():
     local_invoker = LocalLlmInvoker.create()
 
     assert provider.provider_id
-    assert provider.version == "0.1.3"
+    assert provider.version == PACKAGE_VERSION
     assert invoker.managed is not None
     assert history_provider.provider_id
-    assert history_provider.version == "0.1.3"
+    assert history_provider.version == PACKAGE_VERSION
     assert history_invoker.managed is not None
     assert cuda_provider.provider_id
-    assert cuda_provider.version == "0.1.3"
+    assert cuda_provider.version == PACKAGE_VERSION
     assert cuda_invoker.managed is not None
     assert pipeline_provider.provider_id
-    assert pipeline_provider.version == "0.1.3"
+    assert pipeline_provider.version == PACKAGE_VERSION
     assert pipeline_invoker.managed is not None
     assert local_provider.provider_id
-    assert local_provider.version == "0.1.3"
+    assert local_provider.version == PACKAGE_VERSION
     assert local_invoker.managed is not None
 
 
@@ -239,7 +243,7 @@ def test_microsoft_ai_options_wrapper_resolves_managed_type():
 
     assert options.provider_id == "openai-compatible"
     assert options.name == "OpenAI Compatible Provider"
-    assert options.version == "0.1.3"
+    assert options.version == PACKAGE_VERSION
     assert options.max_input_tokens == 8192
     assert options.stop_sequences == ()
     assert microsoft_ai_assembly_path().name == "AIKernel.Providers.MicrosoftAI.dll"
