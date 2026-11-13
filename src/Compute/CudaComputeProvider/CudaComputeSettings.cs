@@ -15,7 +15,7 @@ public sealed record CudaComputeSettings
     public string Name { get; init; } = "CUDA Compute Provider";
 
     /// <summary>[EN] Provider contract version. [JA] Provider 契約 version です。</summary>
-    public string Version { get; init; } = "0.1.3";
+    public string Version { get; init; } = global::AIKernel.Providers.ProviderBuildVersion.Value;
 
     /// <summary>[EN] Native CUDA device profile. [JA] Native CUDA device profile です。</summary>
     public string DeviceProfile { get; init; } = "cuda13";

@@ -21,7 +21,7 @@ public abstract class FileSystemProviderBase : StandardProviderBase, IFileSystem
         : base(
             providerId,
             name,
-            "0.1.3",
+            global::AIKernel.Providers.ProviderBuildVersion.Value,
             ["fs.exists", "fs.read_text", "fs.write_text", "fs.list"],
             ["path", "text", "directory", "file"])
     {

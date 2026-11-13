@@ -24,7 +24,7 @@ public static class CudaComputeCapabilityContracts
             "CUDA Compute Provider",
             CapabilityModuleKind.NativeLibrary,
             CapabilityInvocationMode.NativeAbi,
-            GetRequiredMetadataValue(descriptor.Metadata, GpuProviderMetadataKeys.Version, "0.1.3"),
+            GetRequiredMetadataValue(descriptor.Metadata, GpuProviderMetadataKeys.Version, global::AIKernel.Providers.ProviderBuildVersion.Value),
             GetMetadataValue(descriptor.Metadata, "entry_point", "ak_create"),
             GetMetadataValue(descriptor.Metadata, "loader_json", null),
             GetMetadataValue(descriptor.Metadata, "artifact_hash", null),

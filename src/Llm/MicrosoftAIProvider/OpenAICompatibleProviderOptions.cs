@@ -22,7 +22,7 @@ public sealed record OpenAICompatibleProviderOptions : ISecureOptions
     /// <summary>[EN] Documents this public package API member. [JA] Version を取得します。</summary>
     /// <include file="docs.en.xml" path="doc/members/member[@name='P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderOptions.Version']/summary" />
     /// <include file="docs.ja.xml" path="doc/members/member[@name='P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderOptions.Version']/summary" />
-    public string Version { get; init; } = "0.1.3";
+    public string Version { get; init; } = global::AIKernel.Providers.ProviderBuildVersion.Value;
 
     /// <summary>[EN] Documents this public package API member. [JA] ModelId を取得します。</summary>
     /// <include file="docs.en.xml" path="doc/members/member[@name='P:AIKernel.Providers.MicrosoftAI.OpenAICompatibleProviderOptions.ModelId']/summary" />
