@@ -39,11 +39,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)build\ProviderBuildVersion.cs" Link="ProviderBuildVersion.cs" />
     <None Include="$(MSBuildThisFileDirectory)README.md" Pack="true" PackagePath="\" />
     <None Include="$(MSBuildThisFileDirectory)README-ja.md" Pack="true" PackagePath="\" />
     <None Include="$(MSBuildThisFileDirectory)RELEASE_NOTES.md" Pack="true" PackagePath="\" />
     <None Include="$(MSBuildThisFileDirectory)LICENSE" Pack="true" PackagePath="\" />
     <None Include="$(MSBuildThisFileDirectory)assets\aikernel-logo128x128.png" Pack="true" PackagePath="\" />
   </ItemGroup>
+  <Target Name="GenerateProviderBuildVersion" BeforeTargets="BeforeCompile">
+    <WriteLinesToFile File="$(IntermediateOutputPath)ProviderBuildVersion.g.cs"
+                      Lines="namespace AIKernel.Providers%3B internal static class ProviderBuildVersion { internal const string Value = &quot;$(PackageVersion)&quot;%3B }"
+                      Overwrite="true" WriteOnlyWhenDifferent="true" />
+    <ItemGroup>
+      <Compile Include="$(IntermediateOutputPath)ProviderBuildVersion.g.cs" />
+      <FileWrites Include="$(IntermediateOutputPath)ProviderBuildVersion.g.cs" />
+    </ItemGroup>
+  </Target>
 </Project>
