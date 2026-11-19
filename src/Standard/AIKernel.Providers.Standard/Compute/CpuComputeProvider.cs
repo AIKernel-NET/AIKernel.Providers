@@ -1,8 +1,12 @@
 namespace AIKernel.Providers.Standard.Compute;
 
 using AIKernel.Abstractions.Compute;
+using AIKernel.Abstractions.Rom;
 using AIKernel.Common.Results;
+using AIKernel.Core.Rom;
+using AIKernel.Dtos.Rom;
 using AIKernel.Providers.Standard;
+using System.Globalization;
 using System.Runtime.InteropServices;
 
 /// <summary>
@@ -11,6 +15,9 @@ using System.Runtime.InteropServices;
 /// </summary>
 public sealed class CpuComputeProvider : StandardProviderBase, IComputeProvider
 {
+    private const string VectorAddKernelId = "cpu.vector_add.f32.v1";
+    private static readonly ISemanticHasher KernelSourceHasher = new Sha256SemanticHasher();
+
     /// <summary>[EN] Initializes the CPU compute provider. [JA] CPU compute Provider を初期化します。</summary>
     public CpuComputeProvider()
         : base(
@@ -129,17 +136,64 @@ public sealed class CpuComputeProvider : StandardProviderBase, IComputeProvider
         =>
             from validKernel in ValidateKernel(kernel)
             from validBuffers in ValidateBuffers(buffers)
-            from supported in ValidateVectorAddKernel(validKernel)
+            from kernelId in ResolveKernelId(validKernel)
             from executed in Try.Run(() =>
             {
-                ExecuteVectorAdd(validBuffers);
+                ExecuteRegisteredKernel(kernelId, validBuffers);
                 return true;
             })
             select executed;
 
-    private static bool IsVectorAddKernel(ComputeKernel kernel)
-        => kernel.Wgsl.Contains("out[i] = a[i] + b[i]", StringComparison.Ordinal)
-           || kernel.Wgsl.Contains("out[i]=a[i]+b[i]", StringComparison.Ordinal);
+    private static Result<string> ResolveKernelId(ComputeKernel kernel)
+    {
+        if (kernel.WorkgroupSizeX > 0)
+        {
+            // Pin the complete v0.1.3 source under this ID. Only the positive
+            // workgroup size varies; future factory changes must be reviewed.
+            var registeredSource = string.Join("\n",
+                "@group(0) @binding(0) var<storage, read> a: array<f32>;",
+                "@group(0) @binding(1) var<storage, read> b: array<f32>;",
+                "@group(0) @binding(2) var<storage, read_write> out: array<f32>;",
+                "",
+                "@compute @workgroup_size(" + kernel.WorkgroupSizeX.ToString(CultureInfo.InvariantCulture) + ")",
+                "fn main(@builtin(global_invocation_id) gid: vec3<u32>) {",
+                "    let i = gid.x;",
+                "    out[i] = a[i] + b[i];",
+                "}");
+            var actualHash = ComputeSourceHash(kernel.Source);
+
+            // CreateVectorAdd uses the host newline. Register both exact byte
+            // variants without normalizing or discarding any supplied source.
+            if (string.Equals(actualHash, ComputeSourceHash(registeredSource), StringComparison.Ordinal)
+                || string.Equals(actualHash, ComputeSourceHash(registeredSource.Replace("\n", "\r\n", StringComparison.Ordinal)), StringComparison.Ordinal))
+            {
+                return Result<string>.Success(VectorAddKernelId);
+            }
+        }
+
+        return Result<string>.Fail("CpuComputeProvider currently supports the vector-add compute kernel. ErrorCode=CPU_KERNEL_NOT_SUPPORTED");
+    }
+
+    private static string ComputeSourceHash(string source)
+        // The shared hasher hashes CanonicalBody as UTF-8 verbatim. No ROM
+        // formatting or source canonicalization is performed here.
+        => KernelSourceHasher.ComputeHash(new CanonicalizedRomDto
+        {
+            CanonicalBody = source,
+            CanonicalizationVersion = "wgsl-source-exact-v1"
+        });
+
+    private static void ExecuteRegisteredKernel(string kernelId, IReadOnlyList<ComputeBuffer> buffers)
+    {
+        switch (kernelId)
+        {
+            case VectorAddKernelId:
+                ExecuteVectorAdd(buffers);
+                break;
+            default:
+                throw new InvalidOperationException("Unregistered CPU kernel ID. ErrorCode=CPU_KERNEL_NOT_SUPPORTED");
+        }
+    }
 
     private static void ExecuteVectorAdd(IReadOnlyList<ComputeBuffer> buffers)
     {
@@ -203,11 +257,6 @@ public sealed class CpuComputeProvider : StandardProviderBase, IComputeProvider
         => buffers is null
             ? Result<ComputeBuffer[]>.Fail("Compute buffers are required. ErrorCode=CPU_BUFFERS_REQUIRED")
             : Result<ComputeBuffer[]>.Success(buffers);
-
-    private static Result<bool> ValidateVectorAddKernel(ComputeKernel kernel)
-        => IsVectorAddKernel(kernel)
-            ? Result<bool>.Success(true)
-            : Result<bool>.Fail("CpuComputeProvider currently supports the vector-add compute kernel. ErrorCode=CPU_KERNEL_NOT_SUPPORTED");
 
     private static T RequireSuccess<T>(Result<T> result)
         => result.Match(
