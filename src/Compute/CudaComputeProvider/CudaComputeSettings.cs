@@ -15,7 +15,7 @@ public sealed record CudaComputeSettings
     public string Name { get; init; } = "CUDA Compute Provider";
 
     /// <summary>[EN] Provider contract version. [JA] Provider 契約 version です。</summary>
-    public string Version { get; init; } = "0.1.3";
+    public string Version { get; init; } = global::AIKernel.Providers.ProviderBuildVersion.Value;
 
     /// <summary>[EN] Native CUDA device profile. [JA] Native CUDA device profile です。</summary>
     public string DeviceProfile { get; init; } = "cuda13";
@@ -34,13 +34,13 @@ public sealed record CudaComputeSettings
     public string? BackendVersion { get; init; } = "13.0";
 
     /// <summary>[EN] Optional dedicated backend package identifier. [JA] 任意の dedicated backend package 識別子です。</summary>
-    public string? PackageId { get; init; } = "aikernel-cuda13";
+    public string? PackageId { get; init; } = "AIKernel.Kernel";
 
     /// <summary>[EN] Native module identifier. [JA] native module 識別子です。</summary>
-    public string ModuleId { get; init; } = "libtorch_bridge";
+    public string ModuleId { get; init; } = "aikernel_cuda_driver";
 
     /// <summary>[EN] Optional native module ABI version. [JA] 任意の native module ABI version です。</summary>
-    public string? AbiVersion { get; init; } = "1.0";
+    public string? AbiVersion { get; init; } = "1";
 
     /// <summary>[EN] Optional maximum device memory in bytes. [JA] 任意の最大 device memory byte 数です。</summary>
     public long? MaxDeviceMemoryBytes { get; init; }
@@ -49,10 +49,10 @@ public sealed record CudaComputeSettings
     public IReadOnlyList<string> SupportedComputeCapabilities { get; init; } = [];
 
     /// <summary>[EN] Descriptor URI for the native module boundary. [JA] native module 境界の descriptor URI です。</summary>
-    public string NativeModuleRef { get; init; } = "aikernel-cuda://cuda13.0/modules/libtorch_bridge";
+    public string NativeModuleRef { get; init; } = "aikernel-cuda://cuda13.0/modules/aikernel_cuda_driver";
 
     /// <summary>[EN] Native entry point name. [JA] Native entry point 名です。</summary>
-    public string EntryPoint { get; init; } = "libtorch_bridge";
+    public string EntryPoint { get; init; } = "ak_create";
 
     /// <summary>[EN] Optional loader manifest URI. [JA] 任意の loader manifest URI です。</summary>
     public string? LoaderJson { get; init; } = "rom://providers/cuda/loader.json";

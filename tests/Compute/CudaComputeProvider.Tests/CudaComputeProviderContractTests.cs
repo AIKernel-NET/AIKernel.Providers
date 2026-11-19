@@ -162,6 +162,10 @@ public sealed class CudaComputeProviderContractTests
             ProviderId = "providers.cuda",
             BackendName = "cuda13.0",
             NativeModuleRef = "aikernel-cuda://cuda13.0/modules/libtorch_bridge",
+            PackageId = "aikernel-cuda13",
+            ModuleId = "libtorch_bridge",
+            EntryPoint = "libtorch_bridge",
+            AbiVersion = "1.0",
             ArtifactHash = "sha256:cuda",
             MaxDeviceMemoryBytes = 1024
         });

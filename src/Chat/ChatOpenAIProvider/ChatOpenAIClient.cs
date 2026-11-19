@@ -25,16 +25,30 @@ public sealed partial class ChatOpenAIClient(
     public async Task<string> CompleteAsync(
         IReadOnlyList<IModelMessage> messages,
         CancellationToken cancellationToken = default)
+        => (await CompleteDetailedAsync(messages, cancellationToken).ConfigureAwait(false)).Content;
+
+    /// <summary>[EN] Returns text and usage without treating missing usage as zero.
+    /// [JA] 本文と使用量を返します。欠落した使用量をゼロと扱いません。</summary>
+    public async Task<ChatCompletionResult> CompleteDetailedAsync(
+        IReadOnlyList<IModelMessage> messages,
+        CancellationToken cancellationToken = default)
     {
+        using var timeout = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        timeout.CancelAfter(_settings.Timeout);
+        var token = timeout.Token;
         using var request = CreateChatRequest(messages, stream: false);
-        using var response = await _httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
+        using var response = await _httpClient.SendAsync(request, token).ConfigureAwait(false);
         response.EnsureSuccessStatusCode();
 
         var payload = await response.Content
-            .ReadFromJsonAsync(ChatJsonContext.Default.ChatCompletionResponse, cancellationToken)
+            .ReadFromJsonAsync(ChatJsonContext.Default.ChatCompletionResponse, token)
             .ConfigureAwait(false);
 
-        return payload?.Choices?.FirstOrDefault()?.Message?.Content ?? string.Empty;
+        if (payload?.Usage is { } usage && (usage.PromptTokens < 0 || usage.CompletionTokens < 0))
+            throw new InvalidDataException("The chat provider returned invalid token usage.");
+        var choice = payload?.Choices?.FirstOrDefault();
+        return new ChatCompletionResult(choice?.Message?.Content ?? string.Empty, choice?.FinishReason,
+            payload?.Usage?.PromptTokens, payload?.Usage?.CompletionTokens);
     }
 
     /// <summary>
@@ -162,8 +176,11 @@ public sealed partial class ChatOpenAIClient(
     private HttpRequestMessage CreateChatRequest(IReadOnlyList<IModelMessage> messages, bool stream)
     {
         ArgumentNullException.ThrowIfNull(messages);
+        if (_settings.MaxCompletionTokens is <= 0)
+            throw new ArgumentOutOfRangeException(nameof(_settings.MaxCompletionTokens), "Completion token limit must be positive.");
         var payload = new ChatCompletionRequest(_settings.Model,
-            messages.Select(message => new ChatCompletionMessage(message.Role, message.Content)).ToArray(), stream);
+            messages.Select(message => new ChatCompletionMessage(message.Role, message.Content)).ToArray(), stream,
+            _settings.MaxCompletionTokens);
         var request = CreateRequest("chat/completions");
         request.Content = JsonContent.Create(payload, ChatJsonContext.Default.ChatCompletionRequest);
         return request;
@@ -187,17 +204,24 @@ public sealed partial class ChatOpenAIClient(
     private sealed record ChatCompletionRequest(
         [property: JsonPropertyName("model")] string Model,
         [property: JsonPropertyName("messages")] IReadOnlyList<ChatCompletionMessage> Messages,
-        [property: JsonPropertyName("stream"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)] bool Stream);
+        [property: JsonPropertyName("stream"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)] bool Stream,
+        [property: JsonPropertyName("max_completion_tokens"), JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)] int? MaxCompletionTokens);
 
     private sealed record ChatCompletionMessage(
         [property: JsonPropertyName("role")] string Role,
         [property: JsonPropertyName("content")] string Content);
 
     private sealed record ChatCompletionResponse(
-        [property: JsonPropertyName("choices")] ChatCompletionChoice[]? Choices);
+        [property: JsonPropertyName("choices")] ChatCompletionChoice[]? Choices,
+        [property: JsonPropertyName("usage")] ChatUsage? Usage);
+
+    private sealed record ChatUsage(
+        [property: JsonPropertyName("prompt_tokens")] int? PromptTokens,
+        [property: JsonPropertyName("completion_tokens")] int? CompletionTokens);
 
     private sealed record ChatCompletionChoice(
-        [property: JsonPropertyName("message")] ChatCompletionMessage? Message);
+        [property: JsonPropertyName("message")] ChatCompletionMessage? Message,
+        [property: JsonPropertyName("finish_reason")] string? FinishReason);
 
     private sealed record ChatStreamChunk(
         [property: JsonPropertyName("choices")] ChatStreamChoice?[]? Choices);

@@ -15,7 +15,7 @@ public sealed record DynamicPipelineCompilerSettings
     public string Name { get; init; } = "Dynamic Pipeline Compiler Provider";
 
     /// <summary>[EN] Provider contract version. [JA] Provider 契約 version です。</summary>
-    public string Version { get; init; } = "0.1.3";
+    public string Version { get; init; } = global::AIKernel.Providers.ProviderBuildVersion.Value;
 
     /// <summary>[EN] DSL schema version. [JA] DSL schema version です。</summary>
     public string DslSchemaVersion { get; init; } = "0.2";
