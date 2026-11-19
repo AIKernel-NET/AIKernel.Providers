@@ -4,15 +4,17 @@
     <Version>0.1.4-dev13</Version>
     <PackageVersion>0.1.4-dev13</PackageVersion>
     <InformationalVersion>0.1.4-dev13</InformationalVersion>
+    <!-- First release of this package; there is no baseline package on NuGet. -->
+    <PackageValidationBaselineVersion />
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <PackageReadmeFile>COSMOS_SCENE_P0.md</PackageReadmeFile>
-    <PackageReleaseNotes>Contain host clock failures in the readiness error path. Return probe_failed without private details, preserve cancellation type/task state/caller token, revoke cached approval before fallback clock reads and retain stopped/quarantined state. Healthy-clock failure bytes, hash formulas, Scene v1, journal formats and official 0.1.3-dev1 dependencies remain unchanged. Real deployment acceptance is pending.</PackageReleaseNotes>
+    <PackageReleaseNotes>Contain host clock failures in the readiness error path. Return probe_failed without private details, preserve cancellation type/task state/caller token, revoke cached approval before fallback clock reads and retain stopped/quarantined state. Healthy-clock failure bytes, hash formulas, Scene v1, journal formats remain unchanged. Real deployment acceptance is pending.</PackageReleaseNotes>
     <Description>Optional, authenticated scene observation jobs and NVIDIA Cosmos Reasoner transport. Does not execute proposed actions.</Description>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="AIKernel.Abstractions" Version="[0.1.3-dev1]" />
-    <PackageReference Include="AIKernel.Dtos" Version="[0.1.3-dev1]" />
-    <PackageReference Include="AIKernel.Enums" Version="[0.1.3-dev1]" />
+    <PackageReference Include="AIKernel.Abstractions" Version="$(AIKernelContractPackageVersion)" />
+    <PackageReference Include="AIKernel.Dtos" Version="$(AIKernelContractPackageVersion)" />
+    <PackageReference Include="AIKernel.Enums" Version="$(AIKernelContractPackageVersion)" />
     <None Include="schemas/*.json" Pack="true" PackagePath="schemas" />
     <None Include="../../../docs/operations/COSMOS_SCENE_P0.md" Pack="true" PackagePath="/" />
     <None Include="../../../docs/operations/COSMOS_SCENE_ERRORS.md" Pack="true" PackagePath="/" />

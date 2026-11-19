@@ -9,7 +9,8 @@ JA: Microsoft.Extensions.AI を利用した AIKernel.NET 向け Provider 実装�
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AIKernel.Common" Version="[$(AIKernelCorePackageVersion)]" />
+    <ProjectReference Include="$(AIKernelCommonSourceProject)" Condition="'$(AIKernelCommonSourceProject)' != ''" />
+    <PackageReference Condition="'$(AIKernelCommonSourceProject)' == ''" Include="AIKernel.Common" Version="[$(AIKernelCorePackageVersion)]" />
     <PackageReference Include="AIKernel.Core" Version="[$(AIKernelCorePackageVersion)]" />
     <PackageReference Include="AIKernel.Abstractions" Version="$(AIKernelPackageVersion)" />
     <PackageReference Include="AIKernel.Dtos" Version="$(AIKernelPackageVersion)" />
