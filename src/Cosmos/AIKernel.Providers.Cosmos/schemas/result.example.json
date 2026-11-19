@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "scene-analysis.v1",
+  "requestId": "req-example",
+  "sessionEpoch": "epoch-example",
+  "snapshotId": "snap-example",
+  "status": "completed",
+  "analysisOnly": true,
+  "freshnessVerified": false,
+  "errorCode": "example_only",
+  "sceneRevision": 41,
+  "layoutRevision": 8,
+  "cameraId": "camera-wide",
+  "policyRevision": "public-policy-3",
+  "capturedAtUtc": "2026-11-11T03:00:00+00:00",
+  "expiresAtUtc": "2026-11-11T03:00:05+00:00",
+  "observations": [],
+  "proposals": [],
+  "provider": {
+    "backend": "example-only",
+    "model": "not-a-real-model",
+    "revision": "not-measured",
+    "precision": "none",
+    "runtime": "none",
+    "endpointId": "none",
+    "gpuIds": [],
+    "isMock": true,
+    "imageDigest": null
+  },
+  "timings": {
+    "queueMs": 0,
+    "preparationMs": 0,
+    "inferenceMs": 0,
+    "validationMs": 0,
+    "observationAgeMs": 0
+  },
+  "backendCancellation": "not_requested",
+  "mode": "shadow",
+  "retryAfterMs": null
+}

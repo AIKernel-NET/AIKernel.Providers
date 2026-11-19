@@ -1,0 +1,61 @@
+{
+  "type": "object",
+  "properties": {
+    "model": {
+      "type": "string"
+    },
+    "revision": {
+      "type": "string"
+    },
+    "precision": {
+      "type": "string"
+    },
+    "runtime": {
+      "type": "string"
+    },
+    "gpuIds": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "imageDigest": {
+      "type": "string"
+    },
+    "observedAtUtc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "expiresAtUtc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "state": {
+      "type": "string",
+      "enum": [
+        "disabled",
+        "loading",
+        "warming_up",
+        "ready",
+        "busy",
+        "degraded",
+        "unavailable"
+      ]
+    }
+  },
+  "required": [
+    "model",
+    "revision",
+    "precision",
+    "runtime",
+    "gpuIds",
+    "imageDigest",
+    "observedAtUtc",
+    "expiresAtUtc",
+    "state"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:aikernel:cosmos:scene-v1:deployment-evidence",
+  "description": "Wire shape. Cross-field authorization, catalog, snapshot, duplicate keys, byte limits and configured limits are additionally enforced by SceneService. See COSMOS_SCENE_P0.md."
+}

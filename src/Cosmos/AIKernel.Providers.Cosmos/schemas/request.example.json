@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "scene-observation.v1",
+  "requestId": "req-example",
+  "sessionEpoch": "epoch-example",
+  "snapshotId": "snap-example",
+  "captureSource": "program-composite",
+  "capturedAtUtc": "2026-11-11T03:00:00+00:00",
+  "maxObservationAgeMs": 5000,
+  "remainingBudgetMs": 3000,
+  "sceneRevision": 41,
+  "layoutRevision": 8,
+  "cameraId": "camera-wide",
+  "policyRevision": "public-policy-3",
+  "permissionScope": "public",
+  "mode": "shadow",
+  "media": [
+    {
+      "mediaId": "media-example",
+      "frameId": "frame-1",
+      "mimeType": "image/png",
+      "width": 960,
+      "height": 540,
+      "offsetMs": 0
+    }
+  ],
+  "actors": [
+    {
+      "actorId": "actor-a",
+      "assetRevision": 12,
+      "activity": "listening",
+      "visible": true,
+      "facing": "unknown",
+      "speakerState": "unknown"
+    }
+  ],
+  "targets": [
+    {
+      "targetId": "board-a",
+      "kind": "presentation-surface"
+    }
+  ],
+  "allowedActions": [
+    {
+      "actionId": "look_at",
+      "actorIds": [
+        "actor-a"
+      ],
+      "targetIds": [
+        "board-a"
+      ]
+    }
+  ],
+  "maxProposals": 2
+}

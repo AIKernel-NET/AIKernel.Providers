@@ -1,0 +1,14 @@
+{
+  "endpoint": "https://cosmos.invalid/",
+  "endpointId": "managed-cosmos",
+  "model": "REPLACE_WITH_V1_MODELS_ID",
+  "revision": "REPLACE_WITH_PINNED_MODEL_REVISION",
+  "precision": "REPLACE_WITH_DEPLOYED_PRECISION",
+  "runtime": "REPLACE_WITH_PINNED_NIM_VERSION",
+  "imageDigest": "REPLACE_WITH_CONTAINER_SHA256_DIGEST",
+  "gpuIds": ["REPLACE_WITH_ACTUAL_GPU_UUID"],
+  "allowedAddresses": ["192.0.2.10"],
+  "journalDirectory": "D:\\AIKernel\\private-cosmos-jobs",
+  "deploymentEvidenceFile": "D:\\AIKernel\\private-cosmos-control\\observed-deployment.json",
+  "transportTimeoutSeconds": 300
+}

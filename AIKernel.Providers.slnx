@@ -1,4 +1,10 @@
 <Solution>
+  <Folder Name="/samples/">
+    <Project Path="samples/Cosmos.SceneClient/Cosmos.SceneClient.csproj" />
+  </Folder>
+  <Folder Name="/tools/">
+    <Project Path="tools/AIKernel.Cosmos.ContractExport/AIKernel.Cosmos.ContractExport.csproj" />
+  </Folder>
   <Folder Name="/src/" />
   <Folder Name="/src/Audio/">
     <Project Path="src/Audio/AIKernel.Providers.Audio/AIKernel.Providers.Audio.csproj" />
@@ -13,6 +19,9 @@
   </Folder>
   <Folder Name="/src/Council/">
     <Project Path="src/Council/AIKernel.Providers.Council/AIKernel.Providers.Council.csproj" />
+  </Folder>
+  <Folder Name="/src/Cosmos/">
+    <Project Path="src/Cosmos/AIKernel.Providers.Cosmos/AIKernel.Providers.Cosmos.csproj" />
   </Folder>
   <Folder Name="/src/Llm/">
     <Project Path="src/Llm/LocalLlmProvider/LocalLlmProvider.csproj" />
@@ -44,6 +53,9 @@
   </Folder>
   <Folder Name="/tests/Council/">
     <Project Path="tests/Council/AIKernel.Providers.Council.Tests/AIKernel.Providers.Council.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tests/Cosmos/">
+    <Project Path="tests/Cosmos/AIKernel.Providers.Cosmos.Tests/AIKernel.Providers.Cosmos.Tests.csproj" />
   </Folder>
   <Folder Name="/tests/Dependency/">
     <Project Path="tests/Dependency/AIKernel.Providers.DependencyGuard.Tests/AIKernel.Providers.DependencyGuard.Tests.csproj" />

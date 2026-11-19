@@ -1,0 +1,248 @@
+{
+  "type": "object",
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "scene-observation.v1"
+    },
+    "requestId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$",
+      "maxLength": 128
+    },
+    "sessionEpoch": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$",
+      "maxLength": 128
+    },
+    "snapshotId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$",
+      "maxLength": 128
+    },
+    "captureSource": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$",
+      "maxLength": 128
+    },
+    "capturedAtUtc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "maxObservationAgeMs": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 600000
+    },
+    "remainingBudgetMs": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 600000
+    },
+    "sceneRevision": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "layoutRevision": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "cameraId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$",
+      "maxLength": 128
+    },
+    "policyRevision": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$",
+      "maxLength": 128
+    },
+    "permissionScope": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$",
+      "maxLength": 128
+    },
+    "mode": {
+      "type": "string",
+      "enum": [
+        "shadow",
+        "observe-only",
+        "propose"
+      ]
+    },
+    "media": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "mediaId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$",
+            "maxLength": 128
+          },
+          "frameId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$",
+            "maxLength": 128
+          },
+          "mimeType": {
+            "type": "string",
+            "const": "image/png"
+          },
+          "width": {
+            "type": "integer"
+          },
+          "height": {
+            "type": "integer"
+          },
+          "offsetMs": {
+            "type": "integer",
+            "minimum": -600000,
+            "maximum": 0
+          }
+        },
+        "required": [
+          "mediaId",
+          "frameId",
+          "mimeType",
+          "width",
+          "height",
+          "offsetMs"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1,
+      "maxItems": 32
+    },
+    "actors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "actorId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$",
+            "maxLength": 128
+          },
+          "assetRevision": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "activity": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$",
+            "maxLength": 128
+          },
+          "visible": {
+            "type": "boolean"
+          },
+          "facing": {
+            "type": "string",
+            "default": "unknown",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$",
+            "maxLength": 128
+          },
+          "speakerState": {
+            "type": "string",
+            "default": "unknown",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$",
+            "maxLength": 128
+          }
+        },
+        "required": [
+          "actorId",
+          "assetRevision",
+          "activity",
+          "visible"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 256
+    },
+    "targets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "targetId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$",
+            "maxLength": 128
+          },
+          "kind": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$",
+            "maxLength": 128
+          }
+        },
+        "required": [
+          "targetId",
+          "kind"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 128
+    },
+    "allowedActions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "actionId": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$",
+            "maxLength": 128
+          },
+          "actorIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "targetIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "actionId",
+          "actorIds",
+          "targetIds"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 128
+    },
+    "maxProposals": {
+      "type": "integer",
+      "minimum": 0
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "requestId",
+    "sessionEpoch",
+    "snapshotId",
+    "captureSource",
+    "capturedAtUtc",
+    "maxObservationAgeMs",
+    "remainingBudgetMs",
+    "sceneRevision",
+    "layoutRevision",
+    "cameraId",
+    "policyRevision",
+    "permissionScope",
+    "mode",
+    "media",
+    "actors",
+    "targets",
+    "allowedActions",
+    "maxProposals"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:aikernel:cosmos:scene-v1:request",
+  "description": "Wire shape. Cross-field authorization, catalog, snapshot, duplicate keys, byte limits and configured limits are additionally enforced by SceneService. See COSMOS_SCENE_P0.md."
+}

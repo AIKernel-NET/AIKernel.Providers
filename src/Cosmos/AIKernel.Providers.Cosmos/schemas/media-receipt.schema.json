@@ -1,0 +1,31 @@
+{
+  "type": "object",
+  "properties": {
+    "mediaId": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,127}$",
+      "maxLength": 128
+    },
+    "contentHash": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "sizeBytes": {
+      "type": "integer"
+    },
+    "expiresAtUtc": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "mediaId",
+    "contentHash",
+    "sizeBytes",
+    "expiresAtUtc"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:aikernel:cosmos:scene-v1:media-receipt",
+  "description": "Wire shape. Cross-field authorization, catalog, snapshot, duplicate keys, byte limits and configured limits are additionally enforced by SceneService. See COSMOS_SCENE_P0.md."
+}
