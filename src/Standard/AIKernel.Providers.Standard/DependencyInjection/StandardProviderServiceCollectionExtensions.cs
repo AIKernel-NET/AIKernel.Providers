@@ -32,7 +32,13 @@ public static class StandardProviderServiceCollectionExtensions
     /// [JA] fluent composition 用に同じ service collection を返します。
     /// </returns>
     public static IServiceCollection AddAIKernelStandardProviders(this IServiceCollection services)
+        => AddAIKernelStandardProviders(services, []);
+
+    /// <summary>Registers the standard providers and permits connections to the specified network origins.</summary>
+    public static IServiceCollection AddAIKernelStandardProviders(this IServiceCollection services, params string[] allowedNetworkOrigins)
     {
+        ArgumentNullException.ThrowIfNull(allowedNetworkOrigins);
+        var http = new HttpNetworkProvider(allowedNetworkOrigins);
         ArgumentNullException.ThrowIfNull(services);
 
         services.AddSingleton<CpuComputeProvider>();
@@ -51,7 +57,7 @@ public static class StandardProviderServiceCollectionExtensions
         services.AddSingleton<IProcessSupervisorProvider>(static provider => provider.GetRequiredService<DefaultProcessSupervisorProvider>());
         services.AddSingleton<IProvider>(static provider => provider.GetRequiredService<DefaultProcessSupervisorProvider>());
 
-        services.AddSingleton<HttpNetworkProvider>();
+        services.AddSingleton(http);
         services.AddSingleton<INetworkProvider>(static provider => provider.GetRequiredService<HttpNetworkProvider>());
         services.AddSingleton<IProvider>(static provider => provider.GetRequiredService<HttpNetworkProvider>());
 

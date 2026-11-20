@@ -51,19 +51,36 @@ public sealed class NetworkProvider : StandardProviderBase
 /// </summary>
 public sealed class HttpNetworkProvider : StandardProviderBase, INetworkProvider
 {
+    private static readonly HttpClient SharedClient = new(new HttpClientHandler { AllowAutoRedirect = false });
     private readonly HttpClient _httpClient;
+    private readonly HashSet<string> _allowedOrigins;
 
     /// <summary>[EN] Initializes the HTTP network provider. [JA] HTTP network Provider を初期化します。</summary>
     public HttpNetworkProvider()
-        : this(new HttpClient())
+        : this(SharedClient, [])
     {
     }
 
     /// <summary>[EN] Initializes the HTTP network provider with a client. [JA] client で HTTP network Provider を初期化します。</summary>
-    public HttpNetworkProvider(HttpClient httpClient)
+    public HttpNetworkProvider(HttpClient httpClient) : this(httpClient, []) { }
+
+    internal HttpNetworkProvider(IEnumerable<string> allowedOrigins) : this(SharedClient, allowedOrigins) { }
+
+    /// <summary>Allows exact HTTP, HTTPS and TCP origins. The supplied handler must disable automatic redirects.</summary>
+    public HttpNetworkProvider(HttpClient httpClient, IEnumerable<string> allowedOrigins)
         : base("providers.network.http", "HTTP Network Provider", global::AIKernel.Providers.ProviderBuildVersion.Value, ["network.http.get", "network.http.post"], ["http"])
     {
         _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+        ArgumentNullException.ThrowIfNull(allowedOrigins);
+        _allowedOrigins = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var origin in allowedOrigins)
+        {
+            if (!Uri.TryCreate(origin, UriKind.Absolute, out var uri) || uri.Scheme is not ("http" or "https" or "tcp") ||
+                string.IsNullOrEmpty(uri.Host) || uri.UserInfo.Length != 0 || uri.AbsolutePath != "/" ||
+                uri.Query.Length != 0 || uri.Fragment.Length != 0 || uri.Port <= 0)
+                throw new ArgumentException("Expected an HTTP, HTTPS or TCP origin with host and port.", nameof(allowedOrigins));
+            _allowedOrigins.Add(uri.GetLeftPart(UriPartial.Authority));
+        }
     }
 
     /// <summary>[EN] Documents this public package API member. [JA] ConnectAsync を実行します。</summary>
@@ -72,54 +89,68 @@ public sealed class HttpNetworkProvider : StandardProviderBase, INetworkProvider
         => RequireSuccess(await TryConnectAsync(host, port).ConfigureAwait(false));
 
     /// <summary>[EN] Safely connects to a TCP endpoint as a Result. [JA] TCP endpoint へ Result として安全に接続します。</summary>
-    public Task<Result<INetworkStream>> TryConnectAsync(string host, int port)
+    public Task<Result<INetworkStream>> TryConnectAsync(string host, int port) => TryConnectAsync(host, port, CancellationToken.None);
+
+    /// <summary>Runs the network operation with caller cancellation and the configured timeout.</summary>
+    public async Task<INetworkStream> ConnectAsync(string host, int port, CancellationToken cancellationToken)
+    {
+        var result = await TryConnectAsync(host, port, cancellationToken).ConfigureAwait(false);
+        cancellationToken.ThrowIfCancellationRequested();
+        return RequireSuccess(result);
+    }
+
+    /// <summary>Runs the network operation with caller cancellation and the configured timeout.</summary>
+    public Task<Result<INetworkStream>> TryConnectAsync(string host, int port, CancellationToken cancellationToken)
     {
         return
             from validHost in ValidateHost(host).AsTask()
             from validPort in ValidatePort(port).AsTask()
             from stream in Try.RunAsync<INetworkStream>(async () =>
             {
+                if (Uri.CheckHostName(validHost) == UriHostNameType.Unknown ||
+                    !_allowedOrigins.Contains(new UriBuilder("tcp", validHost, validPort).Uri.GetLeftPart(UriPartial.Authority)))
+                    throw new InvalidOperationException("TCP destination is not permitted.");
                 var client = new TcpClient();
-                await client.ConnectAsync(validHost, validPort).ConfigureAwait(false);
-                return new TcpNetworkStream(client);
+                try
+                {
+                    using var timeout = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+                    timeout.CancelAfter(TimeSpan.FromSeconds(30));
+                    await client.ConnectAsync(validHost, validPort, timeout.Token).ConfigureAwait(false);
+                    return new TcpNetworkStream(client);
+                }
+                catch
+                {
+                    client.Dispose();
+                    throw;
+                }
             })
             select stream;
     }
 
     /// <summary>[EN] Documents this public package API member. [JA] HttpGetAsync を実行します。</summary>
     /// <inheritdoc />
-    public async Task<IHttpResponse> HttpGetAsync(string url)
-        => RequireSuccess(await TryHttpGetAsync(url).ConfigureAwait(false));
+    public Task<IHttpResponse> HttpGetAsync(string url) => HttpGetAsync(url, CancellationToken.None);
+
+    /// <summary>Runs the network operation with caller cancellation and the configured timeout.</summary>
+    public Task<IHttpResponse> HttpGetAsync(string url, CancellationToken token) => SendHttpAsync(HttpMethod.Get, url, null, token);
 
     /// <summary>[EN] Safely executes HTTP GET as a Result. [JA] HTTP GET を Result として安全に実行します。</summary>
     public Task<Result<IHttpResponse>> TryHttpGetAsync(string url)
     {
-        return
-            from validUrl in ValidateUrl(url).AsTask()
-            from response in Try.RunAsync<IHttpResponse>(async () =>
-            {
-                using var httpResponse = await _httpClient.GetAsync(validUrl).ConfigureAwait(false);
-                return await HttpNetworkResponse.FromAsync(httpResponse).ConfigureAwait(false);
-            })
-            select response;
+        return Try.RunAsync(() => HttpGetAsync(url));
     }
 
     /// <summary>[EN] Documents this public package API member. [JA] HttpPostAsync を実行します。</summary>
     /// <inheritdoc />
-    public async Task<IHttpResponse> HttpPostAsync(string url, byte[] body)
-        => RequireSuccess(await TryHttpPostAsync(url, body).ConfigureAwait(false));
+    public Task<IHttpResponse> HttpPostAsync(string url, byte[] body) => HttpPostAsync(url, body, CancellationToken.None);
+
+    /// <summary>Runs the network operation with caller cancellation and the configured timeout.</summary>
+    public Task<IHttpResponse> HttpPostAsync(string url, byte[] body, CancellationToken token) => SendHttpAsync(HttpMethod.Post, url, body, token);
 
     /// <summary>[EN] Safely executes HTTP POST as a Result. [JA] HTTP POST を Result として安全に実行します。</summary>
     public Task<Result<IHttpResponse>> TryHttpPostAsync(string url, byte[]? body)
     {
-        return
-            from validUrl in ValidateUrl(url).AsTask()
-            from response in Try.RunAsync<IHttpResponse>(async () =>
-            {
-                using var httpResponse = await _httpClient.PostAsync(validUrl, new ByteArrayContent(body ?? [])).ConfigureAwait(false);
-                return await HttpNetworkResponse.FromAsync(httpResponse).ConfigureAwait(false);
-            })
-            select response;
+        return Try.RunAsync(() => HttpPostAsync(url, body ?? []));
     }
 
     private static Result<string> ValidateHost(string host)
@@ -132,10 +163,19 @@ public sealed class HttpNetworkProvider : StandardProviderBase, INetworkProvider
             ? Result<int>.Success(port)
             : Result<int>.Fail("Network port must be between 1 and 65535. ErrorCode=NETWORK_PORT_INVALID");
 
-    private static Result<string> ValidateUrl(string url)
-        => string.IsNullOrWhiteSpace(url)
-            ? Result<string>.Fail("Network URL is required. ErrorCode=NETWORK_URL_REQUIRED")
-            : Result<string>.Success(url);
+    private async Task<IHttpResponse> SendHttpAsync(HttpMethod method, string url, byte[]? body, CancellationToken token)
+    {
+        if (!Uri.TryCreate(url, UriKind.Absolute, out var uri) || uri.Scheme is not ("https" or "http") ||
+            uri.UserInfo.Length != 0 || !_allowedOrigins.Contains(uri.GetLeftPart(UriPartial.Authority)))
+            throw new InvalidOperationException("HTTP destination is not permitted.");
+        using var timeout = CancellationTokenSource.CreateLinkedTokenSource(token);
+        timeout.CancelAfter(_httpClient.Timeout);
+        using var request = new HttpRequestMessage(method, uri) { Content = body is null ? null : new ByteArrayContent(body) };
+        using var response = await _httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, timeout.Token).ConfigureAwait(false);
+        await response.Content.LoadIntoBufferAsync(16 * 1024 * 1024, timeout.Token).ConfigureAwait(false);
+        return await HttpNetworkResponse.FromAsync(response).ConfigureAwait(false);
+    }
+
 
     private static T RequireSuccess<T>(Result<T> result)
         => result.Match(
@@ -157,7 +197,18 @@ public sealed class WebSocketNetworkProvider()
         => RequireSuccess(await TryConnectAsync(host, port).ConfigureAwait(false));
 
     /// <summary>[EN] Safely connects to a WebSocket endpoint as a Result. [JA] WebSocket endpoint へ Result として安全に接続します。</summary>
-    public Task<Result<INetworkStream>> TryConnectAsync(string host, int port)
+    public Task<Result<INetworkStream>> TryConnectAsync(string host, int port) => TryConnectAsync(host, port, CancellationToken.None);
+
+    /// <summary>Runs the network operation with caller cancellation and the configured timeout.</summary>
+    public async Task<INetworkStream> ConnectAsync(string host, int port, CancellationToken cancellationToken)
+    {
+        var result = await TryConnectAsync(host, port, cancellationToken).ConfigureAwait(false);
+        cancellationToken.ThrowIfCancellationRequested();
+        return RequireSuccess(result);
+    }
+
+    /// <summary>Runs the network operation with caller cancellation and the configured timeout.</summary>
+    public Task<Result<INetworkStream>> TryConnectAsync(string host, int port, CancellationToken cancellationToken)
     {
         return
             from validHost in ValidateHost(host).AsTask()
@@ -165,8 +216,18 @@ public sealed class WebSocketNetworkProvider()
             from stream in Try.RunAsync<INetworkStream>(async () =>
             {
                 var webSocket = new ClientWebSocket();
-                await webSocket.ConnectAsync(new Uri($"ws://{validHost}:{validPort}/"), CancellationToken.None).ConfigureAwait(false);
-                return new WebSocketNetworkStream(webSocket);
+                try
+                {
+                    using var timeout = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+                    timeout.CancelAfter(TimeSpan.FromSeconds(30));
+                    await webSocket.ConnectAsync(new Uri($"ws://{validHost}:{validPort}/"), timeout.Token).ConfigureAwait(false);
+                    return new WebSocketNetworkStream(webSocket);
+                }
+                catch
+                {
+                    webSocket.Dispose();
+                    throw;
+                }
             })
             select stream;
     }

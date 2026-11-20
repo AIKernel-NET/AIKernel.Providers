@@ -77,19 +77,25 @@ public sealed class ProcessSupervisorProvider : StandardProviderBase
         => Update(processId, ProcessState.Running);
 
     private bool Update(string processId, ProcessState state)
-        => ProcessOption(processId)
-            .Match(
-                () => false,
-                current =>
-                {
-                    _processes[processId] = current with { State = state };
-                    return true;
-                });
+    {
+        while (_processes.TryGetValue(processId, out var current))
+        {
+            var next = current with { State = state };
+            if (!_processes.TryUpdate(processId, next, current)) continue;
+            if (state == ProcessState.Stopped) TrimStopped();
+            return true;
+        }
+        return false;
+    }
 
-    private Option<ProcessInfo> ProcessOption(string processId)
-        => _processes.TryGetValue(processId, out var current)
-            ? Option<ProcessInfo>.Some(current)
-            : Option<ProcessInfo>.None();
+    private void TrimStopped()
+    {
+        foreach (var pair in _processes.Where(p => p.Value.State == ProcessState.Stopped)
+            .OrderByDescending(p => p.Value.StartedAtUtc).ThenBy(p => p.Key, StringComparer.Ordinal).Skip(256))
+            _processes.TryRemove(pair);
+    }
+
+
 }
 
 /// <summary>
@@ -112,13 +118,15 @@ public sealed class DefaultProcessSupervisorProvider : StandardProviderBase, IPr
     }
 
     /// <summary>[EN] Starts a logical process snapshot. [JA] logical process snapshot を開始します。</summary>
-    public CoreProcessInfo Start(string name, IReadOnlyDictionary<string, string>? metadata = null)
+    public CoreProcessInfo Start(string name, IReadOnlyDictionary<string, string>? metadata = null) => Create(name, metadata, CoreProcessState.Running);
+
+    private CoreProcessInfo Create(string name, IReadOnlyDictionary<string, string>? metadata, CoreProcessState state)
     {
         var id = new ProcessId(Guid.NewGuid());
         var info = new CoreProcessInfo(
             id,
             ProcessSupervisorValidation.RequireProcessName(name),
-            CoreProcessState.Running,
+            state,
             DateTimeOffset.UtcNow,
             metadata ?? new Dictionary<string, string>());
         _processes[id] = info;
@@ -130,7 +138,7 @@ public sealed class DefaultProcessSupervisorProvider : StandardProviderBase, IPr
     public Task<IProcess> CreateProcessAsync(string name, object? args = null)
     {
         var metadata = args as IReadOnlyDictionary<string, string>;
-        var info = Start(name, metadata);
+        var info = Create(name, metadata, CoreProcessState.Starting);
         return Task.FromResult<IProcess>(new StandardManagedProcess(info, UpdateProcessState));
     }
 
@@ -162,13 +170,19 @@ public sealed class DefaultProcessSupervisorProvider : StandardProviderBase, IPr
     }
 
     private void UpdateCoreProcessState(ProcessId id, CoreProcessState state)
-        => CoreProcessOption(id)
-            .Tap(current => _processes[id] = current with { State = state });
-
-    private Option<CoreProcessInfo> CoreProcessOption(ProcessId id)
-        => _processes.TryGetValue(id, out var current)
-            ? Option<CoreProcessInfo>.Some(current)
-            : Option<CoreProcessInfo>.None();
+    {
+        while (_processes.TryGetValue(id, out var current))
+        {
+            if (!_processes.TryUpdate(id, current with { State = state }, current)) continue;
+            if (state == CoreProcessState.Stopped)
+            {
+                foreach (var pair in _processes.Where(p => p.Value.State == CoreProcessState.Stopped)
+                    .OrderByDescending(p => p.Value.StartedAtUtc).ThenBy(p => p.Key.Value).Skip(256))
+                    _processes.TryRemove(pair);
+            }
+            break;
+        }
+    }
 
 }
 

@@ -139,14 +139,16 @@ public sealed partial class ChatOpenAIClient(
             throw new InvalidOperationException("An embedding model must be configured.");
         }
 
+        using var timeout = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        timeout.CancelAfter(_settings.Timeout);
         using var request = CreateRequest("embeddings");
         request.Content = JsonContent.Create(
             new EmbeddingRequest(model, inputs, "float"), ChatJsonContext.Default.EmbeddingRequest);
-        using var response = await _httpClient.SendAsync(request, cancellationToken).ConfigureAwait(false);
+        using var response = await _httpClient.SendAsync(request, timeout.Token).ConfigureAwait(false);
         response.EnsureSuccessStatusCode();
 
         var payload = await response.Content
-            .ReadFromJsonAsync(ChatJsonContext.Default.EmbeddingResponse, cancellationToken).ConfigureAwait(false);
+            .ReadFromJsonAsync(ChatJsonContext.Default.EmbeddingResponse, timeout.Token).ConfigureAwait(false);
         if (payload?.Data is not { } data || data.Length != inputs.Length)
         {
             throw new InvalidDataException("The embedding provider returned the wrong number of vectors.");

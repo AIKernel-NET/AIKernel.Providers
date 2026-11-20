@@ -21,6 +21,27 @@ namespace AIKernel.Providers.Tests;
 
 public sealed class StandardProvidersContractTests
 {
+    private sealed class Credentials : IVfsCredentials
+    {
+        public string? Username => null;
+        public string? ApiKey => null;
+        public string? Token => null;
+        public IReadOnlyDictionary<string, object> Parameters { get; } = new Dictionary<string, object>();
+    }
+
+    [Fact]
+    public async Task VfsSessionPreservesBinaryBytesWithoutSharingMutableData()
+    {
+        var memory = new MemoryFileSystemProvider { CredentialValidator = _ => true };
+        await using var session = await memory.OpenSessionAsync(new Credentials());
+        byte[] original = [0, 255, 128, 13];
+        await session.WriteFileAsync("/image", original);
+        original[1] = 0;
+        var snapshot = await session.ReadFileAsync("/image");
+        Assert.Equal(new byte[] { 0, 255, 128, 13 }, await snapshot.ReadAsync());
+        Assert.Equal(4, snapshot.Size);
+    }
+
     [Fact]
     public async Task StandardProviders_ExposeProviderLifecycle()
     {
@@ -100,7 +121,7 @@ public sealed class StandardProvidersContractTests
         var fileSystem = new MemoryFileSystemProvider();
         var logger = new ConsoleLoggingProvider();
         var supervisor = new DefaultProcessSupervisorProvider();
-        var network = new HttpNetworkProvider(new HttpClient(new StaticHttpHandler()));
+        var network = new HttpNetworkProvider(new HttpClient(new StaticHttpHandler()), ["https://example.test"]);
 
         Assert.True(((IComputeProvider)compute).IsAvailable());
         ((ILoggingProvider)logger).Log(LogLevel.Information, "standard provider test");
@@ -110,6 +131,10 @@ public sealed class StandardProvidersContractTests
         Assert.Single(await ((IProcessSupervisorProvider)supervisor).ListAsync());
 
         var response = await ((INetworkProvider)network).HttpGetAsync("https://example.test/");
+        await Assert.ThrowsAsync<InvalidOperationException>(() => network.HttpGetAsync("http://example.test/"));
+        await Assert.ThrowsAsync<InvalidOperationException>(() => network.HttpGetAsync("https://example.test:8080/"));
+        await Assert.ThrowsAsync<InvalidOperationException>(() => network.HttpGetAsync("https://other.test/"));
+        Assert.True((await network.TryConnectAsync("example.test", 443)).IsFailure);
         Assert.Equal(200, response.StatusCode);
         Assert.Equal("ok", Encoding.UTF8.GetString(response.Body));
 

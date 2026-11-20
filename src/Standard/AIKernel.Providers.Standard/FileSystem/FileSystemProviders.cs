@@ -28,6 +28,16 @@ public abstract class FileSystemProviderBase : StandardProviderBase, IFileSystem
     }
 
     /// <summary>[EN] Checks whether a path exists. [JA] path が存在するか確認します。</summary>
+    /// <summary>Validates credentials before a VFS session is created.</summary>
+    public Func<IVfsCredentials, bool>? CredentialValidator { get; init; }
+
+    /// <summary>Reads the original bytes from the provider.</summary>
+    public virtual byte[] ReadBytes(string path) => System.Text.Encoding.UTF8.GetBytes(ReadText(path));
+    /// <summary>Writes bytes without silent text replacement.</summary>
+    public virtual void WriteBytes(string path, byte[] content)
+        => WriteText(path, new System.Text.UTF8Encoding(false, true).GetString(content));
+
+    /// <summary>Reports whether a virtual path exists.</summary>
     public abstract bool Exists(string path);
 
     /// <summary>[EN] Reads text from a path. [JA] path から text を読み取ります。</summary>
@@ -61,7 +71,12 @@ public abstract class FileSystemProviderBase : StandardProviderBase, IFileSystem
 
     /// <summary>[EN] Opens a VFS session for this file system provider. [JA] この file system Provider の VFS session を開きます。</summary>
     public Task<IVfsSession> OpenSessionAsync(IVfsCredentials credentials)
-        => Task.FromResult<IVfsSession>(new StandardFileSystemVfsSession(this));
+    {
+        ArgumentNullException.ThrowIfNull(credentials);
+        if (CredentialValidator?.Invoke(credentials) != true)
+            throw new UnauthorizedAccessException("VFS credentials were not accepted.");
+        return Task.FromResult<IVfsSession>(new StandardFileSystemVfsSession(this));
+    }
 
     /// <summary>[EN] Returns VFS health for the file-system alias contract. [JA] file-system alias contract 向けの VFS health を返します。</summary>
     async Task<VfsProviderHealth> IVfsProvider.GetHealthAsync()
@@ -94,7 +109,7 @@ internal sealed class StandardFileSystemVfsSession(FileSystemProviderBase provid
     /// </summary>
 
     public Task<IVfsFile> ReadFileAsync(string path)
-        => Task.FromResult<IVfsFile>(new StandardVfsFile(path, _provider.ReadText(path)));
+        => Task.FromResult<IVfsFile>(new StandardVfsFile(path, _provider.ReadBytes(path)));
     /// <summary>
     /// EN: Executes ExistsAsync.
     /// [EN] Documents this public package API member. [JA] ExistsAsync を実行します。
@@ -116,7 +131,7 @@ internal sealed class StandardFileSystemVfsSession(FileSystemProviderBase provid
 
     public Task WriteFileAsync(string path, byte[] content)
     {
-        _provider.WriteText(path, System.Text.Encoding.UTF8.GetString(content ?? []));
+        _provider.WriteBytes(path, content);
         return Task.CompletedTask;
     }
     /// <summary>
@@ -173,9 +188,9 @@ internal sealed class StandardFileSystemVfsSession(FileSystemProviderBase provid
             : Option<string>.None();
 }
 
-internal sealed class StandardVfsFile(string path, string content) : IVfsFile
+internal sealed class StandardVfsFile(string path, byte[] content) : IVfsFile
 {
-    private readonly string _content = content ?? string.Empty;
+    private readonly byte[] _content = content;
     /// <summary>
     /// EN: Executes Name.
     /// [EN] Documents this public package API member. [JA] Name を実行します。
@@ -193,7 +208,7 @@ internal sealed class StandardVfsFile(string path, string content) : IVfsFile
     /// [EN] Documents this public package API member. [JA] Size を実行します。
     /// </summary>
 
-    public long Size => System.Text.Encoding.UTF8.GetByteCount(_content);
+    public long Size => _content.Length;
     /// <summary>
     /// EN: Gets CreatedAt.
     /// [EN] Documents this public package API member. [JA] CreatedAt を取得します。
@@ -218,14 +233,14 @@ internal sealed class StandardVfsFile(string path, string content) : IVfsFile
     /// </summary>
 
     public Task<byte[]> ReadAsync()
-        => Task.FromResult(System.Text.Encoding.UTF8.GetBytes(_content));
+        => Task.FromResult(_content.ToArray());
     /// <summary>
     /// EN: Executes ReadAsTextAsync.
     /// [EN] Documents this public package API member. [JA] ReadAsTextAsync を実行します。
     /// </summary>
 
     public Task<string> ReadAsTextAsync()
-        => Task.FromResult(_content);
+        => Task.FromResult(System.Text.Encoding.UTF8.GetString(_content));
 }
 
 internal sealed class StandardVfsDirectory(
@@ -259,7 +274,7 @@ internal sealed class StandardVfsDirectory(
         => Task.FromResult<IReadOnlyList<IVfsFile>>(
             entries
                 .Where(provider.Exists)
-                .Select(item => (IVfsFile)new StandardVfsFile(item, provider.ReadText(item)))
+                .Select(item => (IVfsFile)new StandardVfsFile(item, provider.ReadBytes(item)))
                 .ToArray());
     /// <summary>
     /// EN: Executes GetDirectoriesAsync.
@@ -298,15 +313,7 @@ internal sealed class StandardVfsDirectory(
             provider));
 
     private static long EntrySize(FileSystemProviderBase provider, string item)
-        => EntryContent(provider, item)
-            .Match(
-                () => 0,
-                content => System.Text.Encoding.UTF8.GetByteCount(content));
-
-    private static Option<string> EntryContent(FileSystemProviderBase provider, string item)
-        => provider.Exists(item)
-            ? Option<string>.Some(provider.ReadText(item))
-            : Option<string>.None();
+        => provider.Exists(item) ? provider.ReadBytes(item).LongLength : 0;
 
     private static string JoinPath(string path, string name)
         => MonadicDecision.SelectText(
@@ -357,7 +364,7 @@ internal sealed class StandardVfsQueryResult(
 /// </summary>
 public sealed class MemoryFileSystemProvider : FileSystemProviderBase
 {
-    private readonly ConcurrentDictionary<string, string> _files = new(StringComparer.Ordinal);
+    private readonly ConcurrentDictionary<string, byte[]> _files = new(StringComparer.Ordinal);
 
     /// <summary>[EN] Initializes the memory file system provider. [JA] memory file system Provider を初期化します。</summary>
     public MemoryFileSystemProvider()
@@ -366,6 +373,7 @@ public sealed class MemoryFileSystemProvider : FileSystemProviderBase
     }
 
     /// <summary>[EN] Documents this public package API member. [JA] Exists を実行します。</summary>
+    /// <inheritdoc />
     /// <inheritdoc />
     public override bool Exists(string path) => _files.ContainsKey(Normalize(path));
 
@@ -385,7 +393,14 @@ public sealed class MemoryFileSystemProvider : FileSystemProviderBase
     /// <summary>[EN] Documents this public package API member. [JA] WriteText を実行します。</summary>
     /// <inheritdoc />
     public override void WriteText(string path, string content)
-        => _files[Normalize(path)] = content ?? string.Empty;
+        => WriteBytes(path, System.Text.Encoding.UTF8.GetBytes(content ?? string.Empty));
+
+    /// <inheritdoc />
+    public override void WriteBytes(string path, byte[] content) => _files[Normalize(path)] = content.ToArray();
+
+    /// <inheritdoc />
+    public override byte[] ReadBytes(string path) => _files.TryGetValue(Normalize(path), out var data)
+        ? data.ToArray() : throw new FileNotFoundException("Memory file was not found.", path);
 
     /// <summary>[EN] Deletes an in-memory file. [JA] in-memory file を削除します。</summary>
     public void Delete(string path)
@@ -413,7 +428,7 @@ public sealed class MemoryFileSystemProvider : FileSystemProviderBase
 
     private Option<string> MemoryFileOption(string normalized)
         => _files.TryGetValue(normalized, out var value)
-            ? Option<string>.Some(value)
+            ? Option<string>.Some(System.Text.Encoding.UTF8.GetString(value))
             : Option<string>.None();
 
     private static Either<string, string> NormalizePath(string path)
@@ -434,6 +449,33 @@ public sealed class MemoryFileSystemProvider : FileSystemProviderBase
 public sealed class PhysicalFileSystemProvider : FileSystemProviderBase
 {
     /// <summary>[EN] Initializes the physical file system provider. [JA] physical file system Provider を初期化します。</summary>
+    private readonly string? _root;
+
+    /// <summary>Restricts physical file access to the configured directory.</summary>
+    public PhysicalFileSystemProvider(string root) : this()
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(root);
+        _root = Path.GetFullPath(root);
+    }
+
+    private string Resolve(string path)
+    {
+        var root = _root ?? throw new InvalidOperationException("Configure a physical VFS root before use.");
+        var full = Path.GetFullPath(Path.Combine(root, path.TrimStart('/', '\\')));
+        var child = Path.GetRelativePath(root, full);
+        if (Path.IsPathRooted(child) || child == ".." || child.StartsWith(".." + Path.DirectorySeparatorChar, StringComparison.Ordinal))
+            throw new UnauthorizedAccessException("Path escapes the VFS root.");
+        var current = root;
+        foreach (var part in new[] { "." }.Concat(child.Split(Path.DirectorySeparatorChar)))
+        {
+            current = Path.GetFullPath(Path.Combine(current, part));
+            if (new FileInfo(current).LinkTarget is not null)
+                throw new UnauthorizedAccessException("Links are not permitted in the physical VFS.");
+        }
+        return full;
+    }
+
+    /// <summary>Creates a provider for capability discovery. Configure a root for file operations.</summary>
     public PhysicalFileSystemProvider()
         : base("providers.fs.physical", "Physical File System Provider")
     {
@@ -441,35 +483,49 @@ public sealed class PhysicalFileSystemProvider : FileSystemProviderBase
 
     /// <summary>[EN] Documents this public package API member. [JA] Exists を実行します。</summary>
     /// <inheritdoc />
-    public override bool Exists(string path) => File.Exists(path) || Directory.Exists(path);
+    /// <inheritdoc />
+    public override bool Exists(string path) => File.Exists(Resolve(path)) || Directory.Exists(Resolve(path));
 
     /// <summary>[EN] Documents this public package API member. [JA] ReadText を実行します。</summary>
     /// <inheritdoc />
-    public override string ReadText(string path) => File.ReadAllText(path);
+    public override string ReadText(string path) => File.ReadAllText(Resolve(path));
+
+    /// <inheritdoc />
+    public override byte[] ReadBytes(string path) => File.ReadAllBytes(Resolve(path));
 
     /// <summary>[EN] Documents this public package API member. [JA] WriteText を実行します。</summary>
     /// <inheritdoc />
     public override void WriteText(string path, string content)
     {
+        WriteBytes(path, System.Text.Encoding.UTF8.GetBytes(content ?? string.Empty));
+    }
+
+    /// <inheritdoc />
+    public override void WriteBytes(string path, byte[] content)
+    {
+        path = Resolve(path);
         var directory = Path.GetDirectoryName(path);
         if (!string.IsNullOrWhiteSpace(directory))
         {
             Directory.CreateDirectory(directory);
         }
 
-        File.WriteAllText(path, content ?? string.Empty);
+        File.WriteAllBytes(path, content);
     }
 
     /// <summary>[EN] Documents this public package API member. [JA] List を実行します。</summary>
     /// <inheritdoc />
     public override IReadOnlyList<string> List(string path)
-        => Directory.Exists(path)
-            ? Directory.EnumerateFileSystemEntries(path).Order(StringComparer.Ordinal).ToArray()
+        => Directory.Exists(Resolve(path))
+            ? Directory.EnumerateFiles(Resolve(path), "*", new EnumerationOptions { AttributesToSkip = FileAttributes.ReparsePoint })
+                .Select(file => Path.GetRelativePath(_root!, file)).Order(StringComparer.Ordinal).ToArray()
             : [];
 
     /// <summary>[EN] Deletes a physical file or directory. [JA] physical file または directory を削除します。</summary>
     public void Delete(string path)
     {
+        path = Resolve(path);
+        if (Path.GetRelativePath(_root!, path) == ".") throw new UnauthorizedAccessException("Cannot delete the VFS root.");
         if (File.Exists(path))
         {
             File.Delete(path);
@@ -501,6 +557,18 @@ public sealed class ZipFileSystemProvider : FileSystemProviderBase
     }
 
     /// <summary>[EN] Documents this public package API member. [JA] Exists を実行します。</summary>
+    /// <inheritdoc />
+    /// <inheritdoc />
+    public override byte[] ReadBytes(string path)
+    {
+        using var archive = ZipFile.OpenRead(_zipPath);
+        var entry = archive.GetEntry(Normalize(path)) ?? throw new FileNotFoundException("ZIP entry was not found.", path);
+        using var input = entry.Open();
+        using var output = new MemoryStream();
+        input.CopyTo(output);
+        return output.ToArray();
+    }
+
     /// <inheritdoc />
     public override bool Exists(string path)
     {
