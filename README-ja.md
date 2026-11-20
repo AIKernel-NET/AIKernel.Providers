@@ -235,8 +235,8 @@ Python 関連資料は 0.1.3 line の同期 wrapper として公開します。
 
 Provider の変更は、AIKernel 共通の開発規律に従ってください。
 
-- [AIKernel 開発ガイドライン](../AIKernel.NET/docs/guidelines/AIKERNEL_DEVELOPMENT_GUIDELINES-jp.md)
-- [AIKernel Development Guidelines](../AIKernel.NET/docs/guidelines/AIKERNEL_DEVELOPMENT_GUIDELINES.md)
+- [AIKernel 開発ガイドライン](https://github.com/AIKernel-NET/AIKernel.NET/blob/dev/docs/guidelines/AIKERNEL_DEVELOPMENT_GUIDELINES-jp.md)
+- [AIKernel Development Guidelines](https://github.com/AIKernel-NET/AIKernel.NET/blob/dev/docs/guidelines/AIKERNEL_DEVELOPMENT_GUIDELINES.md)
 
 Provider implementation は endpoint / native-driver behavior を Core の外に保ち、
 fail-closed contract を公開し、failure composition には monadic LINQ を使用し、
