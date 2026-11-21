@@ -49,6 +49,8 @@ public sealed class SceneInFlightAuthorizationTests
         await Idle(f);
         AssertRejected(await f.Status(), state, reason);
         Assert.Equal(request.CapturedAtUtc.AddMilliseconds(request.MaxObservationAgeMs), (await f.Status()).ExpiresAtUtc);
+        // The backend call count precedes the receipt write. Wait for that write before opening the journal.
+        await SceneFixture.Eventually(async () => (await f.Status()).BackendCancellation == f.Backend.CancelReceipt);
         var journal = SceneJson.Read<SceneJournalDocument>(await File.ReadAllTextAsync(Path.Combine(f.Directory, "jobs.json"),
             TestContext.Current.CancellationToken), 1024 * 1024);
         var stored = Assert.Single(journal.Entries, e => e.Result.RequestId == request.RequestId);
@@ -56,7 +58,9 @@ public sealed class SceneInFlightAuthorizationTests
         Assert.DoesNotContain("private-revocation-detail", SceneJson.Write(journal));
         await f.Restart();
         AssertRejected(await f.Status(), state, reason);
-        AssertRejected(SceneFixture.Parse(await f.Submit(request)), state, reason);
+        var restoredRetry = await f.Submit(request);
+        Assert.True(restoredRetry.Succeeded, restoredRetry.ErrorCode);
+        AssertRejected(SceneFixture.Parse(restoredRetry), state, reason);
         Assert.Equal(2, f.Backend.Count);
     }
 
