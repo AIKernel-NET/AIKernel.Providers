@@ -12,7 +12,7 @@ HTTP と MCP のアプリからは `AIKernel.Abstractions.Hosting` のインタ�
 | マニフェスト | `IProviderManifestLoader`、`IProviderManifestValidator`、`IConfiguredManifestValidator` | カタログとレジストリは独自実装を受け取れ、既存コンストラクターも利用可能 |
 | 資格情報と利用枠 | `ISecureCredentialResolver<TOptions>`、`ITokenReservationBudget` | 既存の資格情報解決器や永続ジャーナルの呼び出しを維持 |
 
-旧アセンブリで公開していた型には型転送を設定しました。既存の名前空間を使うソースは同じ名前を参照できます。配布時には対応する共有パッケージも一緒に更新してください。
+旧アセンブリで公開していた型には型転送を設定しました。既存の名前空間を使うソースは同じ名前を参照できます。`AIKernel.Providers.Perception.IFramePerceptionProvider` は `AIKernel.Contracts` が所有します。カーネルの `AIKernel.Abstractions.Perception.IFramePerceptionProvider` は別の要求型を扱います。接続監視の `ConnectionState` は `AIKernel.Enums` が所有します。配布時には対応する共有パッケージも一緒に更新してください。
 
 ## 点検範囲
 
@@ -22,15 +22,4 @@ Microsoft AI の応答マッパーは SDK の `ChatResponse` を扱います。W
 
 ## 受入試験
 
-標準の自動試験は独立した2台のローカル待受を使い、認証、失効、接続先切り替え、停止・復帰、TLS 終端とパス接頭辞、Range と切断の伝播を確認します。実アプリとの互換性試験では、パッケージから構築したホストに Music の既存業務クラスを登録し、Atelier と Codex から同じ相談を操作します。[Music と Atelier の試験手順](../../tests/Hosting/Music.Atelier.Compatibility/README.md)
-
-### 2026-11-23 の結果
-
-| 検証 | 確認できたこと |
-| --- | --- |
-| Windows x64 | 対象の回帰・受入試験519件が合格。別途、Generic Host の差し替え、資格情報の解決器、利用枠の永続化を確認 |
-| Linux x64（WSL Ubuntu） | 分散 Provider の受入試験6件が合格。Windows のパッケージ利用アプリからゲストのプライベート IPv4 に接続し、認証付き heartbeat のサーバー ID が一致 |
-| ローカル NuGet フィード | 関連11パッケージを生成。パッケージのみを参照するアプリで、旧アセンブリ名による97型の解決と Generic Host の起動・接続ファイル出力・停止に成功 |
-| Music／Atelier／Codex | 一時 DB を持つ2サーバーを登録。実際の Edge の2タブから相談を作成し、Codex からの提案が指定した相談に届いた。別タブの下書きと、接続先を戻した後の元の下書きも一致 |
-
-この結果は今回の共有契約と分散 Provider に対するものです。Music の互換性試験には既存の Release ビルドを使用しました。
+.NET 10 SDK で `dotnet test tests/Hosting/AIKernel.Providers.Distributed.Tests -c Release` を実行します。独立した2台のローカル待受で認証、失効、接続先切り替え、停止・復帰、TLS 終端とパス接頭辞、Range と切断の伝播を確認します。業務アプリのソースや外部モデルは必要ありません。

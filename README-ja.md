@@ -1,5 +1,8 @@
 # AIKernel.Providers
 
+
+0.1.4 · [HTTPとMCPから同じメモを操作する](samples/DistributedApplication/README.md)
+
 CUDA Driverの既定値（0.1.4準備）：[移行と互換性](docs/CUDA-DRIVER-MIGRATION.md)。
 
 [English README](README.md)
@@ -35,7 +38,7 @@ AIKernel.Abstractions が定義する contract boundary を維持しながら、
 descriptor と invocation surface を公開します。
 
 AIKernel.Providers 0.1.3 は AIKernel.Core / AIKernel.Control 0.1.3 と同じ
-開発方針に従います。この line は NuGet package と同期 Python wrapper を公開します。stable publication が開くまで、local NuGet development package には`r`n`0.1.3-dev{build-number}`、local Python wheel validation には `0.1.3.dev{build-number}` を使います。
+開発方針に従います。この line は NuGet package と同期 Python wrapper を公開します。stable publication が開くまで、local NuGet development package には `0.1.3-dev{build-number}`、local Python wheel validation には `0.1.3.dev{build-number}` を使います。
 
 リリースノート:
 

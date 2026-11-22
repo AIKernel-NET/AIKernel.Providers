@@ -1,5 +1,8 @@
 # AIKernel.Providers
 
+
+0.1.4 · [Run the HTTP/MCP notes sample](samples/DistributedApplication/README.en.md)
+
 CUDA Driver defaults (0.1.4 preparation): [migration and compatibility](docs/CUDA-DRIVER-MIGRATION.md).
 
 [日本語 README](README-ja.md)
@@ -44,7 +47,7 @@ standard file systems, logging drivers, process supervisor drivers, network
 drivers, schedulers, and profilers.
 
 AIKernel.Providers 0.1.3 follows the same development policy as
-AIKernel.Core and AIKernel.Control 0.1.3. The line publishes NuGet packages and synchronized Python wrappers. Use`r`n`0.1.3-dev{build-number}` for local NuGet development packages and`r`n`0.1.3.dev{build-number}` for local Python wheel validation until stable publication opens.
+AIKernel.Core and AIKernel.Control 0.1.3. The line publishes NuGet packages and synchronized Python wrappers. Use `0.1.3-dev{build-number}` for local NuGet development packages and `0.1.3.dev{build-number}` for local Python wheel validation until stable publication opens.
 
 ## Concept Elevation
 

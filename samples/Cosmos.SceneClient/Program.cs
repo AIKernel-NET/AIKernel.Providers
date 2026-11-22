@@ -74,7 +74,7 @@ try
             result = SceneProtocol.DeserializeResult(reply.Metadata[SceneService.ResultMetadataKey]);
         }
         Console.WriteLine($"status={result.Status}; mode={result.Mode}; analysisOnly={result.AnalysisOnly}; freshness={result.FreshnessVerified}; proposals={result.Proposals.Count}; reason={result.ErrorCode ?? "none"}");
-        // TheoriaCast must revalidate current epoch/revisions/deadline, manual precedence and proposalId before adopting any propose-mode candidate.
+        // The consuming application must revalidate current epoch/revisions/deadline, manual precedence and proposalId before adopting any propose-mode candidate.
         // shadow and observe-only are never executed. Succeeded is API processing, not job completion or performed.
         ValueTask<CapabilityInvocationResult> Query(string operation) => invoker.InvokeAsync(new("inv-" + Guid.NewGuid().ToString("N"), SceneService.CapabilityId,
             operation, new Dictionary<string, string> { ["requestId"] = id }, null, null, new Dictionary<string, string>()));

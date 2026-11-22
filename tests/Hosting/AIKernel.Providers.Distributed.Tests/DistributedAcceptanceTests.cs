@@ -45,7 +45,7 @@ public sealed class DistributedAcceptanceTests : IDisposable
     [Fact]
     public async Task SdkToolAndRestShareNotesAndEnforceScopes()
     {
-        var o = Options("music"); await using var host = Host(o);
+        var o = Options("notes"); await using var host = Host(o);
         await host.StartAsync();
         var connection = Read(o);
         using var http = new HttpClient();
@@ -93,10 +93,10 @@ public sealed class DistributedAcceptanceTests : IDisposable
     [Fact]
     public async Task PinnedProfilesPersistAndTransferRangeWithoutFollowingRedirects()
     {
-        var a = Options("home"); var b = Options("studio");
+        var a = Options("home"); var b = Options("office");
         await using var first = Host(a); await using var second = Host(b);
         await first.StartAsync(); await second.StartAsync();
-        var storePath = Path.Combine(root, "atelier");
+        var storePath = Path.Combine(root, "profiles");
         using var store = new ConnectionProfiles(storePath, files);
         Assert.Empty(store.List());
         Import(store, a); var idA = store.Selected!.Value; Import(store, b); var idB = store.Selected!.Value;
@@ -128,7 +128,7 @@ public sealed class DistributedAcceptanceTests : IDisposable
         var a = Options("a"); var b = Options("b");
         await using var first = Host(a); await using var second = Host(b);
         await first.StartAsync(); await second.StartAsync();
-        using var store = new ConnectionProfiles(Path.Combine(root,"atelier"), files);
+        using var store = new ConnectionProfiles(Path.Combine(root,"profiles"), files);
         var monitor = new HeartbeatMonitor(store, store, TimeSpan.FromMilliseconds(50), TimeSpan.FromSeconds(1));
         using var cancel = new CancellationTokenSource(TimeSpan.FromSeconds(30));
         var monitoring = monitor.MonitorAsync(cancel.Token);
@@ -164,9 +164,9 @@ public sealed class DistributedAcceptanceTests : IDisposable
         await using var first = Host(o); await first.StartAsync();
         var conflict = Options("conflict", new Uri(Read(o).ApiUrl)); await using var collision = Host(conflict);
         await Assert.ThrowsAsync<IOException>(() => collision.StartAsync()); Assert.False(File.Exists(conflict.ConnectionFile));
-        var proxy = Options("proxy", advertised:new("https://studio.example:8443/music/family"));
+        var proxy = Options("proxy", advertised:new("https://notes.example:8443/service/team"));
         await using var behindProxy = Host(proxy); await behindProxy.StartAsync();
-        Assert.Equal("https://studio.example:8443/music/family/mcp",Read(proxy).McpUrl);
+        Assert.Equal("https://notes.example:8443/service/team/mcp",Read(proxy).McpUrl);
     }
 
     public void Dispose() { if (Directory.Exists(root)) Directory.Delete(root,true); }

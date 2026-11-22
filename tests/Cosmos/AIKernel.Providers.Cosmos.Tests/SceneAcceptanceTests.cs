@@ -13,7 +13,7 @@ public sealed class SceneAcceptanceTests
         Assert.IsAssignableFrom<ICapabilityModuleInvoker>(f.Session);
         Assert.Equal("AIKernel.Abstractions", typeof(ICapabilityModuleInvoker).Assembly.GetName().Name);
         Assert.Equal("AIKernel.Dtos", typeof(CapabilityInvocationRequest).Assembly.GetName().Name);
-        var old = await f.Session.InvokeAsync(new("inv-old", "theoriacast.assistant.observer", "assistant.observe",
+        var old = await f.Session.InvokeAsync(new("inv-old", "example.external.observer", "assistant.observe",
             new Dictionary<string, string>(), null, "old", new Dictionary<string, string>()), TestContext.Current.CancellationToken);
         Assert.False(old.Succeeded); Assert.Equal("capability_unsupported", old.ErrorCode); Assert.Equal(0, f.Backend.Count);
         var catalog = await f.Invoke("scene.capabilities");
