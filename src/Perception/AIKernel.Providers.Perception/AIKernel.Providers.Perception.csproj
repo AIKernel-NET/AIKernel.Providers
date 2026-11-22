@@ -18,4 +18,5 @@ JA: capability descriptor と deterministic routing policy を含む pure manage
   <ItemGroup>
     <None Include="perception.provider.json" CopyToOutputDirectory="PreserveNewest" Pack="true" PackagePath="providers\" />
   </ItemGroup>
+  <Import Project="../../../SharedContracts.props" />
 </Project>

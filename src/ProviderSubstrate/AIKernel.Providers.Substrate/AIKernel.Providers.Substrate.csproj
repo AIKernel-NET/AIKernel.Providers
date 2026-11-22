@@ -6,4 +6,5 @@
 
 JA: AIKernel.Providers 向けの pure managed な provider manifest、registry、deterministic routing substrate です。</Description>
   </PropertyGroup>
+  <Import Project="../../../SharedContracts.props" />
 </Project>

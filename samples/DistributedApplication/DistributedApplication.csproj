@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType><IsPackable>false</IsPackable></PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../src/Hosting/AIKernel.Providers.Distributed/AIKernel.Providers.Distributed.csproj" />
+  </ItemGroup>
+</Project>

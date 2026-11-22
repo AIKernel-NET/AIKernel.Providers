@@ -4,7 +4,7 @@ namespace AIKernel.Providers.Substrate;
 /// [EN] Validates provider manifests using fail-closed structured diagnostics.
 /// [JA] fail-closed な構造化 diagnostic で Provider manifest を検証します。
 /// </summary>
-public sealed class ProviderManifestValidator : IProviderManifestValidator
+public sealed class ProviderManifestValidator : IConfiguredManifestValidator
 {
     /// <summary>
     /// [EN] Validates a loaded provider manifest descriptor.

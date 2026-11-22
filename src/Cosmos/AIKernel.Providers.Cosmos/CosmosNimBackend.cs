@@ -6,16 +6,6 @@ using System.Text.Json;
 
 namespace AIKernel.Providers.Cosmos;
 
-// Evidence must come from the authenticated deployment/control plane, not from
-// scene JSON or the model. No readiness probe performs provisioning operations.
-public sealed record SceneDeploymentEvidence(string Model, string Revision, string Precision,
-    string Runtime, IReadOnlyList<string> GpuIds, string ImageDigest,
-    DateTimeOffset ObservedAtUtc, DateTimeOffset ExpiresAtUtc, string State);
-public interface ISceneDeploymentEvidenceSource
-{
-    ValueTask<SceneDeploymentEvidence> ReadAsync(CancellationToken cancellationToken);
-}
-
 public sealed class CosmosNimOptions
 {
     public required Uri Endpoint { get; init; }

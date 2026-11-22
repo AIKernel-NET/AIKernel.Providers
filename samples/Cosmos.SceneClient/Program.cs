@@ -29,7 +29,7 @@ ISceneReasonerBackend backend = offline ? new OfflineBackend() : new CosmosNimBa
 }, new SceneDeploymentFileSource(config.DeploymentEvidenceFile));
 try
 {
-    await using var service = new SceneService(new() { Enabled = true, JournalDirectory = directory }, backend, new PublicSceneAuthorizer());
+    await using ISceneService service = new SceneService(new() { Enabled = true, JournalDirectory = directory }, backend, new PublicSceneAuthorizer());
     var readiness = await service.ProbeAsync();
     Console.WriteLine($"backend={readiness.Provider.Backend}; mock={readiness.Provider.IsMock}; readiness={readiness.State}; reason={readiness.ReasonCode}");
     if (readiness.State != "ready") return;

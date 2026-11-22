@@ -1,0 +1,17 @@
+using System.Runtime.CompilerServices;
+
+[assembly: TypeForwardedTo(typeof(AIKernel.Providers.Substrate.IProviderManifestLoader))]
+[assembly: TypeForwardedTo(typeof(AIKernel.Providers.Substrate.IProviderManifestValidator))]
+[assembly: TypeForwardedTo(typeof(AIKernel.Providers.Substrate.ProviderBackendDescriptor))]
+[assembly: TypeForwardedTo(typeof(AIKernel.Providers.Substrate.ProviderCapabilityDescriptor))]
+[assembly: TypeForwardedTo(typeof(AIKernel.Providers.Substrate.ProviderCliHints))]
+[assembly: TypeForwardedTo(typeof(AIKernel.Providers.Substrate.ProviderCompatibilityDescriptor))]
+[assembly: TypeForwardedTo(typeof(AIKernel.Providers.Substrate.ProviderDependencyDescriptor))]
+[assembly: TypeForwardedTo(typeof(AIKernel.Providers.Substrate.ProviderDiagnostic))]
+[assembly: TypeForwardedTo(typeof(AIKernel.Providers.Substrate.ProviderEvidenceRef))]
+[assembly: TypeForwardedTo(typeof(AIKernel.Providers.Substrate.ProviderManifestDescriptor))]
+[assembly: TypeForwardedTo(typeof(AIKernel.Providers.Substrate.ProviderManifestLoadRequest))]
+[assembly: TypeForwardedTo(typeof(AIKernel.Providers.Substrate.ProviderManifestLoadResult))]
+[assembly: TypeForwardedTo(typeof(AIKernel.Providers.Substrate.ProviderManifestValidationError))]
+[assembly: TypeForwardedTo(typeof(AIKernel.Providers.Substrate.ProviderManifestValidationOptions))]
+[assembly: TypeForwardedTo(typeof(AIKernel.Providers.Substrate.ProviderManifestValidationResult))]

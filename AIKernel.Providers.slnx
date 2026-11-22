@@ -1,11 +1,15 @@
 <Solution>
   <Folder Name="/samples/">
+    <Project Path="samples/DistributedApplication/DistributedApplication.csproj" />
     <Project Path="samples/Cosmos.SceneClient/Cosmos.SceneClient.csproj" />
   </Folder>
   <Folder Name="/tools/">
     <Project Path="tools/AIKernel.Cosmos.ContractExport/AIKernel.Cosmos.ContractExport.csproj" />
   </Folder>
   <Folder Name="/src/" />
+  <Folder Name="/src/Hosting/">
+    <Project Path="src/Hosting/AIKernel.Providers.Distributed/AIKernel.Providers.Distributed.csproj" />
+  </Folder>
   <Folder Name="/src/Audio/">
     <Project Path="src/Audio/AIKernel.Providers.Audio/AIKernel.Providers.Audio.csproj" />
   </Folder>
@@ -40,6 +44,9 @@
     <Project Path="src/Standard/AIKernel.Providers.Standard/AIKernel.Providers.Standard.csproj" />
   </Folder>
   <Folder Name="/tests/" />
+  <Folder Name="/tests/Hosting/">
+    <Project Path="tests/Hosting/AIKernel.Providers.Distributed.Tests/AIKernel.Providers.Distributed.Tests.csproj" />
+  </Folder>
   <Folder Name="/tests/Audio/">
     <Project Path="tests/Audio/AIKernel.Providers.Audio.Tests/AIKernel.Providers.Audio.Tests.csproj" />
   </Folder>

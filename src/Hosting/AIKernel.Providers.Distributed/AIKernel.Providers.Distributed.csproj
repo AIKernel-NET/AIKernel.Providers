@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <PackageId>AIKernel.Providers.Distributed</PackageId>
+    <Description>Authenticated HTTP and MCP application hosting and multi-server connections for AIKernel.</Description>
+    <PackageVersion>0.1.4</PackageVersion>
+    <PackageValidationBaselineVersion></PackageValidationBaselineVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="ModelContextProtocol.AspNetCore" Version="2.2.0" />
+  </ItemGroup>
+  <Import Project="../../../SharedContracts.props" />
+</Project>

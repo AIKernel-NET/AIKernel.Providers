@@ -2,6 +2,10 @@
 
 [日本語](RELEASE_NOTES-ja.md)
 
+## 0.1.4 (in development)
+
+The optional distributed application provider hosts authenticated HTTP and MCP Streamable HTTP and manages multiple server profiles. The sample saves a note over MCP and reads its ID over HTTP. [Run the sample and tests](samples/DistributedApplication/README.md)
+
 ## 0.1.3 (Unreleased)
 
 - Align the official Provider packages with AIKernel.NET, Core, and Control 0.1.3. Keep endpoint, driver, and optional native-runtime concerns outside Core.

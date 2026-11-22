@@ -3,10 +3,6 @@
     <PackageId>AIKernel.Providers.Cosmos</PackageId>
     <Version>0.1.4-dev13</Version>
     <PackageVersion>0.1.4-dev13</PackageVersion>
-    <!-- Keep the archived dev13 scene client reproducible. Integrated builds
-         supply their own PackageVersion and matching contract feed. -->
-    <CosmosContractVersion Condition="'$(PackageVersion)' == '0.1.4-dev13'">[0.1.3-dev1]</CosmosContractVersion>
-    <CosmosContractVersion Condition="'$(CosmosContractVersion)' == ''">$(AIKernelContractPackageVersion)</CosmosContractVersion>
     <InformationalVersion>0.1.4-dev13</InformationalVersion>
     <!-- First release of this package; there is no baseline package on NuGet. -->
     <PackageValidationBaselineVersion />
@@ -16,11 +12,9 @@
     <Description>Optional, authenticated scene observation jobs and NVIDIA Cosmos Reasoner transport. Does not execute proposed actions.</Description>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="AIKernel.Abstractions" Version="$(CosmosContractVersion)" />
-    <PackageReference Include="AIKernel.Dtos" Version="$(CosmosContractVersion)" />
-    <PackageReference Include="AIKernel.Enums" Version="$(CosmosContractVersion)" />
     <None Include="schemas/*.json" Pack="true" PackagePath="schemas" />
     <None Include="../../../docs/operations/COSMOS_SCENE_P0.md" Pack="true" PackagePath="/" />
     <None Include="../../../docs/operations/COSMOS_SCENE_ERRORS.md" Pack="true" PackagePath="/" />
   </ItemGroup>
+  <Import Project="../../../SharedContracts.props" />
 </Project>

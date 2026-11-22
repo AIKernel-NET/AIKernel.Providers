@@ -4,7 +4,7 @@ using AIKernel.Dtos.Capabilities;
 
 namespace AIKernel.Providers.Cosmos;
 
-public sealed class SceneService : IAsyncDisposable
+public sealed class SceneService : ISceneService
 {
     public const string CapabilityId = "vision.scene.reasoning";
     public const string ResultMetadataKey = "scene.result_json";
@@ -96,6 +96,8 @@ public sealed class SceneService : IAsyncDisposable
             throw SceneHostErrors.Sanitize(error, "journal_unavailable");
         }
     }
+
+    ISceneSession ISceneService.OpenSession(ClaimsPrincipal authenticatedCaller) => OpenSession(authenticatedCaller);
 
     public SceneSession OpenSession(ClaimsPrincipal authenticatedCaller)
     {
@@ -795,7 +797,7 @@ public sealed class SceneService : IAsyncDisposable
     }
 }
 
-public sealed class SceneSession : ICapabilityModuleInvoker
+public sealed class SceneSession : ISceneSession
 {
     private readonly SceneService service;
     private readonly ClaimsPrincipal principal;

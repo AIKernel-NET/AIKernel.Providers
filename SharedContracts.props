@@ -1,0 +1,11 @@
+<Project>
+  <!-- Use the matching checkout when developing across repositories. Standalone consumers resolve the released contracts. -->
+  <PropertyGroup>
+    <AIKernelContractSourceRoot Condition="'$(UseAIKernelContractSource)' != 'false' and '$(AIKernelContractSourceRoot)' == '' and Exists('$(MSBuildThisFileDirectory)../AIKernel.NET/src/AIKernel.Abstractions/AIKernel.Abstractions.csproj')">$(MSBuildThisFileDirectory)../AIKernel.NET/src</AIKernelContractSourceRoot>
+    <DistributedContractVersion Condition="'$(DistributedContractVersion)' == ''">[0.1.4]</DistributedContractVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Condition="'$(AIKernelContractSourceRoot)' != ''" Include="$(AIKernelContractSourceRoot)/AIKernel.Abstractions/AIKernel.Abstractions.csproj" />
+    <PackageReference Condition="'$(AIKernelContractSourceRoot)' == ''" Include="AIKernel.Abstractions" Version="$(DistributedContractVersion)" />
+  </ItemGroup>
+</Project>

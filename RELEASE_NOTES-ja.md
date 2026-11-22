@@ -2,6 +2,10 @@
 
 [English](RELEASE_NOTES.md)
 
+## 0.1.4（公開準備中）
+
+標準 Provider に認証付き HTTP と MCP Streamable HTTP、複数サーバーの接続管理を追加しました。サンプルでは MCP で保存したメモを同じ ID で HTTP から取得できます。[起動と試験手順](samples/DistributedApplication/README.md)
+
 ## 0.1.3（公開準備中）
 
 - 公式 Provider パッケージを AIKernel.NET・Core・Control の 0.1.3 に揃えます。接続先、ドライバー、任意のネイティブランタイムは Core の外に置きます。

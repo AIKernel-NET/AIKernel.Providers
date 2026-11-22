@@ -6,8 +6,8 @@ namespace AIKernel.Providers.Substrate;
 /// </summary>
 public sealed class ProviderManifestCatalog
 {
-    private readonly ProviderManifestLoader _loader;
-    private readonly ProviderManifestValidator _validator;
+    private readonly IProviderManifestLoader _loader;
+    private readonly IConfiguredManifestValidator _validator;
 
     /// <summary>
     /// [EN] Initializes a provider manifest catalog with default loader and validator.
@@ -33,6 +33,9 @@ public sealed class ProviderManifestCatalog
     public ProviderManifestCatalog(
         ProviderManifestLoader loader,
         ProviderManifestValidator validator)
+        : this((IProviderManifestLoader)loader, validator) { }
+
+    public ProviderManifestCatalog(IProviderManifestLoader loader, IConfiguredManifestValidator validator)
     {
         _loader = loader ?? throw new ArgumentNullException(nameof(loader));
         _validator = validator ?? throw new ArgumentNullException(nameof(validator));
@@ -72,7 +75,7 @@ public sealed class ProviderManifestCatalog
                      .Distinct(StringComparer.Ordinal)
                      .Order(StringComparer.Ordinal))
         {
-            var load = await _loader.LoadFileAsync(path, cancellationToken).ConfigureAwait(false);
+            var load = await _loader.LoadAsync(new ProviderManifestLoadRequest { Path = path }, cancellationToken).ConfigureAwait(false);
             diagnostics.AddRange(load.Diagnostics);
             if (!load.Succeeded)
             {

@@ -7,7 +7,7 @@ namespace AIKernel.Providers.Substrate;
 public sealed class ProviderRegistry
 {
     private readonly List<ProviderManifestDescriptor> _providers = [];
-    private readonly ProviderManifestValidator _validator;
+    private readonly IConfiguredManifestValidator _validator;
 
     /// <summary>
     /// [EN] Initializes an empty provider registry.
@@ -27,6 +27,9 @@ public sealed class ProviderRegistry
     /// [JA] manifest validator です。
     /// </param>
     public ProviderRegistry(ProviderManifestValidator validator)
+        : this((IConfiguredManifestValidator)validator) { }
+
+    public ProviderRegistry(IConfiguredManifestValidator validator)
     {
         _validator = validator ?? throw new ArgumentNullException(nameof(validator));
     }
@@ -45,7 +48,7 @@ public sealed class ProviderRegistry
     /// </returns>
     public ProviderRegistryRegistrationResult Register(ProviderManifestDescriptor? descriptor)
     {
-        var validation = _validator.Validate(descriptor);
+        var validation = _validator.Validate(descriptor, new ProviderManifestValidationOptions());
         if (!validation.Succeeded)
         {
             return new ProviderRegistryRegistrationResult

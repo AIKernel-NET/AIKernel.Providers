@@ -22,11 +22,7 @@ public sealed class ProviderManifestMergePolicy
     {
         ArgumentNullException.ThrowIfNull(descriptor);
 
-        var merged = new SortedDictionary<string, string>(StringComparer.Ordinal);
-        CopyInto(merged, descriptor.Metadata);
-        CopyInto(merged, descriptor.BackendMetadata);
-        CopyInto(merged, descriptor.VendorMetadata);
-        return merged;
+        return descriptor.MergeMetadata();
     }
 
     /// <summary>
