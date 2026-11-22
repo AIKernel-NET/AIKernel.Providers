@@ -43,6 +43,30 @@ public sealed class DistributedAcceptanceTests : IDisposable
     }
 
     [Fact]
+    public async Task ConnectionFileCanBeReplacedAfterAReaderCloses()
+    {
+        var options = Options("notes");
+        await using var host = Host(options);
+        await host.StartAsync();
+        var descriptor = Read(options);
+        var changed = descriptor with { Name = "Updated name" };
+        using var started = new ManualResetEventSlim();
+        Task writing;
+        using (File.OpenRead(options.ConnectionFile))
+        {
+            writing = Task.Run(() =>
+            {
+                started.Set();
+                files.Export(options.ConnectionFile, changed);
+            });
+            Assert.True(started.Wait(TimeSpan.FromSeconds(5)));
+            await Task.Delay(75, TestContext.Current.CancellationToken);
+        }
+        await writing;
+        Assert.Equal(changed, Read(options));
+    }
+
+    [Fact]
     public async Task SdkToolAndRestShareNotesAndEnforceScopes()
     {
         var o = Options("notes"); await using var host = Host(o);

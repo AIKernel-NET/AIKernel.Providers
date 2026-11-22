@@ -28,7 +28,22 @@ internal static class PrivateFiles
                 JsonSerializer.Serialize(file, value, Json);
                 file.Flush(true);
             }
-            File.Move(temp, path, overwrite);
+            for (int attempt = 0; ; attempt++)
+            {
+                try
+                {
+                    File.Move(temp, path, overwrite);
+                    break;
+                }
+                catch (Exception error) when (OperatingSystem.IsWindows() && overwrite && attempt < 6 &&
+                    (error is IOException or UnauthorizedAccessException) &&
+                    (error.HResult & 0xffff) is 5 or 32 && File.Exists(path))
+                {
+                    // An open Windows reader can temporarily prevent replacing the old file.
+                    // Keep it intact and retry the same flushed, private temporary file.
+                    Thread.Sleep(10 << attempt);
+                }
+            }
         }
         finally { File.Delete(temp); }
     }
