@@ -35,6 +35,7 @@
   </Folder>
   <Folder Name="/src/Llm/">
     <Project Path="src/Llm/AIKernel.Providers.Embedding/AIKernel.Providers.Embedding.csproj" />
+    <Project Path="src/Llm/AIKernel.Providers.Reranker/AIKernel.Providers.Reranker.csproj" />
     <Project Path="src/Llm/LocalLlmProvider/LocalLlmProvider.csproj" />
     <Project Path="src/Llm/MicrosoftAIProvider/AIKernel.Providers.MicrosoftAI.csproj" />
   </Folder>

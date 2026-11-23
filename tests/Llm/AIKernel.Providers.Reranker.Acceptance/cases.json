@@ -1,0 +1,47 @@
+[
+  {
+    "name": "ja",
+    "query": "フランスの首都はどこですか？",
+    "candidates": [
+      "リヨンはフランスの都市で、食文化で知られています。",
+      "パリはセーヌ川沿いにあります。",
+      "フランスの国旗は青、白、赤の三色です。",
+      "ベルギーの首都はブリュッセルです。",
+      "マルセイユはフランス南部にあります。",
+      "フランスの首都はパリです。"
+    ],
+    "bestIndex": 5
+  },
+  {
+    "name": "en",
+    "query": "How does a heat pump warm a home?",
+    "candidates": [
+      "Double glazing reduces heat loss through windows.",
+      "A heat pump absorbs heat outdoors and transfers it indoors using a refrigerant cycle.",
+      "A thermostat measures room temperature.",
+      "An electric heater converts electricity directly to heat."
+    ],
+    "bestIndex": 1
+  },
+  {
+    "name": "ja-en",
+    "query": "富士山の標高は何メートルですか？",
+    "candidates": [
+      "Mount Fuji rises to 3,776 meters above sea level.",
+      "Lake Biwa is the largest lake in Japan.",
+      "Mount Fuji last erupted in 1707."
+    ],
+    "bestIndex": 0
+  },
+  {
+    "name": "unicode",
+    "query": "Which format\u00a0stores a tensor's shape and dtype?",
+    "candidates": [
+      "PNG is an image format.",
+      "SafeTensors records each tensor's shape and dtype in a JSON header.",
+      "UTF-8 encodes Unicode. <s> </s> <pad>",
+      "Ｄｏｃｕｍｅｎｔ　／　文書"
+    ],
+    "bestIndex": 1
+  }
+]
