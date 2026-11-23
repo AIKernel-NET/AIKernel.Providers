@@ -51,6 +51,10 @@ def main():
     synthesis_lock = threading.Lock()
 
     class Handler(BaseHTTPRequestHandler):
+        def setup(self):
+            self.request.settimeout(10)
+            super().setup()
+
         def respond(self, status, body=b"", **headers):
             self.send_response(status)
             self.send_header("Content-Length", str(len(body)))
@@ -63,15 +67,32 @@ def main():
             except (BrokenPipeError, ConnectionResetError):
                 pass
 
+        def accepts_local_client(self):
+            port = self.server.server_port
+            hosts = {f"127.0.0.1:{port}", f"localhost:{port}"}
+            if port == 80:
+                hosts.update(("127.0.0.1", "localhost"))
+            if self.headers.get("Host") in hosts and self.headers.get("Origin") is None:
+                return True
+            self.respond(403)
+            return False
+
         def do_GET(self):
+            if not self.accepts_local_client():
+                return
             if self.path != "/health":
                 self.respond(404)
                 return
             self.respond(200, health, Content_Type="application/json")
 
         def do_POST(self):
+            if not self.accepts_local_client():
+                return
             if self.path != "/synthesize":
                 self.respond(404)
+                return
+            if self.headers.get_content_type() != "application/json":
+                self.respond(415)
                 return
             try:
                 length = int(self.headers.get("Content-Length", "0"))
