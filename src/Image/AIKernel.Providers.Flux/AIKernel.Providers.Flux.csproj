@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <PackageId>AIKernel.Providers.Flux</PackageId>
+    <Title>AIKernel FLUX Image Editing Provider</Title>
+    <PackageVersion>0.1.5</PackageVersion>
+    <Version>$(PackageVersion)</Version>
+    <AssemblyVersion>0.1.5.0</AssemblyVersion>
+    <FileVersion>$(AssemblyVersion)</FileVersion>
+    <InformationalVersion>$(PackageVersion)</InformationalVersion>
+    <PackageValidationBaselineVersion />
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <PackageReadmeFile>FLUX.md</PackageReadmeFile>
+    <PackageTags>aikernel;provider;flux;image-editing;virtual-memory</PackageTags>
+    <Description>FLUX.2 klein 4B prompt image editing through a native CPU ABI and AIKernel-backed model paging.</Description>
+    <PackageReleaseNotes>Initial FLUX.2 klein 4B CPU image editing provider for Windows x64.</PackageReleaseNotes>
+    <FluxContractSource Condition="'$(UseAIKernelContractSource)' != 'false' and Exists('$(MSBuildThisFileDirectory)../../../../AIKernel.NET/src/AIKernel.Contracts.Images/AIKernel.Contracts.Images.csproj')">$(MSBuildThisFileDirectory)../../../../AIKernel.NET/src/AIKernel.Contracts.Images/AIKernel.Contracts.Images.csproj</FluxContractSource>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Condition="'$(FluxContractSource)' != ''" Include="$(FluxContractSource)" />
+    <PackageReference Condition="'$(FluxContractSource)' == ''" Include="AIKernel.Contracts.Images" Version="0.1.5" />
+    <PackageReference Include="AIKernel.Kernel" Version="[0.1.4]" />
+    <None Update="FLUX.md" Pack="true" PackagePath="FLUX.md" />
+    <None Update="THIRD_PARTY_NOTICES.txt" Pack="true" PackagePath="THIRD_PARTY_NOTICES.txt" />
+    <None Include="$(FluxNativeLibrary)" Condition="'$(FluxNativeLibrary)' != ''" Pack="true" PackagePath="runtimes/win-x64/native/aikernel_flux.dll" />
+  </ItemGroup>
+  <Target Name="RequireFluxNativeLibrary" BeforeTargets="GenerateNuspec">
+    <Error Condition="'$(FluxNativeLibrary)' == '' or !Exists('$(FluxNativeLibrary)')" Text="Build the pinned Windows x64 FLUX native bridge and supply -p:FluxNativeLibrary=PATH before packing." />
+  </Target>
+</Project>
