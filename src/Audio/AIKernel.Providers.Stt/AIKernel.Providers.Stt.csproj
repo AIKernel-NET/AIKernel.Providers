@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <PackageVersion>0.1.4</PackageVersion>
+    <Version>$(PackageVersion)</Version>
+    <AssemblyVersion>0.1.4.0</AssemblyVersion>
+    <FileVersion>0.1.4.0</FileVersion>
+    <InformationalVersion>$(PackageVersion)</InformationalVersion>
+    <PackageValidationBaselineVersion />
+    <PackageReadmeFile>STT.md</PackageReadmeFile>
+    <PackageTags>aikernel;asr;stt;whisper;wav;cpu</PackageTags>
+    <Description>Local CPU WAV transcription with the pinned multilingual Whisper small model.</Description>
+    <PackageReleaseNotes>Adds timed Japanese and English batch transcription with configurable limits and native cancellation.</PackageReleaseNotes>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <IsPackable Condition="'$(AsrRuntimeDirectory)' == ''">false</IsPackable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="AIKernel.Contracts.SpeechRecognition" Version="[0.1.4]" />
+    <None Update="STT.md;THIRD_PARTY_NOTICES.txt" Pack="true" PackagePath="/" />
+    <AsrRuntime Include="$(AsrRuntimeDirectory)/**/native/aikernel_whisper.dll;$(AsrRuntimeDirectory)/**/native/libaikernel_whisper.so;$(AsrRuntimeDirectory)/**/native/libaikernel_whisper.dylib"
+                Condition="'$(AsrRuntimeDirectory)' != ''" />
+    <None Include="@(AsrRuntime)" Pack="true" PackagePath="runtimes/%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+  <Target Name="ValidateAsrRuntimePackage" BeforeTargets="GenerateNuspec" Condition="'$(IsPackable)' == 'true'">
+    <Error Condition="'@(AsrRuntime)' == ''" Text="Build the whisper.cpp native bridge and point AsrRuntimeDirectory to the directory of RID folders." />
+  </Target>
+</Project>
