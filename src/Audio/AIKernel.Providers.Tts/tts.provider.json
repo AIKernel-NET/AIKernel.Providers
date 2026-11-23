@@ -1,0 +1,12 @@
+{
+  "providerId": "tts",
+  "name": "Text-to-Speech",
+  "version": "0.1.4",
+  "assembly": "AIKernel.Providers.Tts.dll",
+  "capabilities": ["tts.synthesize"],
+  "metadata": {
+    "providerType": "AIKernel.Providers.Tts.TtsProvider",
+    "invokerType": "AIKernel.Providers.Tts.TtsProvider",
+    "protocol": "aikernel-tts-http/v1"
+  }
+}

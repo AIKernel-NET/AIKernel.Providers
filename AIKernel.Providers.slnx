@@ -12,6 +12,7 @@
   </Folder>
   <Folder Name="/src/Audio/">
     <Project Path="src/Audio/AIKernel.Providers.Audio/AIKernel.Providers.Audio.csproj" />
+    <Project Path="src/Audio/AIKernel.Providers.Tts/AIKernel.Providers.Tts.csproj" />
   </Folder>
   <Folder Name="/src/Chat/">
     <Project Path="src/Chat/ChatOpenAIProvider/ChatOpenAIProvider.csproj" />
@@ -49,6 +50,7 @@
   </Folder>
   <Folder Name="/tests/Audio/">
     <Project Path="tests/Audio/AIKernel.Providers.Audio.Tests/AIKernel.Providers.Audio.Tests.csproj" />
+    <Project Path="tests/Audio/AIKernel.Providers.Tts.Tests/AIKernel.Providers.Tts.Tests.csproj" />
   </Folder>
   <Folder Name="/tests/Chat/">
     <Project Path="tests/Chat/ChatOpenAIProvider.Tests/ChatOpenAIProvider.Tests.csproj" />

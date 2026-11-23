@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Title>AIKernel.Providers.Tts</Title>
+    <PackageId>AIKernel.Providers.Tts</PackageId>
+    <PackageVersion>0.1.4</PackageVersion>
+    <Version>$(PackageVersion)</Version>
+    <AssemblyVersion>0.1.4.0</AssemblyVersion>
+    <FileVersion>$(AssemblyVersion)</FileVersion>
+    <InformationalVersion>$(PackageVersion)</InformationalVersion>
+    <PackageValidationBaselineVersion />
+    <PackageReadmeFile>TTS.md</PackageReadmeFile>
+    <PackageTags>aikernel;provider;tts;kokoro;audio;wav</PackageTags>
+    <Description>AIKernel 0.1.4 capability adapter for an externally provisioned text-to-speech engine.</Description>
+    <PackageReleaseNotes>Initial TTS synthesis capability with a Kokoro-82M HTTP adapter.</PackageReleaseNotes>
+    <TtsContractPackageVersion Condition="'$(TtsContractPackageVersion)' == ''">[0.1.4]</TtsContractPackageVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="AIKernel.Abstractions" Version="$(TtsContractPackageVersion)" />
+    <PackageReference Include="AIKernel.Dtos" Version="$(TtsContractPackageVersion)" />
+    <PackageReference Include="AIKernel.Enums" Version="$(TtsContractPackageVersion)" />
+    <None Update="tts.provider.json" CopyToOutputDirectory="PreserveNewest" Pack="true" PackagePath="providers/" />
+    <None Update="tts.settings.example.json" Pack="true" PackagePath="providers/" />
+    <None Update="docs/TTS.md" Pack="true" PackagePath="TTS.md" />
+    <None Update="docs/TTS.ja.md" Pack="true" PackagePath="TTS.ja.md" />
+    <None Update="samples/kokoro_http.py" Pack="true" PackagePath="samples/kokoro_http.py" />
+  </ItemGroup>
+</Project>

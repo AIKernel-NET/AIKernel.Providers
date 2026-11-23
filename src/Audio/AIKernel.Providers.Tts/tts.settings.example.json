@@ -1,0 +1,7 @@
+{
+  "engine": "kokoro-82m",
+  "endpoint": "http://127.0.0.1:8765/",
+  "language": "en-US",
+  "voice": "af_heart",
+  "timeout": "00:00:30"
+}
