@@ -77,7 +77,7 @@ Python validation until stable publication is explicitly opened.
 | orchestration | AIKernel.Control |
 | provider substrate | AIKernel.Providers |
 | provider implementation | AIKernel.Providers or a dedicated provider package |
-| runtime implementation | Dedicated runtime repository such as AIKernel.Wasm or AIKernel.Cuda13.0 |
+| runtime implementation | `AIKernel.Kernel` bundles the CUDA Driver. `AIKernel.Wasm` owns the browser runtime. |
 | scenario implementation | Dedicated scenario package / repository |
 | tools / CLI | AIKernel.Tools |
 
@@ -91,6 +91,6 @@ Python validation until stable publication is explicitly opened.
 - [ ] Providers do not depend on Wasm or Tools.
 - [ ] Tools do not own provider implementations.
 - [ ] Scenario-specific logic is not mixed into generic providers.
-- [ ] CUDA descriptors remain descriptors; CUDA implementation stays in a dedicated backend.
+- [ ] CUDA descriptors describe the configuration. `AIKernel.Kernel` bundles the native CUDA implementation.
 - [ ] WindowsAI / WinRT implementation stays out of generic Providers.
 - [ ] Public API XML documentation passes `py AIKernel.NET\tools\check_bilingual_xml_docs.py AIKernel.Providers\src` from the shared workspace root.

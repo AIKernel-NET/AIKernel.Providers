@@ -74,7 +74,7 @@ v0.1.3 正典シリーズでは、stable publication が明示的に開始され
 | orchestration | AIKernel.Control |
 | provider substrate | AIKernel.Providers |
 | provider implementation | AIKernel.Providers または dedicated provider package |
-| runtime implementation | AIKernel.Wasm / AIKernel.Cuda13.0 などの dedicated runtime repository |
+| runtime implementation | CUDA Driver は `AIKernel.Kernel` に同梱。ブラウザーのランタイムは `AIKernel.Wasm` が担当。 |
 | scenario implementation | dedicated scenario package / repository |
 | tools / CLI | AIKernel.Tools |
 
@@ -88,6 +88,6 @@ v0.1.3 正典シリーズでは、stable publication が明示的に開始され
 - [ ] Providers が Wasm / Tools に依存していない
 - [ ] Tools が provider implementation を所有していない
 - [ ] Scenario-specific logic が generic providers に混入していない
-- [ ] CUDA descriptor は descriptor のままで、CUDA implementation は dedicated backend にある
+- [ ] CUDA descriptor は設定を表し、ネイティブ実装は `AIKernel.Kernel` 同梱の CUDA Driver にある
 - [ ] WindowsAI / WinRT implementation が generic Providers に混入していない
 - [ ] shared workspace root で `py AIKernel.NET\tools\check_bilingual_xml_docs.py AIKernel.Providers\src` を実行し、public API XML documentation が通る
