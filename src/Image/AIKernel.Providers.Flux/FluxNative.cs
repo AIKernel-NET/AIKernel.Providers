@@ -6,7 +6,11 @@ namespace AIKernel.Providers.Flux;
 
 internal static unsafe partial class FluxNative
 {
-    private const string Library = "aikernel_flux";
+#if AK_FLUX_CUDA
+    internal const string Library = "aikernel_flux_cuda";
+#else
+    internal const string Library = "aikernel_flux";
+#endif
     internal const int Canceled = 3;
 
     [StructLayout(LayoutKind.Sequential)]
@@ -25,7 +29,11 @@ internal static unsafe partial class FluxNative
         internal nuint ReferenceSize;
     }
 
+#if AK_FLUX_CUDA
+    [LibraryImport(Library, EntryPoint = "ak_flux_cuda_abi_version")]
+#else
     [LibraryImport(Library, EntryPoint = "ak_flux_abi_version")]
+#endif
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     internal static partial uint Version();
 
@@ -41,11 +49,20 @@ internal static unsafe partial class FluxNative
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     internal static partial void Free(nint job);
 
+#if AK_FLUX_CUDA
+    [LibraryImport(Library, EntryPoint = "ak_flux_cuda_edit")]
+    [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
+    internal static partial int Edit(FluxJob job, Request* request,
+        delegate* unmanaged[Cdecl]<nint, byte*, ulong, void*, nuint, int> reader,
+        delegate* unmanaged[Cdecl]<nint, byte*, ulong, void*, nuint, int> deviceReader, nint state, FluxCudaDevice device,
+        byte* output, nuint outputSize, byte* error, nuint errorSize);
+#else
     [LibraryImport(Library, EntryPoint = "ak_flux_edit")]
     [UnmanagedCallConv(CallConvs = [typeof(CallConvCdecl)])]
     internal static partial int Edit(FluxJob job, Request* request,
         delegate* unmanaged[Cdecl]<nint, byte*, ulong, void*, nuint, int> reader, nint state,
         byte* output, nuint outputSize, byte* error, nuint errorSize);
+#endif
 
     internal sealed class FluxJob() : SafeHandleZeroOrMinusOneIsInvalid(ownsHandle: true)
     {

@@ -1,5 +1,8 @@
 #include "flux_abi.h"
 #include "stable-diffusion.h"
+#ifdef AK_FLUX_CUDA
+#include "flux_cuda_context.h"
+#endif
 
 #include <atomic>
 #include <cstdio>
@@ -22,6 +25,11 @@ std::mutex execution;
 struct reader_scope {
     ak_flux_reader reader;
     void* state;
+#ifdef AK_FLUX_CUDA
+    ak_flux_reader device_reader;
+    const char* backend;
+    std::atomic<uint64_t> device_reads{0};
+#endif
     std::atomic<uint64_t> successful_reads{0};
 };
 std::atomic<reader_scope*> active_reader{nullptr};
@@ -55,6 +63,19 @@ bool ak_flux_read_weight(const char* path, uint64_t offset, void* destination, s
     return true;
 }
 
+#ifdef AK_FLUX_CUDA
+int ak_flux_read_cuda_weight(const char* buffer_name, const char* path, uint64_t offset, void* destination, size_t size) {
+    auto* scope = active_reader.load(std::memory_order_acquire);
+    if (scope == nullptr || scope->device_reader == nullptr || buffer_name == nullptr ||
+        std::strcmp(buffer_name, scope->backend) != 0)
+        return 0;
+    if (scope->device_reader(scope->state, path, offset, destination, size) != 0)
+        return -1;
+    scope->device_reads.fetch_add(1, std::memory_order_relaxed);
+    return 1;
+}
+#endif
+
 uint32_t AK_FLUX_CALL ak_flux_abi_version() { return 1; }
 
 ak_flux_job* AK_FLUX_CALL ak_flux_job_create() { return new (std::nothrow) ak_flux_job; }
@@ -69,8 +90,12 @@ void AK_FLUX_CALL ak_flux_job_cancel(ak_flux_job* job) {
 
 void AK_FLUX_CALL ak_flux_job_free(ak_flux_job* job) { delete job; }
 
-int32_t AK_FLUX_CALL ak_flux_edit(ak_flux_job* job, const ak_flux_request* req,
-    ak_flux_reader reader, void* state, uint8_t* output, size_t output_size, char* error, size_t error_size) {
+static int32_t edit(ak_flux_job* job, const ak_flux_request* req,
+    ak_flux_reader reader, void* state, uint8_t* output, size_t output_size, char* error, size_t error_size
+#ifdef AK_FLUX_CUDA
+    , ak_flux_reader device_reader = nullptr, int32_t ordinal = 0
+#endif
+    ) {
     if (error != nullptr && error_size > 0) error[0] = '\0';
     if (job == nullptr || req == nullptr || req->struct_size != sizeof(ak_flux_request) || reader == nullptr ||
         output == nullptr || req->reference_rgb == nullptr || req->prompt == nullptr || req->prompt[0] == '\0' ||
@@ -86,7 +111,19 @@ int32_t AK_FLUX_CALL ak_flux_edit(ak_flux_job* job, const ak_flux_request* req,
     try {
         std::lock_guard lock(execution);
         if (job->cancelled) return AK_FLUX_CANCELLED;
+        const char* backend = "cpu";
+#ifdef AK_FLUX_CUDA
+        char runtime_name[24];
+        char buffer_name[24];
+        if (device_reader != nullptr) {
+            std::snprintf(runtime_name, sizeof(runtime_name), "cuda%d", ordinal);
+            std::snprintf(buffer_name, sizeof(buffer_name), "CUDA%d", ordinal);
+            backend = runtime_name;
+        }
+        reader_scope binding{reader, state, device_reader, buffer_name};
+#else
         reader_scope binding{reader, state};
+#endif
         active_reader.store(&binding, std::memory_order_release);
         sd_set_progress_callback([](int, int, float, void*) {}, nullptr);
         struct reset_reader {
@@ -101,7 +138,7 @@ int32_t AK_FLUX_CALL ak_flux_edit(ak_flux_job* job, const ak_flux_request* req,
             sd_opt_set_string(load.get(), "llm_path", req->text_encoder_path) != SD_STATUS_OK ||
             sd_opt_set_string(load.get(), "vae_path", req->vae_path) != SD_STATUS_OK ||
             sd_opt_set_int(load.get(), "n_threads", req->cpu_threads) != SD_STATUS_OK ||
-            sd_opt_set_string(load.get(), "backend", "cpu") != SD_STATUS_OK ||
+            sd_opt_set_string(load.get(), "backend", backend) != SD_STATUS_OK ||
             sd_opt_set_string(load.get(), "params_backend", "disk") != SD_STATUS_OK ||
             sd_opt_set_bool(load.get(), "enable_mmap", false) != SD_STATUS_OK ||
             sd_opt_set_bool(load.get(), "eager_load", false) != SD_STATUS_OK ||
@@ -136,9 +173,17 @@ int32_t AK_FLUX_CALL ak_flux_edit(ak_flux_job* job, const ak_flux_request* req,
         sd_result_t* generated = nullptr;
         auto status = sd_generate_image(context, edit.get(), &generated);
         std::unique_ptr<sd_result_t, decltype(&sd_result_free)> result(generated, sd_result_free);
-        if (status != SD_STATUS_OK || !result || sd_result_get_image_count(result.get()) != 1 ||
-            binding.successful_reads.load(std::memory_order_relaxed) == 0)
+        auto host_reads = binding.successful_reads.load(std::memory_order_relaxed);
+        if (status != SD_STATUS_OK || !result || sd_result_get_image_count(result.get()) != 1)
             return fail(*job, error, error_size, "FLUX did not produce an image using the weight reader.");
+#ifdef AK_FLUX_CUDA
+        if (device_reader != nullptr) {
+            if (binding.device_reads.load(std::memory_order_relaxed) == 0)
+                return fail(*job, error, error_size, "FLUX did not load any weights through the CUDA device pages.");
+        } else
+#endif
+        if (host_reads == 0)
+            return fail(*job, error, error_size, "FLUX did not load any weights through the host pages.");
 
         const sd_tensor_t* image = sd_result_get_image(result.get(), 0);
         if (image == nullptr || sd_tensor_type(image) != SD_TENSOR_U8 || sd_tensor_rank(image) != 3 ||
@@ -157,3 +202,26 @@ int32_t AK_FLUX_CALL ak_flux_edit(ak_flux_job* job, const ak_flux_request* req,
         return fail(*job, error, error_size, "Unknown failure in the FLUX native runtime.");
     }
 }
+
+int32_t AK_FLUX_CALL ak_flux_edit(ak_flux_job* job, const ak_flux_request* req,
+    ak_flux_reader reader, void* state, uint8_t* output, size_t output_size, char* error, size_t error_size) {
+    return edit(job, req, reader, state, output, output_size, error, error_size);
+}
+
+#ifdef AK_FLUX_CUDA
+uint32_t AK_FLUX_CALL ak_flux_cuda_abi_version() { return 1; }
+
+int32_t AK_FLUX_CALL ak_flux_cuda_edit(ak_flux_job* job, const ak_flux_request* req,
+    ak_flux_reader host_reader, ak_flux_reader device_reader, void* state, const ak_flux_cuda_device* device,
+    uint8_t* output, size_t output_size, char* error, size_t error_size) {
+    if (device_reader == nullptr || device == nullptr)
+        return AK_FLUX_INVALID;
+    ak_flux_cuda_context_scope scope(device->context);
+    if (scope.result != CUDA_SUCCESS) {
+        if (error != nullptr && error_size != 0)
+            std::snprintf(error, error_size, "Could not enter the selected CUDA context (%d).", scope.result);
+        return AK_FLUX_FAILED;
+    }
+    return edit(job, req, host_reader, state, output, output_size, error, error_size, device_reader, device->ordinal);
+}
+#endif

@@ -16,11 +16,19 @@ internal sealed class FluxCheckpointPages : IVirtualMemorySource, IDisposable
     private readonly Dictionary<string, Checkpoint> byPath = new(OperatingSystem.IsWindows()
         ? StringComparer.OrdinalIgnoreCase : StringComparer.Ordinal);
     private readonly VirtualMemorySpace pages;
+#if AK_FLUX_CUDA
+    private readonly VirtualMemorySpace devicePages;
+    private readonly FluxCudaDevice device;
+#endif
     internal string[] Paths { get; } = new string[Checkpoints.Length];
 
     private sealed record Checkpoint(FileStream File, long Bytes, long FirstPage, long PageCount);
 
-    internal FluxCheckpointPages(string directory, string swapDirectory, int pageCount, CancellationToken token)
+    internal FluxCheckpointPages(string directory, string swapDirectory, int pageCount, CancellationToken token
+#if AK_FLUX_CUDA
+        , FluxCudaDevice device, int devicePageCount
+#endif
+        )
     {
         long nextPage = 0;
         var scratch = new byte[PageBytes];
@@ -41,6 +49,18 @@ internal sealed class FluxCheckpointPages : IVirtualMemorySource, IDisposable
                 nextPage += count;
             }
             pages = new VirtualMemorySpace(nextPage, PageBytes, pageCount, swapDirectory, source: this);
+#if AK_FLUX_CUDA
+            this.device = device;
+            try
+            {
+                devicePages = new VirtualMemorySpace(nextPage, PageBytes, 1, swapDirectory, devicePageCount, device, this);
+            }
+            catch
+            {
+                pages.Dispose();
+                throw;
+            }
+#endif
         }
         catch
         {
@@ -82,7 +102,8 @@ internal sealed class FluxCheckpointPages : IVirtualMemorySource, IDisposable
         destination[actual..].Clear();
     }
 
-    internal unsafe void Read(string path, ulong offset, nint destination, nuint size, CancellationToken token)
+    internal unsafe void Read(string path, ulong offset, nint destination, nuint size, CancellationToken token,
+        bool deviceDestination = false)
     {
         if (!byPath.TryGetValue(Path.GetFullPath(path), out var checkpoint) || size > int.MaxValue ||
             offset > (ulong)checkpoint.Bytes || (ulong)size > (ulong)checkpoint.Bytes - offset)
@@ -96,8 +117,14 @@ internal sealed class FluxCheckpointPages : IVirtualMemorySource, IDisposable
             int start = (int)(position % PageBytes);
             int length = Math.Min(remaining, PageBytes - start);
             nint target = destination;
-            pages.UseComputeBlock(checkpoint.FirstPage + position / PageBytes,
-                (source, _) => source.Slice(start, length).CopyTo(new Span<byte>((void*)target, length)));
+            long blockIndex = checkpoint.FirstPage + position / PageBytes;
+#if AK_FLUX_CUDA
+            if (deviceDestination)
+                devicePages.UseDeviceBlock(blockIndex, block => device.CopyTo(block, start, target, length));
+            else
+#endif
+                pages.UseComputeBlock(blockIndex,
+                    (source, _) => source.Slice(start, length).CopyTo(new Span<byte>((void*)target, length)));
             position += length;
             remaining -= length;
             destination += length;
@@ -105,10 +132,21 @@ internal sealed class FluxCheckpointPages : IVirtualMemorySource, IDisposable
     }
 
     internal VirtualMemoryStatistics GetStatistics() => pages.GetStatistics();
+#if AK_FLUX_CUDA
+    internal VirtualMemoryStatistics GetDeviceStatistics() => devicePages.GetStatistics();
+#endif
 
     public void Dispose()
     {
-        try { pages.Dispose(); }
+        try
+        {
+#if AK_FLUX_CUDA
+            try { devicePages.Dispose(); }
+            finally { pages.Dispose(); }
+#else
+            pages.Dispose();
+#endif
+        }
         finally
         {
             foreach (var checkpoint in byPath.Values)

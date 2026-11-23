@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <PackageId>AIKernel.Providers.Flux.Cuda</PackageId>
+    <Title>AIKernel FLUX Image Editing Provider for CUDA</Title>
+    <PackageVersion>0.1.5</PackageVersion>
+    <Version>$(PackageVersion)</Version>
+    <AssemblyVersion>0.1.5.0</AssemblyVersion>
+    <FileVersion>$(AssemblyVersion)</FileVersion>
+    <InformationalVersion>$(PackageVersion)</InformationalVersion>
+    <PackageValidationBaselineVersion />
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DefineConstants>$(DefineConstants);AK_FLUX_CUDA</DefineConstants>
+    <PackageReadmeFile>FLUX-CUDA.md</PackageReadmeFile>
+    <PackageTags>aikernel;provider;flux;cuda;image-editing;virtual-memory</PackageTags>
+    <Description>Windows x64 FLUX.2 klein 4B prompt image editing on NVIDIA CUDA with AIKernel-backed checkpoint pages.</Description>
+    <PackageReleaseNotes>Initial separate CUDA package for FLUX.2 klein 4B image editing.</PackageReleaseNotes>
+    <FluxContractSource Condition="'$(UseAIKernelContractSource)' != 'false' and Exists('$(MSBuildThisFileDirectory)../../../../AIKernel.NET/src/AIKernel.Contracts.Images/AIKernel.Contracts.Images.csproj')">$(MSBuildThisFileDirectory)../../../../AIKernel.NET/src/AIKernel.Contracts.Images/AIKernel.Contracts.Images.csproj</FluxContractSource>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Condition="'$(FluxContractSource)' != ''" Include="$(FluxContractSource)" />
+    <PackageReference Condition="'$(FluxContractSource)' == ''" Include="AIKernel.Contracts.Images" Version="0.1.5" />
+    <PackageReference Include="AIKernel.Kernel" Version="[0.1.4]" />
+    <Compile Include="../AIKernel.Providers.Flux/FluxImageProvider.cs" Link="FluxCudaImageProvider.cs" />
+    <Compile Include="../AIKernel.Providers.Flux/FluxCheckpointPages.cs" Link="FluxCheckpointPages.cs" />
+    <Compile Include="../AIKernel.Providers.Flux/FluxNative.cs" Link="FluxNative.cs" />
+    <None Update="FLUX-CUDA.md" Pack="true" PackagePath="FLUX-CUDA.md" />
+    <None Include="../AIKernel.Providers.Flux/THIRD_PARTY_NOTICES.txt" Pack="true" PackagePath="THIRD_PARTY_NOTICES.txt" />
+    <None Include="$(FluxCudaNativeLibrary)" Condition="'$(FluxCudaNativeLibrary)' != ''" Pack="true" PackagePath="runtimes/win-x64/native/aikernel_flux_cuda.dll" />
+  </ItemGroup>
+  <Target Name="RequireFluxCudaNativeLibrary" BeforeTargets="GenerateNuspec">
+    <Error Condition="'$(FluxCudaNativeLibrary)' == '' or !Exists('$(FluxCudaNativeLibrary)')" Text="Build the pinned Windows x64 CUDA bridge and supply -p:FluxCudaNativeLibrary=PATH before packing." />
+  </Target>
+</Project>

@@ -32,7 +32,7 @@ All three pinned weight sources identify their license as Apache-2.0. The accept
 
 ## ABI and memory
 
-The provider calls ABI v1 of `aikernel_flux.dll`. The native tensor loader requests bytes through a callback. AIKernel `VirtualMemorySpace` owns the RAM cache, with checkpoint files on SSD as immutable backing. `LastWeightStatistics` reports resident cache bytes, successful native read requests, and logical reads from the checkpoint source. The budget applies to checkpoint pages. Native tensor staging, activations and decoder workspace have their own allocations. Native CUDA execution and GPU-resident pages require separate implementation and verification.
+The provider calls ABI v1 of `aikernel_flux.dll`. The native tensor loader requests bytes through a callback. AIKernel `VirtualMemorySpace` owns the RAM cache, with checkpoint files on SSD as immutable backing. `LastWeightStatistics` reports resident cache bytes, successful native read requests, and logical reads from the checkpoint source. The budget applies to checkpoint pages. Native tensor staging, activations and decoder workspace have their own allocations. See the [CUDA provider build guide](../AIKernel.Providers.Flux.Cuda/FLUX-CUDA.md) for the optional GPU implementation.
 
 ## Build the native dependency
 
