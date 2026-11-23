@@ -182,17 +182,15 @@ endpoint: "http://localhost:8000"
 model: "Qwen/Qwen2.5"
 ```
 
-`CudaComputeProvider` は CUDA native module、CUDA runtime、ABI loader、device
-profile implementation、native memory operations、kernel が AIKernel.Cuda13.0
-のような専用 backend package に完全に隔離される場合に限り、AIKernel.Providers
-に残せます。
+`CudaComputeProvider` は CUDA の設定と descriptor を提供します。
+`AIKernel.Kernel` 0.1.4 は Windows x64 と Linux x64 向けの CUDA Driver を同梱します。実行時に必要なネイティブ依存は NVIDIA ドライバのみです。
 
 AIKernel.Providers には descriptor、manifest、invoker boundary、backend selection
 metadata を置けます。ただし native CUDA implementation は置けません。
 
 ```yaml
 backend: "cuda13.0"
-nativeModuleRef: "aikernel-cuda://cuda13.0/modules/vector_add"
+nativeModuleRef: "aikernel-cuda://cuda13.0/modules/aikernel_cuda_driver"
 deviceProfile: "auto"
 ```
 
@@ -301,7 +299,6 @@ default Python wrapper に含めてよいもの:
 pip install aikernel-audio-naudio
 pip install aikernel-audio-sdl
 pip install aikernel-wasm
-pip install aikernel-cuda13
 pip install aikernel-windowsai
 pip install aikernel-openai
 pip install aikernel-microsoftai
@@ -363,10 +360,10 @@ CUDA を知ってよい。
 CUDA を実装してはいけない。
 ```
 
-AIKernel.Cuda13.0:
+AIKernel.Kernel:
 
 ```text
-CUDA を実装する。
+CUDA Driver のネイティブ実装を同梱する。
 ```
 
 CudaComputeProvider must not reference AIKernel.Cuda13.0 or CUDA runtime
