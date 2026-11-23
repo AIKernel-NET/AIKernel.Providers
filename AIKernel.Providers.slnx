@@ -10,6 +10,7 @@
   <Folder Name="/src/" />
   <Folder Name="/src/Hosting/">
     <Project Path="src/Hosting/AIKernel.Providers.Distributed/AIKernel.Providers.Distributed.csproj" />
+    <Project Path="src/Hosting/AIKernel.Providers.ProviderPlacement/AIKernel.Providers.ProviderPlacement.csproj" />
   </Folder>
   <Folder Name="/src/Audio/">
     <Project Path="src/Audio/AIKernel.Providers.Audio/AIKernel.Providers.Audio.csproj" />
