@@ -63,6 +63,7 @@ chat、pipeline、CUDA、MicrosoftAI の Provider package は、その capabilit
 
 ## どの Provider を選ぶべきか
 
+- ローカル画像編集とCosmos 3 Edgeによるタグ付けは、0.1.4向けの [AIKernel.Providers.Image](src/Image/AIKernel.Providers.Image/docs/IMAGE.ja.md) を使います。
 - ローカルだけで model runtime を動かしたい -> `AIKernel.Providers.LocalLlm`
 - OpenAI-compatible API を使いたい -> `AIKernel.Providers.ChatOpenAI`
 - Microsoft.Extensions.AI / Azure AI 系 integration を使いたい -> `AIKernel.Providers.MicrosoftAI`

@@ -2,6 +2,7 @@
   <Folder Name="/samples/">
     <Project Path="samples/DistributedApplication/DistributedApplication.csproj" />
     <Project Path="samples/Cosmos.SceneClient/Cosmos.SceneClient.csproj" />
+    <Project Path="samples/Image.LocalClient/Image.LocalClient.csproj" />
   </Folder>
   <Folder Name="/tools/">
     <Project Path="tools/AIKernel.Cosmos.ContractExport/AIKernel.Cosmos.ContractExport.csproj" />
@@ -27,6 +28,9 @@
   </Folder>
   <Folder Name="/src/Cosmos/">
     <Project Path="src/Cosmos/AIKernel.Providers.Cosmos/AIKernel.Providers.Cosmos.csproj" />
+  </Folder>
+  <Folder Name="/src/Image/">
+    <Project Path="src/Image/AIKernel.Providers.Image/AIKernel.Providers.Image.csproj" />
   </Folder>
   <Folder Name="/src/Llm/">
     <Project Path="src/Llm/LocalLlmProvider/LocalLlmProvider.csproj" />

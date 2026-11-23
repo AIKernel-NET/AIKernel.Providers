@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Title>AIKernel Image Provider</Title>
+    <PackageId>AIKernel.Providers.Image</PackageId>
+    <PackageVersion>0.1.4</PackageVersion>
+    <Version>$(PackageVersion)</Version>
+    <AssemblyVersion>0.1.4.0</AssemblyVersion>
+    <FileVersion>$(AssemblyVersion)</FileVersion>
+    <InformationalVersion>$(PackageVersion)</InformationalVersion>
+    <PackageValidationBaselineVersion />
+    <PackageReadmeFile>IMAGE.md</PackageReadmeFile>
+    <PackageTags>aikernel;provider;image;opencv;birefnet;cosmos</PackageTags>
+    <Description>Local CPU illustration, background removal, and Cosmos 3 Edge visual tagging for .NET 10.</Description>
+    <PackageReleaseNotes>Initial image provider for the AIKernel 0.1.4 release family.</PackageReleaseNotes>
+    <ImageContractSourceRoot Condition="'$(UseAIKernelContractSource)' != 'false' and Exists('$(MSBuildThisFileDirectory)../../../../AIKernel.NET/src/AIKernel.Contracts.Images/AIKernel.Contracts.Images.csproj')">$(MSBuildThisFileDirectory)../../../../AIKernel.NET/src</ImageContractSourceRoot>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Condition="'$(ImageContractSourceRoot)' != ''" Include="$(ImageContractSourceRoot)/AIKernel.Contracts.Images/AIKernel.Contracts.Images.csproj" />
+    <PackageReference Condition="'$(ImageContractSourceRoot)' == ''" Include="AIKernel.Contracts.Images" Version="0.1.4" />
+    <PackageReference Include="AIKernel.Kernel" Version="[0.1.4]" />
+    <PackageReference Include="Microsoft.ML.OnnxRuntime" Version="1.32.0" />
+    <PackageReference Include="OpenCvSharp4" Version="4.13.0.20261107" />
+    <PackageReference Include="OpenCvSharp4.runtime.win" Version="4.13.0.20261107" />
+    <None Update="docs/IMAGE.md" Pack="true" PackagePath="IMAGE.md" />
+    <None Update="docs/IMAGE.ja.md" Pack="true" PackagePath="IMAGE.ja.md" />
+    <None Update="THIRD_PARTY_NOTICES.txt" Pack="true" PackagePath="THIRD_PARTY_NOTICES.txt" />
+  </ItemGroup>
+</Project>

@@ -81,6 +81,7 @@ actually part of the host.
 
 ## Which Provider Should I Choose?
 
+- Local image editing and Cosmos 3 Edge tagging → [AIKernel.Providers.Image](src/Image/AIKernel.Providers.Image/docs/IMAGE.md) for the 0.1.4 package family.
 - Local-only model runtime -> `AIKernel.Providers.LocalLlm`
 - OpenAI-compatible API -> `AIKernel.Providers.ChatOpenAI`
 - Microsoft.Extensions.AI / Azure AI style integration -> `AIKernel.Providers.MicrosoftAI`
