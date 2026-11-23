@@ -27,10 +27,7 @@ public static class LocalLlmCapabilityContracts
             descriptor.Runtime,
             GetMetadataValue(descriptor.Metadata, "runtime_uri", null),
             GetMetadataValue(descriptor.Metadata, "artifact_hash", null),
-            [
-                "chat.local",
-                "embedding.local"
-            ],
+            ["chat.local"],
             ["local.process", "llm.local"],
             descriptor.Metadata);
     }

@@ -1,11 +1,10 @@
 {
   "providerId": "local-llm",
   "name": "Local LLM",
-  "version": "0.1.3",
+  "version": "0.1.5",
   "assembly": "LocalLlmProvider.dll",
   "capabilities": [
-    "chat.local",
-    "embedding.local"
+    "chat.local"
   ],
   "metadata": {
     "runtime": "ollama",

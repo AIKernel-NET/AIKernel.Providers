@@ -105,14 +105,12 @@ internal sealed class LocalLlmProviderCapabilities : IProviderCapabilities
 {
     private static readonly string[] Operations =
     [
-        "chat.local",
-        "embedding.local"
+        "chat.local"
     ];
 
     private static readonly string[] DataTypes =
     [
-        "text",
-        "embedding"
+        "text"
     ];
 
     /// <summary>
@@ -219,7 +217,7 @@ internal sealed class LocalLlmProviderCapabilities : IProviderCapabilities
     /// [EN] Provides the SupportsEmbedding public provider contract surface.
     /// [JA] SupportsEmbedding の public provider contract surface を提供します。
     /// </summary>
-    public bool SupportsEmbedding => true;
+    public bool SupportsEmbedding => false;
 
     /// <summary>
     /// [EN] Provides the EmbeddingDimensions public provider contract surface.

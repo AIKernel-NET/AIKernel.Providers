@@ -28,7 +28,7 @@ public sealed class LocalLlmProviderContractTests
         Assert.Equal(CapabilityInvocationMode.AssemblyReference, contract.InvocationMode);
         Assert.Equal("ollama", contract.EntryPoint);
         Assert.Equal("ollama://localhost", contract.ArtifactUri);
-        Assert.Equal(["chat.local", "embedding.local"], contract.ProvidedOperations);
+        Assert.Equal(["chat.local"], contract.ProvidedOperations);
         Assert.Equal(["local.process", "llm.local"], contract.RequiredPermissions);
     }
 
@@ -46,7 +46,8 @@ public sealed class LocalLlmProviderContractTests
 
         Assert.True(await provider.IsAvailableAsync());
         Assert.True(provider.GetCapabilities().SupportsOperation("chat.local"));
-        Assert.True(provider.GetCapabilities().SupportsOperation("embedding.local"));
+        Assert.False(provider.GetCapabilities().SupportsOperation("embedding.local"));
+        Assert.False(provider.GetCapabilities().SupportsEmbedding);
         Assert.Equal("local-llm", provider.ToCapabilityDescriptor().CapabilityId);
 
         await provider.ShutdownAsync();
@@ -82,6 +83,21 @@ public sealed class LocalLlmProviderContractTests
 
         Assert.False(result.Succeeded);
         Assert.Equal("LOCAL_LLM_OPERATION_NOT_SUPPORTED", result.ErrorCode);
+    }
+
+    [Fact]
+    public async Task Invoker_RejectsEmbeddingWithoutRegisteredModel()
+    {
+        var invoker = new LocalLlmInvoker();
+        var result = await invoker.InvokeAsync(new CapabilityInvocationRequest(
+            "invoke-2", "local-llm", "embedding.local", new Dictionary<string, string>(),
+            null, "sha256:replay", new Dictionary<string, string> { ["input"] = "private text" }),
+            TestContext.Current.CancellationToken);
+
+        Assert.False(result.Succeeded);
+        Assert.Null(result.OutputHash);
+        Assert.Equal("provider.model_not_registered", result.ErrorCode);
+        Assert.False(result.Metadata.ContainsKey("input"));
     }
 
     [Fact]

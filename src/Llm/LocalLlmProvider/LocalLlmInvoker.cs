@@ -21,7 +21,18 @@ public sealed class LocalLlmInvoker : ICapabilityModuleInvoker
         cancellationToken.ThrowIfCancellationRequested();
         ArgumentNullException.ThrowIfNull(request);
 
-        var supported = request.Operation is "chat.local" or "embedding.local";
+        if (request.Operation == "embedding.local")
+            return ValueTask.FromResult(new CapabilityInvocationResult(
+                request.InvocationId,
+                request.CapabilityId,
+                Succeeded: false,
+                OutputHash: null,
+                ErrorCode: "provider.model_not_registered",
+                ErrorMessage: "No embedding model is registered in this provider.",
+                ReplayLogHash: request.ReplayLogHash,
+                Metadata: new Dictionary<string, string>(StringComparer.Ordinal) { ["provider"] = "LocalLlmProvider" }));
+
+        var supported = request.Operation == "chat.local";
         var metadata = new SortedDictionary<string, string>(StringComparer.Ordinal);
         foreach (var item in request.Metadata.OrderBy(x => x.Key, StringComparer.Ordinal))
         {
