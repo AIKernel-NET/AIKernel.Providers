@@ -36,13 +36,17 @@ public sealed class ImageEditProvider : IImageEditProvider, IDisposable
 
     /// <inheritdoc />
     public ValueTask<ReadOnlyMemory<byte>> StylizeAsync(ReadOnlyMemory<byte> image, string style,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default) => StylizeAsync(image, style, null, cancellationToken);
+
+    /// <inheritdoc />
+    public ValueTask<ReadOnlyMemory<byte>> StylizeAsync(ReadOnlyMemory<byte> image, string style,
+        ImageStylizationOptions? options, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
         if (style is not ("illustration" or "pencil" or "detail"))
             throw new NotSupportedException("Use illustration, pencil or detail for CPU stylization.");
 
-        return EditAsync(image, style, cancellationToken);
+        return EditAsync(image, style, options?.Strength ?? 1d, cancellationToken);
     }
 
     /// <inheritdoc />
@@ -53,17 +57,18 @@ public sealed class ImageEditProvider : IImageEditProvider, IDisposable
         if (backgroundModelPath is null)
             throw new InvalidOperationException("No BiRefNet_lite checkpoint is registered.");
 
-        return EditAsync(image, style: null, cancellationToken);
+        return EditAsync(image, style: null, strength: 1d, cancellationToken);
     }
 
-    private async ValueTask<ReadOnlyMemory<byte>> EditAsync(ReadOnlyMemory<byte> bytes, string? style, CancellationToken token)
+    private async ValueTask<ReadOnlyMemory<byte>> EditAsync(ReadOnlyMemory<byte> bytes, string? style, double strength,
+        CancellationToken token)
     {
         ImageInput.ValidateSize(bytes, maximumEncodedBytes);
         await execution.WaitAsync(token).ConfigureAwait(false);
         try
         {
             ObjectDisposedException.ThrowIf(disposed, this);
-            return await Task.Run(() => Edit(bytes, style, token), token).ConfigureAwait(false);
+            return await Task.Run(() => Edit(bytes, style, strength, token), token).ConfigureAwait(false);
         }
         finally
         {
@@ -71,10 +76,13 @@ public sealed class ImageEditProvider : IImageEditProvider, IDisposable
         }
     }
 
-    private byte[] Edit(ReadOnlyMemory<byte> bytes, string? style, CancellationToken token)
+    private byte[] Edit(ReadOnlyMemory<byte> bytes, string? style, double strength, CancellationToken token)
     {
         token.ThrowIfCancellationRequested();
         using var source = ImageInput.Decode(bytes, maximumPixels);
+        if (strength == 0d)
+            return EncodePng(source, token);
+
         using var bgr = ImageInput.ToBgr(source);
         using var sourceAlpha = new Mat();
         if (source.Channels() == 4)
@@ -109,6 +117,9 @@ public sealed class ImageEditProvider : IImageEditProvider, IDisposable
                     break;
             }
 
+            if (strength < 1d)
+                Cv2.AddWeighted(bgr, 1d - strength, edited, strength, 0d, edited);
+
             if (sourceAlpha.Empty())
                 edited.CopyTo(output);
             else
@@ -118,6 +129,11 @@ public sealed class ImageEditProvider : IImageEditProvider, IDisposable
             }
         }
 
+        return EncodePng(output, token);
+    }
+
+    private static byte[] EncodePng(Mat output, CancellationToken token)
+    {
         token.ThrowIfCancellationRequested();
         if (!Cv2.ImEncode(".png", output, out byte[] png))
             throw new InvalidOperationException("OpenCV could not encode the edited image.");
