@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="AIKernel.Providers.Embedding" Version="[0.1.4]" />
+    <PackageReference Include="AIKernel.Providers.LocalLlm" Version="[0.1.5]" />
+    <PackageReference Include="AIKernel.Kernel.ProviderPlacement" Version="[0.1.4]" />
+  </ItemGroup>
+</Project>
