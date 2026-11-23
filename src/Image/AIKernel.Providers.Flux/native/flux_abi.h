@@ -16,6 +16,7 @@ extern "C" {
 #endif
 
 typedef struct ak_flux_job ak_flux_job;
+typedef struct ak_flux_cuda_device ak_flux_cuda_device;
 
 // Copy exactly size bytes and return 0 on success. The destination is borrowed
 // only for this callback. Calls may occur on native worker threads.
@@ -44,6 +45,13 @@ AK_FLUX_API void AK_FLUX_CALL ak_flux_job_cancel(ak_flux_job* job);
 AK_FLUX_API void AK_FLUX_CALL ak_flux_job_free(ak_flux_job* job);
 AK_FLUX_API int32_t AK_FLUX_CALL ak_flux_edit(ak_flux_job* job, const ak_flux_request* request,
     ak_flux_reader reader, void* state, uint8_t* output, size_t output_size, char* error, size_t error_size);
+
+#ifdef AK_FLUX_CUDA
+AK_FLUX_API uint32_t AK_FLUX_CALL ak_flux_cuda_abi_version(void);
+AK_FLUX_API int32_t AK_FLUX_CALL ak_flux_cuda_edit(ak_flux_job* job, const ak_flux_request* request,
+    ak_flux_reader host_reader, ak_flux_reader device_reader, void* state, const ak_flux_cuda_device* device,
+    uint8_t* output, size_t output_size, char* error, size_t error_size);
+#endif
 
 #ifdef __cplusplus
 }
