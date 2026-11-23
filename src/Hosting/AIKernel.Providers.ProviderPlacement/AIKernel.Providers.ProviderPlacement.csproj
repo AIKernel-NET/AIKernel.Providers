@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <PackageVersion>0.1.4</PackageVersion>
+    <Version>$(PackageVersion)</Version>
+    <AssemblyVersion>0.1.4.0</AssemblyVersion>
+    <FileVersion>0.1.4.0</FileVersion>
+    <InformationalVersion>$(PackageVersion)</InformationalVersion>
+    <PackageValidationBaselineVersion></PackageValidationBaselineVersion>
+    <PackageReadmeFile>PROVIDER-WORK.md</PackageReadmeFile>
+    <PackageTags>aikernel;provider;placement;http</PackageTags>
+    <Description>Authenticated central pull transport for AIKernel provider placement ABI v1.</Description>
+    <PackageReleaseNotes>First central worker transport for AIKernel 0.1.4 applications.</PackageReleaseNotes>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="AIKernel.Abstractions" Version="[0.1.4]" />
+    <PackageReference Include="AIKernel.Contracts.ProviderPlacement" Version="[0.1.4]" />
+    <None Update="PROVIDER-WORK.md" Pack="true" PackagePath="/" />
+  </ItemGroup>
+</Project>
