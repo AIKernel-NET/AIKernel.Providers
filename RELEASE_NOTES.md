@@ -2,11 +2,11 @@
 
 [日本語](RELEASE_NOTES-ja.md)
 
-## 0.1.4 (in development)
+## 0.1.4
 
-The optional distributed application provider hosts authenticated HTTP and MCP Streamable HTTP and manages multiple server profiles. The sample saves a note over MCP and reads its ID over HTTP. [Run the sample and tests](samples/DistributedApplication/README.md)
+The optional distributed application provider hosts authenticated HTTP and MCP Streamable HTTP and manages multiple server profiles. The sample saves a note over MCP and reads its ID over HTTP. [Run the sample and tests](samples/DistributedApplication/README.en.md). See the [installation guide](https://aikernel.net/docs/operations/PACKAGE_INSTALLATION_GUIDE/) for separately published module versions.
 
-## 0.1.3 (Unreleased)
+## 0.1.3
 
 - Align the official Provider packages with AIKernel.NET, Core, and Control 0.1.3. Keep endpoint, driver, and optional native-runtime concerns outside Core.
 - Include the Compute provider in `aikernel-providers` bundle verification: check that the matching DLL is loaded and that the provider can be registered. Native CUDA execution remains an opt-in capability.

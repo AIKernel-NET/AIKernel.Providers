@@ -37,8 +37,7 @@ module として読み込まれることを想定しています。AIKernel.Core
 AIKernel.Abstractions が定義する contract boundary を維持しながら、capability
 descriptor と invocation surface を公開します。
 
-AIKernel.Providers 0.1.3 は AIKernel.Core / AIKernel.Control 0.1.3 と同じ
-開発方針に従います。この line は NuGet package と同期 Python wrapper を公開します。stable publication が開くまで、local NuGet development package には `0.1.3-dev{build-number}`、local Python wheel validation には `0.1.3.dev{build-number}` を使います。
+現在の SDK 系列は 0.1.4 です。Provider の初回公開は 0.1.4 とし、モジュール単独の再リリースでは 0.1.4.1 のように第4要素を進めます。過去に異なる採番で公開したモジュールの版は、[パッケージ導入ガイド](https://aikernel.net/docs/operations/PACKAGE_INSTALLATION_GUIDE-jp/)で確認できます。
 
 リリースノート:
 
@@ -52,9 +51,9 @@ credential、local model runtime、native driver を有効化する前に、ま�
 manifest の検証から始めます。
 
 ```bash
-dotnet add package AIKernel.Providers.Standard --version 0.1.3
-dotnet add package AIKernel.Providers.ChatOpenAI --version 0.1.3
-dotnet add package AIKernel.Providers.MicrosoftAI --version 0.1.3
+dotnet add package AIKernel.Providers.Standard --version 0.1.4
+dotnet add package AIKernel.Providers.ChatOpenAI --version 0.1.4
+dotnet add package AIKernel.Providers.MicrosoftAI --version 0.1.4
 ```
 
 OS driver surface が必要な場合は `AIKernel.Providers.Standard` を使用します。LLM、
@@ -145,8 +144,7 @@ MicrosoftAIProvider は managed package と dependency-injection extension surfa
 `aikernel-providers` は、公式拡張 Provider セット向けに予約している Python
 wrapper 名です。
 
-0.1.3 development line では 同期 Python wrapper を公開します。既存の
-Python 関連資料は、参考および将来明示的に予定される Python release のために残します。
+PyPI は `python -m pip install aikernel-providers==0.1.4` で導入できます。
 
 C# Provider contract boundary を Python object と helper function として公開します。
 
@@ -209,19 +207,19 @@ dotnet test AIKernel.Providers.slnx
 .NET host では、公開後に NuGet package を使用します。
 
 ```bash
-dotnet add package AIKernel.Providers.ChatOpenAI --version 0.1.3
-dotnet add package AIKernel.Providers.ChatHistory --version 0.1.3
-dotnet add package AIKernel.Providers.Substrate --version 0.1.3
-dotnet add package AIKernel.Providers.Council --version 0.1.3
-dotnet add package AIKernel.Providers.Audio --version 0.1.3
-dotnet add package AIKernel.Providers.Compute --version 0.1.3
-dotnet add package AIKernel.Providers.CudaCompute --version 0.1.3
-dotnet add package AIKernel.Providers.DynamicPipelineCompiler --version 0.1.3
-dotnet add package AIKernel.Providers.LocalLlm --version 0.1.3
-dotnet add package AIKernel.Providers.MicrosoftAI --version 0.1.3
+dotnet add package AIKernel.Providers.ChatOpenAI --version 0.1.4
+dotnet add package AIKernel.Providers.ChatHistory --version 0.1.4
+dotnet add package AIKernel.Providers.Substrate --version 0.1.4
+dotnet add package AIKernel.Providers.Council --version 0.1.4
+dotnet add package AIKernel.Providers.Audio --version 0.1.4
+dotnet add package AIKernel.Providers.Compute --version 0.1.4
+dotnet add package AIKernel.Providers.CudaCompute --version 0.1.4
+dotnet add package AIKernel.Providers.DynamicPipelineCompiler --version 0.1.4
+dotnet add package AIKernel.Providers.LocalLlm --version 0.1.6
+dotnet add package AIKernel.Providers.MicrosoftAI --version 0.1.4
 ```
 
-Python 関連資料は 0.1.3 line の同期 wrapper として公開します。
+他の Provider と公開版は[パッケージ導入ガイド](https://aikernel.net/docs/operations/PACKAGE_INSTALLATION_GUIDE-jp/)をご覧ください。
 同期 Python wrapper を公開します。
 
 ## ドキュメント

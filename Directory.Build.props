@@ -4,10 +4,10 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
 
-    <StablePackageVersion>0.1.3</StablePackageVersion>
+    <StablePackageVersion>0.1.4</StablePackageVersion>
     <EnablePackageValidation>true</EnablePackageValidation>
     <PackageValidationBaselineVersion>0.1.3</PackageValidationBaselineVersion>
-    <LocalPackageVersionPrefix>0.1.3</LocalPackageVersionPrefix>
+    <LocalPackageVersionPrefix>$(StablePackageVersion)</LocalPackageVersionPrefix>
     <LocalPackageBuildNumber Condition="'$(LocalPackageBuildNumber)' == ''">0</LocalPackageBuildNumber>
     <UseLocalPackageVersion Condition="'$(UseLocalPackageVersion)' == ''">false</UseLocalPackageVersion>
     <PackageVersion Condition="'$(UseLocalPackageVersion)' == 'true'">$(LocalPackageVersionPrefix)-dev$(LocalPackageBuildNumber)</PackageVersion>
@@ -34,10 +34,7 @@
     <PackageTags>aikernel;providers;official-provider-set;openai;microsoft-ai;cuda;cpu-compute;filesystem;logging;process-supervisor;event-bus;network;scheduler;profiler;local-llm;chat-history;pipeline-compiler;semantic-runtime</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageIcon>aikernel-logo128x128.png</PackageIcon>
-    <Description>AIKernel.Providers official extension provider set v0.1.3. Provides external provider drivers for AIKernel semantic runtime workflows without coupling provider-specific logic into Core, Control, or Tools, with synchronized Python wrapper support.</Description>
-    <PackageReleaseNotes>
-      AIKernel.Providers v0.1.3 - Release build aligned with AIKernel.NET contract packages v0.1.3, AIKernel.Core v0.1.3, AIKernel.Control v0.1.3, synchronized Python wrapper package aikernel-providers v0.1.3, and local development package outputs using 0.1.3-dev{build-number}.
-    </PackageReleaseNotes>
+    <Description>Official AIKernel extension provider. See the repository release notes and NuGet dependencies for this package.</Description>
   </PropertyGroup>
 
   <ItemGroup>
@@ -56,9 +53,8 @@
       <FileWrites Include="$(IntermediateOutputPath)ProviderBuildVersion.g.cs" />
     </ItemGroup>
   </Target>
-  <!-- The dev checkout consumes the shared cancellation API from the matching Core source.
-       Versioned release feeds still resolve the requested Common package. -->
-  <PropertyGroup Condition="'$(AIKernelCommonSourceProject)' == '' and '$(AIKernelCorePackageVersion)' == '0.1.3'">
+  <!-- Opt-in development builds may use Common from the adjacent source checkout. -->
+  <PropertyGroup Condition="'$(AIKernelCommonSourceProject)' == '' and '$(UseLocalPackageVersion)' == 'true'">
     <AIKernelCommonSourceProject Condition="Exists('$(MSBuildThisFileDirectory)../AIKernel.Core/src/AIKernel.Common/AIKernel.Common.csproj')">$(MSBuildThisFileDirectory)../AIKernel.Core/src/AIKernel.Common/AIKernel.Common.csproj</AIKernelCommonSourceProject>
   </PropertyGroup>
 </Project>

@@ -20,7 +20,7 @@ JA: capability descriptor と deterministic routing policy を含む pure manage
   </ItemGroup>
   <Import Project="../../../SharedContracts.props" />
   <ItemGroup>
-    <ProjectReference Condition="'$(AIKernelContractSourceRoot)' != ''" Include="$(AIKernelContractSourceRoot)/AIKernel.Contracts/AIKernel.Contracts.csproj" />
-    <PackageReference Condition="'$(AIKernelContractSourceRoot)' == ''" Include="AIKernel.Contracts" Version="$(DistributedContractVersion)" />
+    <ProjectReference Condition="'$(AIKernelContractSourceRoot)' != ''" Include="$(AIKernelContractSourceRoot)/AIKernel.Contracts/AIKernel.Contracts.csproj" Aliases="global,PerceptionContracts" />
+    <PackageReference Condition="'$(AIKernelContractSourceRoot)' == ''" Include="AIKernel.Contracts" Version="$(DistributedContractVersion)" Aliases="global,PerceptionContracts" />
   </ItemGroup>
 </Project>

@@ -2,11 +2,13 @@
 
 [English](RELEASE_NOTES.md)
 
-## 0.1.4（公開準備中）
+## 0.1.4
 
 標準 Provider に認証付き HTTP と MCP Streamable HTTP、複数サーバーの接続管理を追加しました。サンプルでは MCP で保存したメモを同じ ID で HTTP から取得できます。[起動と試験手順](samples/DistributedApplication/README.md)
 
-## 0.1.3（公開準備中）
+個別公開されたモジュールの版は[パッケージ導入ガイド](https://aikernel.net/docs/operations/PACKAGE_INSTALLATION_GUIDE-jp/)で確認できます。
+
+## 0.1.3
 
 - 公式 Provider パッケージを AIKernel.NET・Core・Control の 0.1.3 に揃えます。接続先、ドライバー、任意のネイティブランタイムは Core の外に置きます。
 - `aikernel-providers` の同梱検証には Compute を含め、対応する DLL の読み込みと Provider の登録を確認します。CUDA のネイティブ実行は利用側が明示的に有効化します。

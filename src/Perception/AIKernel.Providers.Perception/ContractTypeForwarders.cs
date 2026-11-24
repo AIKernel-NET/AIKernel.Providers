@@ -1,3 +1,5 @@
+extern alias PerceptionContracts;
+
 using System.Runtime.CompilerServices;
 
 [assembly: TypeForwardedTo(typeof(AIKernel.Providers.Perception.AudioSpectrumRequest))]
@@ -17,7 +19,7 @@ using System.Runtime.CompilerServices;
 [assembly: TypeForwardedTo(typeof(AIKernel.Providers.Perception.HsvThresholdMaskRequest))]
 [assembly: TypeForwardedTo(typeof(AIKernel.Providers.Perception.HsvThresholdMaskResult))]
 [assembly: TypeForwardedTo(typeof(AIKernel.Providers.Perception.IAuditoryPerceptionProvider))]
-[assembly: TypeForwardedTo(typeof(AIKernel.Providers.Perception.IFramePerceptionProvider))]
+[assembly: TypeForwardedTo(typeof(PerceptionContracts::AIKernel.Providers.Perception.IFramePerceptionProvider))]
 [assembly: TypeForwardedTo(typeof(AIKernel.Providers.Perception.IPerceptionAlgorithmKernel))]
 [assembly: TypeForwardedTo(typeof(AIKernel.Providers.Perception.IResidentPerceptionAlgorithmKernel))]
 [assembly: TypeForwardedTo(typeof(AIKernel.Providers.Perception.IRetryIntentResolver))]

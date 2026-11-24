@@ -3,7 +3,7 @@
 
 0.1.4 · [Run the HTTP/MCP notes sample](samples/DistributedApplication/README.en.md)
 
-CUDA Driver defaults (0.1.4 preparation): [migration and compatibility](docs/CUDA-DRIVER-MIGRATION.md).
+CUDA Driver defaults in 0.1.4: [migration and compatibility](docs/CUDA-DRIVER-MIGRATION.md).
 
 [日本語 README](README-ja.md)
 
@@ -46,8 +46,7 @@ repository keeps only driver implementations such as CPU/CUDA compute,
 standard file systems, logging drivers, process supervisor drivers, network
 drivers, schedulers, and profilers.
 
-AIKernel.Providers 0.1.3 follows the same development policy as
-AIKernel.Core and AIKernel.Control 0.1.3. The line publishes NuGet packages and synchronized Python wrappers. Use `0.1.3-dev{build-number}` for local NuGet development packages and `0.1.3.dev{build-number}` for local Python wheel validation until stable publication opens.
+The current SDK line is 0.1.4. A Provider starts at 0.1.4 and uses a fourth component for module-only releases, such as 0.1.4.1. The [installation guide](https://aikernel.net/docs/operations/PACKAGE_INSTALLATION_GUIDE/) lists the published versions, including modules previously published with other numbering.
 
 ## Concept Elevation
 
@@ -70,9 +69,9 @@ manifest validation before enabling live endpoints, credentials, local model
 runtimes, or native drivers.
 
 ```bash
-dotnet add package AIKernel.Providers.Standard --version 0.1.3
-dotnet add package AIKernel.Providers.ChatOpenAI --version 0.1.3
-dotnet add package AIKernel.Providers.MicrosoftAI --version 0.1.3
+dotnet add package AIKernel.Providers.Standard --version 0.1.4
+dotnet add package AIKernel.Providers.ChatOpenAI --version 0.1.4
+dotnet add package AIKernel.Providers.MicrosoftAI --version 0.1.4
 ```
 
 Use `AIKernel.Providers.Standard` for OS driver surfaces. Add LLM, chat,
@@ -136,8 +135,7 @@ Provider projects are grouped by category under `src/`:
 
 ## Provider Manifests
 
-Each external provider includes a JSON manifest that can be copied into a host
-provider directory and loaded dynamically:
+Providers that ship JSON manifests can be loaded dynamically from a host provider directory. Examples:
 
 - `src/Chat/ChatOpenAIProvider/openai.provider.json`
 - `src/Chat/ChatHistoryProvider/chat-history.provider.json`
@@ -163,9 +161,7 @@ extension surface; it does not currently ship a separate manifest file.
 `aikernel-providers` is the reserved Python wrapper name for the official
 extension provider set.
 
-The 0.1.3 development line publishes a synchronized PyPI wrapper. Existing
-Python materials remain in the repository for reference and future scheduled
-Python releases only.
+Install the matching SDK-line wrapper with `python -m pip install aikernel-providers==0.1.4`.
 
 It exposes the C# provider contract boundary as Python objects and helper
 functions:
@@ -230,19 +226,19 @@ Common package metadata is centralized in `Directory.Build.props`.
 For .NET hosts during public release:
 
 ```bash
-dotnet add package AIKernel.Providers.ChatOpenAI --version 0.1.3
-dotnet add package AIKernel.Providers.ChatHistory --version 0.1.3
-dotnet add package AIKernel.Providers.Substrate --version 0.1.3
-dotnet add package AIKernel.Providers.Council --version 0.1.3
-dotnet add package AIKernel.Providers.Audio --version 0.1.3
-dotnet add package AIKernel.Providers.Compute --version 0.1.3
-dotnet add package AIKernel.Providers.CudaCompute --version 0.1.3
-dotnet add package AIKernel.Providers.DynamicPipelineCompiler --version 0.1.3
-dotnet add package AIKernel.Providers.LocalLlm --version 0.1.3
-dotnet add package AIKernel.Providers.MicrosoftAI --version 0.1.3
+dotnet add package AIKernel.Providers.ChatOpenAI --version 0.1.4
+dotnet add package AIKernel.Providers.ChatHistory --version 0.1.4
+dotnet add package AIKernel.Providers.Substrate --version 0.1.4
+dotnet add package AIKernel.Providers.Council --version 0.1.4
+dotnet add package AIKernel.Providers.Audio --version 0.1.4
+dotnet add package AIKernel.Providers.Compute --version 0.1.4
+dotnet add package AIKernel.Providers.CudaCompute --version 0.1.4
+dotnet add package AIKernel.Providers.DynamicPipelineCompiler --version 0.1.4
+dotnet add package AIKernel.Providers.LocalLlm --version 0.1.6
+dotnet add package AIKernel.Providers.MicrosoftAI --version 0.1.4
 ```
 
-Python materials are published as synchronized 0.1.3 wrappers for this line.
+See the [installation guide](https://aikernel.net/docs/operations/PACKAGE_INSTALLATION_GUIDE/) for additional Providers and their published versions.
 
 ## Documentation
 

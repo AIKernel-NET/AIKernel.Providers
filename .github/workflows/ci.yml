@@ -42,4 +42,8 @@ jobs:
         run: dotnet test AIKernel.Providers.slnx -c Release --no-build --no-restore
       - name: Pack
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        run: dotnet pack AIKernel.Providers.slnx -c Release --no-build --no-restore
+        env:
+          PROVIDER_PACKAGE_DIRECTORY: ${{ runner.temp }}/aikernel-provider-packages
+        run: |
+          dotnet pack AIKernel.Providers.slnx -c Release --no-build --no-restore -p:PackageOutputPath="${{ env.PROVIDER_PACKAGE_DIRECTORY }}"
+          python tools/check_package_metadata.py "${{ env.PROVIDER_PACKAGE_DIRECTORY }}"
