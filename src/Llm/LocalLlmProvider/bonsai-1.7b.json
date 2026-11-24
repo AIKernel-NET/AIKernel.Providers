@@ -1,0 +1,17 @@
+{
+  "modelId": "bonsai-1.7b",
+  "version": "Q1_0-1",
+  "readerId": "gguf",
+  "tokenizerVersion": "qwen2-bpe-1",
+  "weightsSha256": "3d7c6c90dd98717a203adb22d5eacd2581850e40aa5327e144b97766cae5f7e3",
+  "tokenizerSha256": "f76f61874e7392480c6de1946c6ede6e4918ef6d32da301895b5bc9ec215c6dc",
+  "shape": {
+    "width": 2048,
+    "hidden": 6144,
+    "heads": 16,
+    "kvHeads": 8,
+    "headSize": 128,
+    "layers": 28,
+    "epsilon": 1e-06
+  }
+}

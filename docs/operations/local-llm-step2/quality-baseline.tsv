@@ -1,0 +1,593 @@
+Assembly	LocalLlmProvider, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null	85	125	68
+Field	AIKernel.Kernel.Inference.DenseModelRegistration._document	100	0	1
+Field	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.Epsilon	93	0	0
+Field	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.Heads	93	0	0
+Field	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.LayerCount	93	0	0
+Field	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.Owners	93	0	0
+Field	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.PleWidth	93	0	0
+Field	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.Vocabulary	93	0	0
+Field	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.Width	93	0	0
+Field	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.Window	93	0	0
+Field	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.chat	100	0	1
+Field	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.context	100	0	0
+Field	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.cuda	100	0	1
+Field	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.disposed	100	0	0
+Field	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.embedding	100	0	1
+Field	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.execution	100	0	1
+Field	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.file	100	0	1
+Field	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.finalNorm	100	0	0
+Field	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.fullFrequencies	100	0	0
+Field	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.gate	89	0	1
+Field	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.instructionSet	100	0	1
+Field	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.layers	93	0	0
+Field	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.localFrequencies	100	0	0
+Field	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.paged	100	0	1
+Field	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.pleEmbedding	100	0	1
+Field	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.pleNorm	100	0	0
+Field	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.pleProjection	100	0	1
+Field	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.resident	100	0	1
+Field	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.threads	100	0	0
+Field	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.tokenizer	100	0	1
+Field	AIKernel.Kernel.Inference.GgufDenseWeights._file	100	0	1
+Field	AIKernel.Kernel.Inference.GgufDenseWeights._pages	100	0	1
+Field	AIKernel.Kernel.Inference.GgufDenseWeights._storage	93	0	2
+Field	AIKernel.Kernel.Inference.GgufTensorEncoding.Formats	72	0	4
+Field	AIKernel.Kernel.Inference.GgufWeights.Metadata	100	0	1
+Field	AIKernel.Kernel.Inference.GgufWeights.Tensors	100	0	2
+Field	AIKernel.Kernel.Inference.GgufWeights.address	100	0	0
+Field	AIKernel.Kernel.Inference.GgufWeights.directReads	100	0	1
+Field	AIKernel.Kernel.Inference.GgufWeights.map	100	0	1
+Field	AIKernel.Kernel.Inference.GgufWeights.view	100	0	1
+Field	AIKernel.Kernel.Inference.GptOss20BCpuModel.AttentionWidth	90	0	0
+Field	AIKernel.Kernel.Inference.GptOss20BCpuModel.Contraction	93	0	0
+Field	AIKernel.Kernel.Inference.GptOss20BCpuModel.Experts	93	0	0
+Field	AIKernel.Kernel.Inference.GptOss20BCpuModel.Head	93	0	0
+Field	AIKernel.Kernel.Inference.GptOss20BCpuModel.Heads	93	0	0
+Field	AIKernel.Kernel.Inference.GptOss20BCpuModel.KvHeads	93	0	0
+Field	AIKernel.Kernel.Inference.GptOss20BCpuModel.KvWidth	89	0	0
+Field	AIKernel.Kernel.Inference.GptOss20BCpuModel.Layers	93	0	0
+Field	AIKernel.Kernel.Inference.GptOss20BCpuModel.Lead	93	0	0
+Field	AIKernel.Kernel.Inference.GptOss20BCpuModel.Lower	93	0	0
+Field	AIKernel.Kernel.Inference.GptOss20BCpuModel.Pieces	78	0	3
+Field	AIKernel.Kernel.Inference.GptOss20BCpuModel.Upper	93	0	0
+Field	AIKernel.Kernel.Inference.GptOss20BCpuModel.Vocab	93	0	0
+Field	AIKernel.Kernel.Inference.GptOss20BCpuModel.Width	93	0	0
+Field	AIKernel.Kernel.Inference.GptOss20BCpuModel.bpe	100	0	1
+Field	AIKernel.Kernel.Inference.GptOss20BCpuModel.channel	100	0	0
+Field	AIKernel.Kernel.Inference.GptOss20BCpuModel.context	100	0	0
+Field	AIKernel.Kernel.Inference.GptOss20BCpuModel.disposed	100	0	0
+Field	AIKernel.Kernel.Inference.GptOss20BCpuModel.embedding	100	0	1
+Field	AIKernel.Kernel.Inference.GptOss20BCpuModel.end	100	0	0
+Field	AIKernel.Kernel.Inference.GptOss20BCpuModel.file	100	0	1
+Field	AIKernel.Kernel.Inference.GptOss20BCpuModel.frequencies	88	0	0
+Field	AIKernel.Kernel.Inference.GptOss20BCpuModel.gate	90	0	1
+Field	AIKernel.Kernel.Inference.GptOss20BCpuModel.layers	100	0	0
+Field	AIKernel.Kernel.Inference.GptOss20BCpuModel.message	100	0	0
+Field	AIKernel.Kernel.Inference.GptOss20BCpuModel.output	100	0	1
+Field	AIKernel.Kernel.Inference.GptOss20BCpuModel.outputNorm	100	0	0
+Field	AIKernel.Kernel.Inference.GptOss20BCpuModel.pages	100	0	1
+Field	AIKernel.Kernel.Inference.GptOss20BCpuModel.start	100	0	0
+Field	AIKernel.Kernel.Inference.GptOss20BCpuModel.stop	100	0	0
+Field	AIKernel.Kernel.Inference.GptOss20BCpuModel.threads	100	0	0
+Field	AIKernel.Kernel.Inference.Qwen3CpuModel.backend	100	0	0
+Field	AIKernel.Kernel.Inference.Qwen3CpuModel.cleanupFailed	100	0	0
+Field	AIKernel.Kernel.Inference.Qwen3CpuModel.context	100	0	0
+Field	AIKernel.Kernel.Inference.Qwen3CpuModel.decodeBackend	100	0	0
+Field	AIKernel.Kernel.Inference.Qwen3CpuModel.decodeThreads	100	0	0
+Field	AIKernel.Kernel.Inference.Qwen3CpuModel.embedding	100	0	1
+Field	AIKernel.Kernel.Inference.Qwen3CpuModel.epsilon	100	0	0
+Field	AIKernel.Kernel.Inference.Qwen3CpuModel.file	100	0	1
+Field	AIKernel.Kernel.Inference.Qwen3CpuModel.finalNorm	100	0	0
+Field	AIKernel.Kernel.Inference.Qwen3CpuModel.frequencies	100	0	0
+Field	AIKernel.Kernel.Inference.Qwen3CpuModel.gate	89	0	1
+Field	AIKernel.Kernel.Inference.Qwen3CpuModel.gpu	100	0	1
+Field	AIKernel.Kernel.Inference.Qwen3CpuModel.headSize	100	0	0
+Field	AIKernel.Kernel.Inference.Qwen3CpuModel.heads	100	0	0
+Field	AIKernel.Kernel.Inference.Qwen3CpuModel.hidden	100	0	0
+Field	AIKernel.Kernel.Inference.Qwen3CpuModel.integerWarmupComplete	100	0	0
+Field	AIKernel.Kernel.Inference.Qwen3CpuModel.kvHeads	100	0	0
+Field	AIKernel.Kernel.Inference.Qwen3CpuModel.kvSize	100	0	0
+Field	AIKernel.Kernel.Inference.Qwen3CpuModel.layers	100	0	0
+Field	AIKernel.Kernel.Inference.Qwen3CpuModel.output	100	0	1
+Field	AIKernel.Kernel.Inference.Qwen3CpuModel.prefillBackend	100	0	0
+Field	AIKernel.Kernel.Inference.Qwen3CpuModel.prefillThreads	100	0	0
+Field	AIKernel.Kernel.Inference.Qwen3CpuModel.prefixCache	88	0	1
+Field	AIKernel.Kernel.Inference.Qwen3CpuModel.preserveQ8Arithmetic	100	0	0
+Field	AIKernel.Kernel.Inference.Qwen3CpuModel.profileEnabled	86	0	1
+Field	AIKernel.Kernel.Inference.Qwen3CpuModel.quantizeGpuActivations	100	0	0
+Field	AIKernel.Kernel.Inference.Qwen3CpuModel.querySize	100	0	0
+Field	AIKernel.Kernel.Inference.Qwen3CpuModel.requestedInstructionSet	100	0	0
+Field	AIKernel.Kernel.Inference.Qwen3CpuModel.ropeAmplitude	100	0	0
+Field	AIKernel.Kernel.Inference.Qwen3CpuModel.threads	100	0	0
+Field	AIKernel.Kernel.Inference.Qwen3CpuModel.tokenizer	100	0	1
+Field	AIKernel.Kernel.Inference.Qwen3CpuModel.tuner	100	0	1
+Field	AIKernel.Kernel.Inference.Qwen3CpuModel.tuningOptions	100	0	1
+Field	AIKernel.Kernel.Inference.Qwen3CpuModel.tuningStatus	100	0	1
+Field	AIKernel.Kernel.Inference.Qwen3CpuModel.width	100	0	0
+Field	AIKernel.Kernel.Inference.Qwen3CpuModel.workspace	100	0	1
+Field	AIKernel.Kernel.Inference.TensorPageStore.PageBytes	86	0	0
+Field	AIKernel.Kernel.Inference.TensorPageStore.accesses	100	0	0
+Field	AIKernel.Kernel.Inference.TensorPageStore.addressSpaceLimit	100	0	1
+Field	AIKernel.Kernel.Inference.TensorPageStore.cacheSlots	100	0	0
+Field	AIKernel.Kernel.Inference.TensorPageStore.handle	100	0	1
+Field	AIKernel.Kernel.Inference.TensorPageStore.layouts	93	0	2
+Field	AIKernel.Kernel.Inference.TensorPageStore.loaded	100	0	0
+Field	AIKernel.Kernel.Inference.TensorPageStore.options	100	0	1
+Field	AIKernel.Kernel.Inference.TensorPageStore.ownsHandle	100	0	0
+Field	AIKernel.Kernel.Inference.TensorPageStore.pageSize	100	0	0
+Field	AIKernel.Kernel.Inference.TensorPageStore.pages	93	0	2
+Field	AIKernel.Kernel.Inference.TensorPageStore.process	93	0	1
+Field	AIKernel.Kernel.Inference.TensorPageStore.space	100	0	1
+Field	AIKernel.Providers.LocalLlm.LocalLlmInvoker.ChatOperation	93	0	0
+Field	AIKernel.Providers.LocalLlm.LocalLlmInvoker.ModelNotRegistered	93	0	0
+Field	AIKernel.Providers.LocalLlm.LocalLlmInvoker._disposed	100	0	0
+Field	AIKernel.Providers.LocalLlm.LocalLlmInvoker._gate	89	0	1
+Field	AIKernel.Providers.LocalLlm.LocalLlmInvoker._model	100	0	1
+Field	AIKernel.Providers.LocalLlm.LocalLlmInvoker._modelPath	100	0	0
+Field	AIKernel.Providers.LocalLlm.LocalLlmInvoker._settings	100	0	1
+Field	AIKernel.Providers.LocalLlm.LocalLlmProvider.Capabilities	93	0	1
+Field	AIKernel.Providers.LocalLlm.LocalLlmProvider._initialized	100	0	0
+Field	AIKernel.Providers.LocalLlm.LocalLlmProvider._settings	86	1	3
+Field	AIKernel.Providers.LocalLlm.LocalLlmProviderCapabilities.DataTypes	93	0	0
+Field	AIKernel.Providers.LocalLlm.LocalLlmProviderCapabilities.Operations	93	0	0
+Field	AIKernel.Providers.ProviderBuildVersion.Value	93	0	0
+Method	AIKernel.Kernel.Inference.DenseCheckpoint.DenseCheckpoint(string, AIKernel.Kernel.Inference.DenseModelRegistration?)	87	1	1
+Method	AIKernel.Kernel.Inference.DenseCheckpoint.Open(int, int?, long, bool, bool, AIKernel.Kernel.Inference.CudaQ8Kernel?, AIKernel.Kernel.Inference.GgufMemoryOptions?)	88	1	6
+Method	AIKernel.Kernel.Inference.DenseKernelAdmission.Check(AIKernel.Kernel.Inference.GgufWeights, bool)	70	6	7
+Method	AIKernel.Kernel.Inference.DenseLayer.DenseLayer(AIKernel.Kernel.Inference.ModelTensor, AIKernel.Kernel.Inference.ModelTensor, AIKernel.Kernel.Inference.ModelTensor, AIKernel.Kernel.Inference.ModelTensor, AIKernel.Kernel.Inference.ModelTensor, AIKernel.Kernel.Inference.ModelTensor, AIKernel.Kernel.Inference.ModelTensor, float[], float[], float[], float[])	100	1	1
+Method	AIKernel.Kernel.Inference.DenseModelRegistration.BindShape(AIKernel.Kernel.Inference.Qwen3ModelDefinition)	92	1	3
+Method	AIKernel.Kernel.Inference.DenseModelRegistration.CheckTokenizer(AIKernel.Kernel.Inference.GgufWeights)	91	1	3
+Method	AIKernel.Kernel.Inference.DenseModelRegistration.CheckWeights(System.IO.Stream)	78	1	3
+Method	AIKernel.Kernel.Inference.DenseModelRegistration.DenseModelRegistration(AIKernel.Kernel.Inference.DenseRegistrationDocument)	96	1	1
+Method	AIKernel.Kernel.Inference.DenseModelRegistration.Open(string, int, int, AIKernel.Kernel.Inference.GgufMemoryOptions?)	78	1	5
+Method	AIKernel.Kernel.Inference.DenseModelRegistration.Parse(string, string)	76	1	2
+Method	AIKernel.Kernel.Inference.DenseModelRegistration.ReadDocument(string)	77	2	6
+Method	AIKernel.Kernel.Inference.DenseModelRegistration.Verify(byte[], string)	90	2	5
+Method	AIKernel.Kernel.Inference.DenseRegistrationDocument.CheckDigest(string)	88	3	6
+Method	AIKernel.Kernel.Inference.DenseRegistrationDocument.DenseRegistrationDocument(string, string, string, string, string, string, AIKernel.Kernel.Inference.DenseRegistrationShape)	100	1	3
+Method	AIKernel.Kernel.Inference.DenseRegistrationDocument.Validate(string)	67	5	5
+Method	AIKernel.Kernel.Inference.DenseRegistrationShape.Bind(AIKernel.Kernel.Inference.Qwen3ModelDefinition)	75	2	3
+Method	AIKernel.Kernel.Inference.DenseRegistrationShape.DenseRegistrationShape(int, int, int, int, int, int, float)	100	1	2
+Method	AIKernel.Kernel.Inference.DenseRotary.Create(int, float, float, int)	83	1	1
+Method	AIKernel.Kernel.Inference.DenseRotary.Frequencies(int, float, float, int)	60	3	3
+Method	AIKernel.Kernel.Inference.DenseRotary.Validate(float, float, int)	85	7	2
+Method	AIKernel.Kernel.Inference.EmbeddedTokenizerDigest.AppendInt(System.Security.Cryptography.IncrementalHash, int)	81	1	4
+Method	AIKernel.Kernel.Inference.EmbeddedTokenizerDigest.AppendTable(System.Security.Cryptography.IncrementalHash, string[])	84	2	2
+Method	AIKernel.Kernel.Inference.EmbeddedTokenizerDigest.AppendText(System.Security.Cryptography.IncrementalHash, string)	78	1	2
+Method	AIKernel.Kernel.Inference.EmbeddedTokenizerDigest.Compute(AIKernel.Kernel.Inference.GgufWeights)	66	1	4
+Method	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.Add(System.Span<float>, System.ReadOnlySpan<float>)	87	2	2
+Method	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.Argmax(float[])	70	4	2
+Method	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.Attention(System.ReadOnlySpan<float>, AIKernel.Kernel.Inference.Gemma4KvCache, System.Span<float>, System.Span<float>)	52	6	5
+Method	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.Backend.get	75	4	5
+Method	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.Chat.get	100	1	1
+Method	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.CreateState(System.Threading.CancellationToken)	85	3	6
+Method	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.Dispose()	64	5	5
+Method	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.Forward(int, int, AIKernel.Kernel.Inference.Gemma4E2BCpuModel.State, bool, System.Action<int, string, float[]>?, bool)	28	28	26
+Method	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.Gelu(float)	87	1	1
+Method	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.Gemma4E2BCpuModel(string, int, int, long)	71	1	1
+Method	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.Gemma4E2BCpuModel(string, int, int, long, AIKernel.Kernel.Inference.Gemma4ExecutionOptions)	35	26	25
+Method	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.Generate(string, string, int, System.Threading.CancellationToken)	47	10	19
+Method	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.GenerateAsync(string, string, int, System.Threading.CancellationToken)	58	4	12
+Method	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.GpuResidentBytes.get	92	3	2
+Method	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.GpuStatistics.get	95	2	3
+Method	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.GpuWeightBytes.get	89	5	3
+Method	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.IsLocal(int)	90	1	0
+Method	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.MemoryStatistics.get	95	2	3
+Method	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.Norm(System.ReadOnlySpan<float>, System.Span<float>, System.ReadOnlySpan<float>)	70	4	3
+Method	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.PrepareRope(float[], int, float[], float[])	72	2	1
+Method	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.Rope(System.Span<float>, float[], float[])	67	2	1
+Method	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.Scale(System.Span<float>, float)	88	2	1
+Method	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.SelectToken(AIKernel.Kernel.Inference.Gemma4E2BCpuModel.State)	89	2	2
+Method	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.Tokenize(string)	83	1	6
+Method	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.Tokenizer.get	100	1	1
+Method	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.ValidateDefinition()	56	31	14
+Method	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.Vector(string, int)	72	2	7
+Method	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.WeightBytes.get	96	1	1
+Method	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.WeightRamUsage.get	95	2	3
+Method	AIKernel.Kernel.Inference.GgufDenseShape.Read(AIKernel.Kernel.Inference.GgufWeights, int, bool, bool, bool)	54	18	10
+Method	AIKernel.Kernel.Inference.GgufDenseWeights.BackingBytesRead.get	95	2	2
+Method	AIKernel.Kernel.Inference.GgufDenseWeights.Backings.get	91	1	7
+Method	AIKernel.Kernel.Inference.GgufDenseWeights.CacheCapacityBytes.get	95	2	2
+Method	AIKernel.Kernel.Inference.GgufDenseWeights.ConfigureStorage(string, int?, long, bool, AIKernel.Kernel.Inference.CudaQ8Kernel?, AIKernel.Kernel.Inference.GgufMemoryOptions?)	79	3	5
+Method	AIKernel.Kernel.Inference.GgufDenseWeights.Describe(AIKernel.Kernel.Inference.GgufWeights.Tensor)	74	2	6
+Method	AIKernel.Kernel.Inference.GgufDenseWeights.Device.get	100	1	1
+Method	AIKernel.Kernel.Inference.GgufDenseWeights.Device.set	100	1	1
+Method	AIKernel.Kernel.Inference.GgufDenseWeights.Dispose()	76	3	3
+Method	AIKernel.Kernel.Inference.GgufDenseWeights.Embedding.get	100	1	1
+Method	AIKernel.Kernel.Inference.GgufDenseWeights.FinalNorm.get	100	1	0
+Method	AIKernel.Kernel.Inference.GgufDenseWeights.GgufDenseWeights(AIKernel.Kernel.Inference.GgufWeights, AIKernel.Kernel.Inference.Qwen3ModelDefinition)	62	2	10
+Method	AIKernel.Kernel.Inference.GgufDenseWeights.Layers.get	100	1	0
+Method	AIKernel.Kernel.Inference.GgufDenseWeights.Length.get	96	1	1
+Method	AIKernel.Kernel.Inference.GgufDenseWeights.Matrix(string, int, int)	77	1	4
+Method	AIKernel.Kernel.Inference.GgufDenseWeights.Multiply(AIKernel.Kernel.Inference.ModelTensor, float[], float[], System.Threading.Tasks.ParallelOptions, string, AIKernel.Kernel.Inference.InferenceProfiler?, AIKernel.Kernel.Inference.PreparedQ8Activation?)	66	2	10
+Method	AIKernel.Kernel.Inference.GgufDenseWeights.MultiplyDevice(AIKernel.Kernel.Inference.ModelTensor, float[], float[], System.Threading.CancellationToken, AIKernel.Kernel.Inference.InferenceProfiler?, AIKernel.Kernel.Inference.PreparedQ8Activation?)	78	1	6
+Method	AIKernel.Kernel.Inference.GgufDenseWeights.Open(string, int, int?, long, bool, bool, AIKernel.Kernel.Inference.CudaQ8Kernel?, AIKernel.Kernel.Inference.GgufMemoryOptions?, AIKernel.Kernel.Inference.DenseModelRegistration?)	62	4	8
+Method	AIKernel.Kernel.Inference.GgufDenseWeights.OpenDevice(int, long, bool, AIKernel.Kernel.Inference.CudaQ8Kernel?)	89	2	6
+Method	AIKernel.Kernel.Inference.GgufDenseWeights.OpenFile(string, bool, AIKernel.Kernel.Inference.DenseModelRegistration?)	73	2	5
+Method	AIKernel.Kernel.Inference.GgufDenseWeights.OpenPages(string, AIKernel.Kernel.Inference.GgufMemoryOptions)	89	1	7
+Method	AIKernel.Kernel.Inference.GgufDenseWeights.Output.get	100	1	1
+Method	AIKernel.Kernel.Inference.GgufDenseWeights.PageBudget(AIKernel.Kernel.Inference.GgufMemoryOptions)	88	1	2
+Method	AIKernel.Kernel.Inference.GgufDenseWeights.ReadLayer(int)	65	1	3
+Method	AIKernel.Kernel.Inference.GgufDenseWeights.ReadRotary(AIKernel.Kernel.Inference.GgufWeights, int)	66	3	8
+Method	AIKernel.Kernel.Inference.GgufDenseWeights.ReadRow(AIKernel.Kernel.Inference.ModelTensor, int, float[])	75	2	10
+Method	AIKernel.Kernel.Inference.GgufDenseWeights.Resolve(AIKernel.Kernel.Inference.ModelTensor)	73	3	3
+Method	AIKernel.Kernel.Inference.GgufDenseWeights.Rotary.get	100	1	1
+Method	AIKernel.Kernel.Inference.GgufDenseWeights.Shape.get	100	1	1
+Method	AIKernel.Kernel.Inference.GgufDenseWeights.Tokenizer.get	100	1	1
+Method	AIKernel.Kernel.Inference.GgufDenseWeights.Vector(string, int)	90	1	2
+Method	AIKernel.Kernel.Inference.GgufDenseWeights.VocabularySize.get	93	1	1
+Method	AIKernel.Kernel.Inference.GgufExtensions.ContainsOutput(AIKernel.Kernel.Inference.GgufWeights)	92	1	3
+Method	AIKernel.Kernel.Inference.GgufPagedWeights.GgufPagedWeights(string, System.Collections.Generic.IEnumerable<AIKernel.Kernel.Inference.GgufWeights.Tensor>, AIKernel.Kernel.Inference.GgufMemoryOptions, int, Microsoft.Win32.SafeHandles.SafeFileHandle?)	75	1	11
+Method	AIKernel.Kernel.Inference.GgufPagedWeights.ReadRow(AIKernel.Kernel.Inference.GgufWeights.Tensor, int, float[])	81	1	9
+Method	AIKernel.Kernel.Inference.GgufPagedWeights.VisitRows(AIKernel.Kernel.Inference.GgufWeights.Tensor, System.Threading.CancellationToken, System.Action<nint, int, int>)	92	1	6
+Method	AIKernel.Kernel.Inference.GgufTensorEncoding.Decode(System.ReadOnlySpan<byte>, System.Span<float>)	44	24	11
+Method	AIKernel.Kernel.Inference.GgufTensorEncoding.Fp4(int)	74	3	0
+Method	AIKernel.Kernel.Inference.GgufTensorEncoding.Get(int)	90	2	3
+Method	AIKernel.Kernel.Inference.GgufTensorEncoding.GgufTensorEncoding(int, string, int, int, bool)	100	1	1
+Method	AIKernel.Kernel.Inference.GgufTensorEncoding.Half(System.ReadOnlySpan<byte>)	93	1	4
+Method	AIKernel.Kernel.Inference.GgufTensorEncoding.RowBytes(long)	79	3	2
+Method	AIKernel.Kernel.Inference.GgufWeights.BackingHandle.get	95	2	2
+Method	AIKernel.Kernel.Inference.GgufWeights.BytesAt(long, int)	73	5	4
+Method	AIKernel.Kernel.Inference.GgufWeights.Dispose()	70	3	4
+Method	AIKernel.Kernel.Inference.GgufWeights.Float(string, float)	89	2	4
+Method	AIKernel.Kernel.Inference.GgufWeights.GgufWeights(System.IO.FileStream, bool)	57	3	11
+Method	AIKernel.Kernel.Inference.GgufWeights.GgufWeights(string, bool)	86	1	2
+Method	AIKernel.Kernel.Inference.GgufWeights.Int(string, int)	78	2	4
+Method	AIKernel.Kernel.Inference.GgufWeights.Length.get	100	1	0
+Method	AIKernel.Kernel.Inference.GgufWeights.Merges.get	93	1	1
+Method	AIKernel.Kernel.Inference.GgufWeights.Parameters.get	100	1	0
+Method	AIKernel.Kernel.Inference.GgufWeights.Pointer(AIKernel.Kernel.Inference.GgufWeights.Tensor)	73	4	5
+Method	AIKernel.Kernel.Inference.GgufWeights.ReadFloat32(AIKernel.Kernel.Inference.GgufWeights.Tensor)	63	5	8
+Method	AIKernel.Kernel.Inference.GgufWeights.Require(string, int, int)	78	5	4
+Method	AIKernel.Kernel.Inference.GgufWeights.Tokens.get	93	1	1
+Method	AIKernel.Kernel.Inference.GgufWeights.Vector(AIKernel.Kernel.Inference.GgufWeights.Tensor)	62	3	7
+Method	AIKernel.Kernel.Inference.GptOss20BCpuModel.Attend(AIKernel.Kernel.Inference.GptOss20BCpuModel.State, int, int, float[])	52	7	8
+Method	AIKernel.Kernel.Inference.GptOss20BCpuModel.BackingBytesRead.get	92	3	2
+Method	AIKernel.Kernel.Inference.GptOss20BCpuModel.Dispose()	68	3	3
+Method	AIKernel.Kernel.Inference.GptOss20BCpuModel.DistinctPagesRead.get	92	3	2
+Method	AIKernel.Kernel.Inference.GptOss20BCpuModel.EncodeChat(string, string)	56	2	4
+Method	AIKernel.Kernel.Inference.GptOss20BCpuModel.Forward(int, int, AIKernel.Kernel.Inference.GptOss20BCpuModel.State, System.Threading.Tasks.ParallelOptions)	37	14	18
+Method	AIKernel.Kernel.Inference.GptOss20BCpuModel.GenerateAsync(string, string, int, System.Threading.CancellationToken)	75	1	4
+Method	AIKernel.Kernel.Inference.GptOss20BCpuModel.GenerateAsync(string, string, int, System.Threading.CancellationToken, System.Action<int>?)	56	7	16
+Method	AIKernel.Kernel.Inference.GptOss20BCpuModel.GptOss20BCpuModel(string, int, int)	78	1	1
+Method	AIKernel.Kernel.Inference.GptOss20BCpuModel.GptOss20BCpuModel(string, int, int, AIKernel.Kernel.Inference.GgufMemoryOptions?)	39	15	18
+Method	AIKernel.Kernel.Inference.GptOss20BCpuModel.LoadLayer(int)	59	7	7
+Method	AIKernel.Kernel.Inference.GptOss20BCpuModel.MatrixTensors()	67	5	5
+Method	AIKernel.Kernel.Inference.GptOss20BCpuModel.MemoryStatistics.get	95	2	3
+Method	AIKernel.Kernel.Inference.GptOss20BCpuModel.Normalize(float[], float[], float[])	78	2	3
+Method	AIKernel.Kernel.Inference.GptOss20BCpuModel.Rotate(float[], float[], float[])	72	3	1
+Method	AIKernel.Kernel.Inference.GptOss20BCpuModel.Run(System.Collections.Generic.List<int>, int, System.Threading.CancellationToken, System.Action<int>?)	47	11	21
+Method	AIKernel.Kernel.Inference.GptOss20BCpuModel.Vector(string, int)	90	1	2
+Method	AIKernel.Kernel.Inference.GptOss20BCpuModel.Weight(string, int, int, int)	76	2	4
+Method	AIKernel.Kernel.Inference.GptOss20BCpuModel.WeightCacheCapacityBytes.get	92	3	2
+Method	AIKernel.Kernel.Inference.GptOss20BCpuModel.WeightRamUsage.get	95	2	3
+Method	AIKernel.Kernel.Inference.IDenseModelWeights.BackingBytesRead.get	100	1	1
+Method	AIKernel.Kernel.Inference.IDenseModelWeights.CacheCapacityBytes.get	100	1	1
+Method	AIKernel.Kernel.Inference.IDenseModelWeights.Device.get	100	1	1
+Method	AIKernel.Kernel.Inference.IDenseModelWeights.Embedding.get	100	1	1
+Method	AIKernel.Kernel.Inference.IDenseModelWeights.FinalNorm.get	100	1	0
+Method	AIKernel.Kernel.Inference.IDenseModelWeights.Layers.get	100	1	0
+Method	AIKernel.Kernel.Inference.IDenseModelWeights.Length.get	100	1	0
+Method	AIKernel.Kernel.Inference.IDenseModelWeights.Multiply(AIKernel.Kernel.Inference.ModelTensor, float[], float[], System.Threading.Tasks.ParallelOptions, string, AIKernel.Kernel.Inference.InferenceProfiler?, AIKernel.Kernel.Inference.PreparedQ8Activation?)	80	1	4
+Method	AIKernel.Kernel.Inference.IDenseModelWeights.MultiplyDevice(AIKernel.Kernel.Inference.ModelTensor, float[], float[], System.Threading.CancellationToken, AIKernel.Kernel.Inference.InferenceProfiler?, AIKernel.Kernel.Inference.PreparedQ8Activation?)	87	1	4
+Method	AIKernel.Kernel.Inference.IDenseModelWeights.Output.get	100	1	1
+Method	AIKernel.Kernel.Inference.IDenseModelWeights.ReadRow(AIKernel.Kernel.Inference.ModelTensor, int, float[])	100	1	1
+Method	AIKernel.Kernel.Inference.IDenseModelWeights.Rotary.get	100	1	1
+Method	AIKernel.Kernel.Inference.IDenseModelWeights.Shape.get	100	1	1
+Method	AIKernel.Kernel.Inference.IDenseModelWeights.Tokenizer.get	100	1	1
+Method	AIKernel.Kernel.Inference.IDenseModelWeights.VocabularySize.get	100	1	0
+Method	AIKernel.Kernel.Inference.ModelTensor.ByteLength.get	93	1	0
+Method	AIKernel.Kernel.Inference.ModelTensor.ModelTensor(long, int, int, int, string, int, int, int)	87	1	0
+Method	AIKernel.Kernel.Inference.ModelTensor.Row(int)	90	1	0
+Method	AIKernel.Kernel.Inference.ModelTensor.UsesBinaryWeights.get	94	1	0
+Method	AIKernel.Kernel.Inference.Qwen3CpuModel.AcquireWorkspace(System.Threading.CancellationToken)	85	1	3
+Method	AIKernel.Kernel.Inference.Qwen3CpuModel.ActivationPrecision.get	80	5	4
+Method	AIKernel.Kernel.Inference.Qwen3CpuModel.ClassifyAsync(string, string, System.Collections.Generic.IReadOnlyList<string>, System.Threading.CancellationToken)	58	3	16
+Method	AIKernel.Kernel.Inference.Qwen3CpuModel.ConfigureTrustedPrefixCache(int, long)	74	2	4
+Method	AIKernel.Kernel.Inference.Qwen3CpuModel.CpuBackend.get	91	2	0
+Method	AIKernel.Kernel.Inference.Qwen3CpuModel.CudaQ8Statistics.get	94	2	3
+Method	AIKernel.Kernel.Inference.Qwen3CpuModel.DevicePciBusId.get	95	2	1
+Method	AIKernel.Kernel.Inference.Qwen3CpuModel.DeviceWeightBytes.get	92	3	2
+Method	AIKernel.Kernel.Inference.Qwen3CpuModel.Dispose()	72	2	4
+Method	AIKernel.Kernel.Inference.Qwen3CpuModel.Dot(System.ReadOnlySpan<float>, System.ReadOnlySpan<float>)	72	3	2
+Method	AIKernel.Kernel.Inference.Qwen3CpuModel.Forward(int, int, AIKernel.Kernel.Inference.Qwen3Workspace, string, AIKernel.Kernel.Inference.InferenceProfiler?)	27	46	20
+Method	AIKernel.Kernel.Inference.Qwen3CpuModel.GenerateAsync(string, string, int, System.Threading.CancellationToken)	61	3	10
+Method	AIKernel.Kernel.Inference.Qwen3CpuModel.GenerateBenchmarkAsync(string, string, int, System.Threading.CancellationToken)	61	3	10
+Method	AIKernel.Kernel.Inference.Qwen3CpuModel.Multiply(AIKernel.Kernel.Inference.ModelTensor, float[], float[], System.Threading.Tasks.ParallelOptions, string, AIKernel.Kernel.Inference.InferenceProfiler?, AIKernel.Kernel.Inference.PreparedQ8Activation?)	56	9	9
+Method	AIKernel.Kernel.Inference.Qwen3CpuModel.Norm(System.ReadOnlySpan<float>, System.ReadOnlySpan<float>, System.Span<float>, float)	68	3	4
+Method	AIKernel.Kernel.Inference.Qwen3CpuModel.PrefixCacheStatistics.get	96	1	2
+Method	AIKernel.Kernel.Inference.Qwen3CpuModel.PrepareShared(float[], string, bool, AIKernel.Kernel.Inference.InferenceProfiler?)	69	8	7
+Method	AIKernel.Kernel.Inference.Qwen3CpuModel.Qwen3CpuModel(AIKernel.Kernel.Inference.DenseCheckpoint, int, int, int?, long, bool, bool, string?, AIKernel.Kernel.Inference.CudaQ8Kernel?, AIKernel.Kernel.Inference.GgufMemoryOptions?)	42	13	16
+Method	AIKernel.Kernel.Inference.Qwen3CpuModel.Qwen3CpuModel(string, int, int)	77	1	3
+Method	AIKernel.Kernel.Inference.Qwen3CpuModel.Qwen3CpuModel(string, int, int, int?, long, bool, bool, string?, AIKernel.Kernel.Inference.CudaQ8Kernel?, AIKernel.Kernel.Inference.GgufMemoryOptions?)	65	1	5
+Method	AIKernel.Kernel.Inference.Qwen3CpuModel.Qwen3CpuModel(string, int, int, string?)	91	1	3
+Method	AIKernel.Kernel.Inference.Qwen3CpuModel.Qwen3CpuModel(string, int, int, string?, AIKernel.Kernel.Inference.GgufMemoryOptions)	88	2	5
+Method	AIKernel.Kernel.Inference.Qwen3CpuModel.RequestedInstructionSet.get	100	1	0
+Method	AIKernel.Kernel.Inference.Qwen3CpuModel.Run(string, string, int, int[]?, System.Threading.CancellationToken, bool)	26	49	32
+Method	AIKernel.Kernel.Inference.Qwen3CpuModel.TuneCpuAsync(AIKernel.Kernel.Inference.CpuAutoTuningOptions, bool, System.Threading.CancellationToken)	32	28	37
+Method	AIKernel.Kernel.Inference.Qwen3CpuModel.TuningStatus.get	100	1	1
+Method	AIKernel.Kernel.Inference.Qwen3CpuModel.VulkanDevice.get	94	2	3
+Method	AIKernel.Kernel.Inference.Qwen3CpuModel.VulkanDiagnostics.get	94	2	2
+Method	AIKernel.Kernel.Inference.Qwen3CpuModel.VulkanRecoveredProjections.get	92	3	3
+Method	AIKernel.Kernel.Inference.Qwen3CpuModel.WarmupAsync(string, System.Threading.CancellationToken)	48	9	20
+Method	AIKernel.Kernel.Inference.Qwen3CpuModel.WeightBackingBytesRead.get	96	1	2
+Method	AIKernel.Kernel.Inference.Qwen3CpuModel.WeightBytes.get	96	1	1
+Method	AIKernel.Kernel.Inference.Qwen3CpuModel.WeightCacheCapacityBytes.get	96	1	2
+Method	AIKernel.Kernel.Inference.Qwen3CpuModel.WithCleanup<T>(System.Func<T>)	76	3	6
+Method	AIKernel.Kernel.Inference.Qwen3ModelDefinition.Qwen3ModelDefinition(int, int, int, int, int, int, float)	100	1	0
+Method	AIKernel.Kernel.Inference.TensorPageBudget.TensorPageBudget(long, long, long, long, string)	100	1	0
+Method	AIKernel.Kernel.Inference.TensorPageStore.BackingBytesRead.get	100	1	0
+Method	AIKernel.Kernel.Inference.TensorPageStore.BackingBytesRead.set	100	1	0
+Method	AIKernel.Kernel.Inference.TensorPageStore.CacheCapacityBytes.get	93	1	0
+Method	AIKernel.Kernel.Inference.TensorPageStore.CheckBudget()	55	5	8
+Method	AIKernel.Kernel.Inference.TensorPageStore.CheckPage()	91	2	0
+Method	AIKernel.Kernel.Inference.TensorPageStore.Dispose()	77	2	3
+Method	AIKernel.Kernel.Inference.TensorPageStore.DistinctPagesRead.get	100	1	0
+Method	AIKernel.Kernel.Inference.TensorPageStore.DistinctPagesRead.set	100	1	0
+Method	AIKernel.Kernel.Inference.TensorPageStore.Locate(AIKernel.Kernel.Inference.ModelTensor, int)	68	1	6
+Method	AIKernel.Kernel.Inference.TensorPageStore.RamUsage.get	96	1	2
+Method	AIKernel.Kernel.Inference.TensorPageStore.ReadAddressSpaceLimit()	63	7	9
+Method	AIKernel.Kernel.Inference.TensorPageStore.ReadBlock(long, System.Span<byte>)	58	4	9
+Method	AIKernel.Kernel.Inference.TensorPageStore.Statistics.get	96	1	2
+Method	AIKernel.Kernel.Inference.TensorPageStore.TensorPageStore(string, System.Collections.Generic.IEnumerable<AIKernel.Kernel.Inference.ModelTensor>, AIKernel.Kernel.Inference.TensorPageBudget, int, Microsoft.Win32.SafeHandles.SafeFileHandle?)	42	12	27
+Method	AIKernel.Kernel.Inference.TensorPageStore.VisitRow(AIKernel.Kernel.Inference.ModelTensor, int, AIKernel.Kernel.Inference.TensorPageStore.RowReader)	73	1	6
+Method	AIKernel.Kernel.Inference.TensorPageStore.VisitRows(AIKernel.Kernel.Inference.ModelTensor, System.Threading.CancellationToken, System.Action<nint, int, int>)	70	2	4
+Method	AIKernel.Kernel.Inference.TensorPageStore.VisitSegment(AIKernel.Kernel.Inference.TensorPageStore.Segment, int, int, System.Action<nint, int, int>)	75	1	5
+Method	AIKernel.Providers.LocalLlm.LocalLlmCapabilityContracts.GetMetadataValue(System.Collections.Generic.IReadOnlyDictionary<string, string>, string, string?)	89	3	1
+Method	AIKernel.Providers.LocalLlm.LocalLlmCapabilityContracts.GetRequiredMetadataValue(System.Collections.Generic.IReadOnlyDictionary<string, string>, string, string)	89	3	1
+Method	AIKernel.Providers.LocalLlm.LocalLlmCapabilityContracts.ToContract(AIKernel.Providers.LocalLlm.LocalLlmCapabilityDescriptor)	78	1	8
+Method	AIKernel.Providers.LocalLlm.LocalLlmCapabilityDescriptor.LocalLlmCapabilityDescriptor(string, string, System.Collections.Generic.IReadOnlyDictionary<string, string>)	100	1	1
+Method	AIKernel.Providers.LocalLlm.LocalLlmInvoker.Dispose()	69	3	2
+Method	AIKernel.Providers.LocalLlm.LocalLlmInvoker.InvokeAsync(AIKernel.Dtos.Capabilities.CapabilityInvocationRequest, System.Threading.CancellationToken)	43	13	27
+Method	AIKernel.Providers.LocalLlm.LocalLlmInvoker.LocalLlmInvoker()	91	1	2
+Method	AIKernel.Providers.LocalLlm.LocalLlmInvoker.LocalLlmInvoker(AIKernel.Providers.LocalLlm.LocalLlmSettings)	68	9	5
+Method	AIKernel.Providers.LocalLlm.LocalLlmProvider.CreateInvoker()	96	1	2
+Method	AIKernel.Providers.LocalLlm.LocalLlmProvider.GetCapabilities()	100	1	2
+Method	AIKernel.Providers.LocalLlm.LocalLlmProvider.GetHealthAsync()	88	1	5
+Method	AIKernel.Providers.LocalLlm.LocalLlmProvider.InitializeAsync()	86	1	1
+Method	AIKernel.Providers.LocalLlm.LocalLlmProvider.IsAvailableAsync()	96	1	2
+Method	AIKernel.Providers.LocalLlm.LocalLlmProvider.LocalLlmProvider()	100	1	1
+Method	AIKernel.Providers.LocalLlm.LocalLlmProvider.LocalLlmProvider(AIKernel.Providers.LocalLlm.LocalLlmSettings)	100	1	3
+Method	AIKernel.Providers.LocalLlm.LocalLlmProvider.Name.get	96	1	1
+Method	AIKernel.Providers.LocalLlm.LocalLlmProvider.ProviderId.get	96	1	1
+Method	AIKernel.Providers.LocalLlm.LocalLlmProvider.ShutdownAsync()	86	1	1
+Method	AIKernel.Providers.LocalLlm.LocalLlmProvider.ToCapabilityDescriptor()	89	1	5
+Method	AIKernel.Providers.LocalLlm.LocalLlmProvider.Version.get	96	1	1
+Method	AIKernel.Providers.LocalLlm.LocalLlmProviderCapabilities.EmbeddingDimensions.get	100	1	1
+Method	AIKernel.Providers.LocalLlm.LocalLlmProviderCapabilities.GetCapabilityProfile()	100	1	1
+Method	AIKernel.Providers.LocalLlm.LocalLlmProviderCapabilities.GetDynamicCapacities(AIKernel.Abstractions.Models.IExecutionConstraints)	100	1	2
+Method	AIKernel.Providers.LocalLlm.LocalLlmProviderCapabilities.MaxConcurrentConnections.get	100	1	0
+Method	AIKernel.Providers.LocalLlm.LocalLlmProviderCapabilities.MaxQueryParts.get	100	1	0
+Method	AIKernel.Providers.LocalLlm.LocalLlmProviderCapabilities.RateLimit.get	100	1	1
+Method	AIKernel.Providers.LocalLlm.LocalLlmProviderCapabilities.SupportedDataTypes.get	100	1	1
+Method	AIKernel.Providers.LocalLlm.LocalLlmProviderCapabilities.SupportedEmbeddingModels.get	100	1	1
+Method	AIKernel.Providers.LocalLlm.LocalLlmProviderCapabilities.SupportedOperations.get	100	1	1
+Method	AIKernel.Providers.LocalLlm.LocalLlmProviderCapabilities.SupportedQueryProcessingOperations.get	100	1	1
+Method	AIKernel.Providers.LocalLlm.LocalLlmProviderCapabilities.SupportsDataType(string)	92	1	4
+Method	AIKernel.Providers.LocalLlm.LocalLlmProviderCapabilities.SupportsEmbedding.get	100	1	0
+Method	AIKernel.Providers.LocalLlm.LocalLlmProviderCapabilities.SupportsOperation(string)	92	1	4
+Method	AIKernel.Providers.LocalLlm.LocalLlmProviderCapabilities.SupportsQuantization(string)	100	1	0
+Method	AIKernel.Providers.LocalLlm.LocalLlmProviderCapabilities.SupportsQueryAugmentation.get	100	1	0
+Method	AIKernel.Providers.LocalLlm.LocalLlmProviderCapabilities.SupportsQueryDecomposition.get	100	1	0
+Method	AIKernel.Providers.LocalLlm.LocalLlmProviderCapabilities.SupportsQueryProcessingOperation(string)	100	1	0
+Method	AIKernel.Providers.LocalLlm.LocalLlmProviderCapabilities.SupportsQueryRouting.get	100	1	0
+Method	AIKernel.Providers.LocalLlm.LocalLlmProviderCapabilities.Vector.get	100	1	1
+Method	AIKernel.Providers.LocalLlm.LocalLlmPythonBridge.CreateInvoker()	100	1	1
+Method	AIKernel.Providers.LocalLlm.LocalLlmPythonBridge.CreateProvider()	100	1	1
+Method	AIKernel.Providers.LocalLlm.LocalLlmPythonBridge.ToContract(string, string)	80	1	5
+Method	AIKernel.Providers.LocalLlm.LocalLlmResponse.OutputHash(string)	89	1	3
+Method	AIKernel.Providers.LocalLlm.LocalLlmResponse.Success(AIKernel.Dtos.Capabilities.CapabilityInvocationRequest, AIKernel.Kernel.Inference.CpuGeneration)	71	1	9
+Method	AIKernel.Providers.LocalLlm.LocalLlmSettings.ArtifactHash.get	100	1	0
+Method	AIKernel.Providers.LocalLlm.LocalLlmSettings.ArtifactHash.init	100	1	0
+Method	AIKernel.Providers.LocalLlm.LocalLlmSettings.BonsaiModelPath.get	100	1	0
+Method	AIKernel.Providers.LocalLlm.LocalLlmSettings.BonsaiModelPath.init	100	1	0
+Method	AIKernel.Providers.LocalLlm.LocalLlmSettings.ContextTokens.get	100	1	0
+Method	AIKernel.Providers.LocalLlm.LocalLlmSettings.ContextTokens.init	100	1	0
+Method	AIKernel.Providers.LocalLlm.LocalLlmSettings.CpuThreads.get	100	1	0
+Method	AIKernel.Providers.LocalLlm.LocalLlmSettings.CpuThreads.init	100	1	0
+Method	AIKernel.Providers.LocalLlm.LocalLlmSettings.MaxNewTokens.get	100	1	0
+Method	AIKernel.Providers.LocalLlm.LocalLlmSettings.MaxNewTokens.init	100	1	0
+Method	AIKernel.Providers.LocalLlm.LocalLlmSettings.MaxPromptCharacters.get	100	1	0
+Method	AIKernel.Providers.LocalLlm.LocalLlmSettings.MaxPromptCharacters.init	100	1	0
+Method	AIKernel.Providers.LocalLlm.LocalLlmSettings.Name.get	100	1	0
+Method	AIKernel.Providers.LocalLlm.LocalLlmSettings.Name.init	100	1	0
+Method	AIKernel.Providers.LocalLlm.LocalLlmSettings.ProviderId.get	100	1	0
+Method	AIKernel.Providers.LocalLlm.LocalLlmSettings.ProviderId.init	100	1	0
+Method	AIKernel.Providers.LocalLlm.LocalLlmSettings.Runtime.get	100	1	0
+Method	AIKernel.Providers.LocalLlm.LocalLlmSettings.Runtime.init	100	1	0
+Method	AIKernel.Providers.LocalLlm.LocalLlmSettings.RuntimeUri.get	100	1	0
+Method	AIKernel.Providers.LocalLlm.LocalLlmSettings.RuntimeUri.init	100	1	0
+Method	AIKernel.Providers.LocalLlm.LocalLlmSettings.SystemPrompt.get	100	1	0
+Method	AIKernel.Providers.LocalLlm.LocalLlmSettings.SystemPrompt.init	100	1	0
+Method	AIKernel.Providers.LocalLlm.LocalLlmSettings.ToMetadata()	67	3	4
+Method	AIKernel.Providers.LocalLlm.LocalLlmSettings.Version.get	100	1	0
+Method	AIKernel.Providers.LocalLlm.LocalLlmSettings.Version.init	100	1	0
+Method	AIKernel.Providers.LocalLlm.LocalModelReader.Open(string, AIKernel.Providers.LocalLlm.LocalLlmSettings, System.Threading.CancellationToken)	66	4	6
+Method	AIKernel.Providers.LocalLlm.LocalModelReader.ReadRegistration(string?)	71	3	9
+Method	AIKernel.Providers.LocalLlm.RegisteredLocalLlmSettings.RegistrationFile.get	100	1	0
+Method	AIKernel.Providers.LocalLlm.RegisteredLocalLlmSettings.RegistrationFile.init	100	1	0
+Method	AIKernel.Providers.LocalLlm.RegisteredLocalLlmSettings.WeightMemory.get	100	1	1
+Method	AIKernel.Providers.LocalLlm.RegisteredLocalLlmSettings.WeightMemory.init	100	1	1
+NamedType	AIKernel.Kernel.Inference.DenseCheckpoint	85	2	6
+NamedType	AIKernel.Kernel.Inference.DenseKernelAdmission	70	6	7
+NamedType	AIKernel.Kernel.Inference.DenseLayer	100	1	1
+NamedType	AIKernel.Kernel.Inference.DenseModelRegistration	81	10	21
+NamedType	AIKernel.Kernel.Inference.DenseRegistrationDocument	90	9	11
+NamedType	AIKernel.Kernel.Inference.DenseRegistrationShape	92	3	5
+NamedType	AIKernel.Kernel.Inference.DenseRotary	72	11	5
+NamedType	AIKernel.Kernel.Inference.EmbeddedTokenizerDigest	76	5	9
+NamedType	AIKernel.Kernel.Inference.Gemma4E2BCpuModel	59	179	66
+NamedType	AIKernel.Kernel.Inference.GgufDenseShape	54	18	10
+NamedType	AIKernel.Kernel.Inference.GgufDenseWeights	78	57	45
+NamedType	AIKernel.Kernel.Inference.GgufExtensions	92	1	3
+NamedType	AIKernel.Kernel.Inference.GgufPagedWeights	80	4	18
+NamedType	AIKernel.Kernel.Inference.GgufTensorEncoding	75	34	16
+NamedType	AIKernel.Kernel.Inference.GgufWeights	74	43	26
+NamedType	AIKernel.Kernel.Inference.GptOss20BCpuModel	59	107	56
+NamedType	AIKernel.Kernel.Inference.IDenseModelWeights	100	15	12
+NamedType	AIKernel.Kernel.Inference.ModelTensor	93	6	0
+NamedType	AIKernel.Kernel.Inference.Qwen3CpuModel	57	244	79
+NamedType	AIKernel.Kernel.Inference.Qwen3ModelDefinition	100	1	0
+NamedType	AIKernel.Kernel.Inference.TensorPageBudget	100	1	0
+NamedType	AIKernel.Kernel.Inference.TensorPageStore	67	47	44
+NamedType	AIKernel.Providers.LocalLlm.LocalLlmCapabilityContracts	86	7	8
+NamedType	AIKernel.Providers.LocalLlm.LocalLlmCapabilityDescriptor	100	1	1
+NamedType	AIKernel.Providers.LocalLlm.LocalLlmInvoker	62	26	32
+NamedType	AIKernel.Providers.LocalLlm.LocalLlmProvider	89	16	16
+NamedType	AIKernel.Providers.LocalLlm.LocalLlmProviderCapabilities	93	32	12
+NamedType	AIKernel.Providers.LocalLlm.LocalLlmPythonBridge	89	3	7
+NamedType	AIKernel.Providers.LocalLlm.LocalLlmResponse	77	2	12
+NamedType	AIKernel.Providers.LocalLlm.LocalLlmSettings	91	27	5
+NamedType	AIKernel.Providers.LocalLlm.LocalModelReader	68	7	14
+NamedType	AIKernel.Providers.LocalLlm.RegisteredLocalLlmSettings	100	4	2
+NamedType	AIKernel.Providers.ProviderBuildVersion	93	0	0
+Property	AIKernel.Kernel.Inference.DenseCheckpoint.Path	100	0	0
+Property	AIKernel.Kernel.Inference.DenseCheckpoint.Registration	100	0	1
+Property	AIKernel.Kernel.Inference.DenseLayer.Down	100	0	1
+Property	AIKernel.Kernel.Inference.DenseLayer.FfnNorm	100	0	0
+Property	AIKernel.Kernel.Inference.DenseLayer.Gate	100	0	1
+Property	AIKernel.Kernel.Inference.DenseLayer.K	100	0	1
+Property	AIKernel.Kernel.Inference.DenseLayer.KNorm	100	0	0
+Property	AIKernel.Kernel.Inference.DenseLayer.Norm	100	0	0
+Property	AIKernel.Kernel.Inference.DenseLayer.O	100	0	1
+Property	AIKernel.Kernel.Inference.DenseLayer.Q	100	0	1
+Property	AIKernel.Kernel.Inference.DenseLayer.QNorm	100	0	0
+Property	AIKernel.Kernel.Inference.DenseLayer.Up	100	0	1
+Property	AIKernel.Kernel.Inference.DenseLayer.V	100	0	1
+Property	AIKernel.Kernel.Inference.DenseRegistrationDocument.ModelId	100	0	0
+Property	AIKernel.Kernel.Inference.DenseRegistrationDocument.ReaderId	100	0	0
+Property	AIKernel.Kernel.Inference.DenseRegistrationDocument.Shape	100	0	1
+Property	AIKernel.Kernel.Inference.DenseRegistrationDocument.TokenizerSha256	100	0	0
+Property	AIKernel.Kernel.Inference.DenseRegistrationDocument.TokenizerVersion	100	0	0
+Property	AIKernel.Kernel.Inference.DenseRegistrationDocument.Version	100	0	0
+Property	AIKernel.Kernel.Inference.DenseRegistrationDocument.WeightsSha256	100	0	0
+Property	AIKernel.Kernel.Inference.DenseRegistrationShape.Epsilon	100	0	0
+Property	AIKernel.Kernel.Inference.DenseRegistrationShape.HeadSize	100	0	0
+Property	AIKernel.Kernel.Inference.DenseRegistrationShape.Heads	100	0	0
+Property	AIKernel.Kernel.Inference.DenseRegistrationShape.Hidden	100	0	0
+Property	AIKernel.Kernel.Inference.DenseRegistrationShape.KvHeads	100	0	0
+Property	AIKernel.Kernel.Inference.DenseRegistrationShape.Layers	100	0	0
+Property	AIKernel.Kernel.Inference.DenseRegistrationShape.Width	100	0	0
+Property	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.Backend	75	8	5
+Property	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.Chat	100	2	1
+Property	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.GpuResidentBytes	92	6	2
+Property	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.GpuStatistics	95	4	3
+Property	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.GpuWeightBytes	89	10	3
+Property	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.MemoryStatistics	95	4	3
+Property	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.Tokenizer	100	2	1
+Property	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.WeightBytes	96	2	1
+Property	AIKernel.Kernel.Inference.Gemma4E2BCpuModel.WeightRamUsage	95	4	3
+Property	AIKernel.Kernel.Inference.GgufDenseWeights.BackingBytesRead	95	4	2
+Property	AIKernel.Kernel.Inference.GgufDenseWeights.Backings	91	2	7
+Property	AIKernel.Kernel.Inference.GgufDenseWeights.CacheCapacityBytes	95	4	2
+Property	AIKernel.Kernel.Inference.GgufDenseWeights.Device	100	2	1
+Property	AIKernel.Kernel.Inference.GgufDenseWeights.Embedding	100	1	1
+Property	AIKernel.Kernel.Inference.GgufDenseWeights.FinalNorm	100	1	0
+Property	AIKernel.Kernel.Inference.GgufDenseWeights.Layers	100	1	1
+Property	AIKernel.Kernel.Inference.GgufDenseWeights.Length	96	2	1
+Property	AIKernel.Kernel.Inference.GgufDenseWeights.Output	100	1	1
+Property	AIKernel.Kernel.Inference.GgufDenseWeights.Rotary	100	1	1
+Property	AIKernel.Kernel.Inference.GgufDenseWeights.Shape	100	1	1
+Property	AIKernel.Kernel.Inference.GgufDenseWeights.Tokenizer	100	1	1
+Property	AIKernel.Kernel.Inference.GgufDenseWeights.VocabularySize	93	2	1
+Property	AIKernel.Kernel.Inference.GgufTensorEncoding.BlockBytes	100	0	0
+Property	AIKernel.Kernel.Inference.GgufTensorEncoding.BlockElements	100	0	0
+Property	AIKernel.Kernel.Inference.GgufTensorEncoding.CpuReference	100	0	0
+Property	AIKernel.Kernel.Inference.GgufTensorEncoding.Name	100	0	0
+Property	AIKernel.Kernel.Inference.GgufTensorEncoding.Type	100	0	0
+Property	AIKernel.Kernel.Inference.GgufWeights.BackingHandle	95	4	2
+Property	AIKernel.Kernel.Inference.GgufWeights.Length	100	1	0
+Property	AIKernel.Kernel.Inference.GgufWeights.Merges	93	2	1
+Property	AIKernel.Kernel.Inference.GgufWeights.Parameters	100	1	0
+Property	AIKernel.Kernel.Inference.GgufWeights.Tokens	93	2	1
+Property	AIKernel.Kernel.Inference.GptOss20BCpuModel.BackingBytesRead	92	6	2
+Property	AIKernel.Kernel.Inference.GptOss20BCpuModel.DistinctPagesRead	92	6	2
+Property	AIKernel.Kernel.Inference.GptOss20BCpuModel.MemoryStatistics	95	4	3
+Property	AIKernel.Kernel.Inference.GptOss20BCpuModel.WeightCacheCapacityBytes	92	6	2
+Property	AIKernel.Kernel.Inference.GptOss20BCpuModel.WeightRamUsage	95	4	3
+Property	AIKernel.Kernel.Inference.IDenseModelWeights.BackingBytesRead	100	1	1
+Property	AIKernel.Kernel.Inference.IDenseModelWeights.CacheCapacityBytes	100	1	1
+Property	AIKernel.Kernel.Inference.IDenseModelWeights.Device	100	1	1
+Property	AIKernel.Kernel.Inference.IDenseModelWeights.Embedding	100	1	1
+Property	AIKernel.Kernel.Inference.IDenseModelWeights.FinalNorm	100	1	0
+Property	AIKernel.Kernel.Inference.IDenseModelWeights.Layers	100	1	1
+Property	AIKernel.Kernel.Inference.IDenseModelWeights.Length	100	1	0
+Property	AIKernel.Kernel.Inference.IDenseModelWeights.Output	100	1	1
+Property	AIKernel.Kernel.Inference.IDenseModelWeights.Rotary	100	1	1
+Property	AIKernel.Kernel.Inference.IDenseModelWeights.Shape	100	1	1
+Property	AIKernel.Kernel.Inference.IDenseModelWeights.Tokenizer	100	1	1
+Property	AIKernel.Kernel.Inference.IDenseModelWeights.VocabularySize	100	1	0
+Property	AIKernel.Kernel.Inference.ModelTensor.Backing	100	0	0
+Property	AIKernel.Kernel.Inference.ModelTensor.BlockBytes	100	0	0
+Property	AIKernel.Kernel.Inference.ModelTensor.BlockElements	100	0	0
+Property	AIKernel.Kernel.Inference.ModelTensor.ByteLength	93	2	0
+Property	AIKernel.Kernel.Inference.ModelTensor.Columns	100	0	0
+Property	AIKernel.Kernel.Inference.ModelTensor.Encoding	100	0	0
+Property	AIKernel.Kernel.Inference.ModelTensor.FirstRow	100	0	0
+Property	AIKernel.Kernel.Inference.ModelTensor.RowBytes	100	0	0
+Property	AIKernel.Kernel.Inference.ModelTensor.Rows	100	0	0
+Property	AIKernel.Kernel.Inference.ModelTensor.UsesBinaryWeights	94	2	0
+Property	AIKernel.Kernel.Inference.Qwen3CpuModel.ActivationPrecision	80	10	4
+Property	AIKernel.Kernel.Inference.Qwen3CpuModel.CpuBackend	91	4	0
+Property	AIKernel.Kernel.Inference.Qwen3CpuModel.CudaQ8Statistics	94	4	3
+Property	AIKernel.Kernel.Inference.Qwen3CpuModel.DevicePciBusId	95	4	1
+Property	AIKernel.Kernel.Inference.Qwen3CpuModel.DeviceWeightBytes	92	6	2
+Property	AIKernel.Kernel.Inference.Qwen3CpuModel.PrefixCacheStatistics	96	2	2
+Property	AIKernel.Kernel.Inference.Qwen3CpuModel.RequestedInstructionSet	100	2	0
+Property	AIKernel.Kernel.Inference.Qwen3CpuModel.TuningStatus	100	2	1
+Property	AIKernel.Kernel.Inference.Qwen3CpuModel.VulkanDevice	94	4	3
+Property	AIKernel.Kernel.Inference.Qwen3CpuModel.VulkanDiagnostics	94	4	2
+Property	AIKernel.Kernel.Inference.Qwen3CpuModel.VulkanRecoveredProjections	92	6	3
+Property	AIKernel.Kernel.Inference.Qwen3CpuModel.WeightBackingBytesRead	96	2	2
+Property	AIKernel.Kernel.Inference.Qwen3CpuModel.WeightBytes	96	2	1
+Property	AIKernel.Kernel.Inference.Qwen3CpuModel.WeightCacheCapacityBytes	96	2	2
+Property	AIKernel.Kernel.Inference.Qwen3ModelDefinition.Epsilon	100	0	0
+Property	AIKernel.Kernel.Inference.Qwen3ModelDefinition.HeadSize	100	0	0
+Property	AIKernel.Kernel.Inference.Qwen3ModelDefinition.Heads	100	0	0
+Property	AIKernel.Kernel.Inference.Qwen3ModelDefinition.Hidden	100	0	0
+Property	AIKernel.Kernel.Inference.Qwen3ModelDefinition.KvHeads	100	0	0
+Property	AIKernel.Kernel.Inference.Qwen3ModelDefinition.LayerCount	100	0	0
+Property	AIKernel.Kernel.Inference.Qwen3ModelDefinition.Width	100	0	0
+Property	AIKernel.Kernel.Inference.TensorPageBudget.InitialWeightCacheBytes	100	0	0
+Property	AIKernel.Kernel.Inference.TensorPageBudget.MaximumResidentBytes	100	0	0
+Property	AIKernel.Kernel.Inference.TensorPageBudget.RuntimeReserveBytes	100	0	0
+Property	AIKernel.Kernel.Inference.TensorPageBudget.SwapDirectory	100	0	0
+Property	AIKernel.Kernel.Inference.TensorPageBudget.WeightCacheBytes	100	0	0
+Property	AIKernel.Kernel.Inference.TensorPageStore.BackingBytesRead	100	2	0
+Property	AIKernel.Kernel.Inference.TensorPageStore.CacheCapacityBytes	93	2	0
+Property	AIKernel.Kernel.Inference.TensorPageStore.DistinctPagesRead	100	2	0
+Property	AIKernel.Kernel.Inference.TensorPageStore.RamUsage	96	2	2
+Property	AIKernel.Kernel.Inference.TensorPageStore.Statistics	96	2	2
+Property	AIKernel.Providers.LocalLlm.LocalLlmCapabilityDescriptor.CapabilityId	100	0	0
+Property	AIKernel.Providers.LocalLlm.LocalLlmCapabilityDescriptor.Metadata	100	0	1
+Property	AIKernel.Providers.LocalLlm.LocalLlmCapabilityDescriptor.Runtime	100	0	0
+Property	AIKernel.Providers.LocalLlm.LocalLlmProvider.Name	96	2	1
+Property	AIKernel.Providers.LocalLlm.LocalLlmProvider.ProviderId	96	2	1
+Property	AIKernel.Providers.LocalLlm.LocalLlmProvider.Version	96	2	1
+Property	AIKernel.Providers.LocalLlm.LocalLlmProviderCapabilities.EmbeddingDimensions	100	2	1
+Property	AIKernel.Providers.LocalLlm.LocalLlmProviderCapabilities.MaxConcurrentConnections	100	2	0
+Property	AIKernel.Providers.LocalLlm.LocalLlmProviderCapabilities.MaxQueryParts	100	2	0
+Property	AIKernel.Providers.LocalLlm.LocalLlmProviderCapabilities.RateLimit	100	2	1
+Property	AIKernel.Providers.LocalLlm.LocalLlmProviderCapabilities.SupportedDataTypes	100	2	1
+Property	AIKernel.Providers.LocalLlm.LocalLlmProviderCapabilities.SupportedEmbeddingModels	100	2	1
+Property	AIKernel.Providers.LocalLlm.LocalLlmProviderCapabilities.SupportedOperations	100	2	1
+Property	AIKernel.Providers.LocalLlm.LocalLlmProviderCapabilities.SupportedQueryProcessingOperations	100	2	1
+Property	AIKernel.Providers.LocalLlm.LocalLlmProviderCapabilities.SupportsEmbedding	100	2	0
+Property	AIKernel.Providers.LocalLlm.LocalLlmProviderCapabilities.SupportsQueryAugmentation	100	2	0
+Property	AIKernel.Providers.LocalLlm.LocalLlmProviderCapabilities.SupportsQueryDecomposition	100	2	0
+Property	AIKernel.Providers.LocalLlm.LocalLlmProviderCapabilities.SupportsQueryRouting	100	2	0
+Property	AIKernel.Providers.LocalLlm.LocalLlmProviderCapabilities.Vector	100	2	1
+Property	AIKernel.Providers.LocalLlm.LocalLlmSettings.ArtifactHash	100	2	0
+Property	AIKernel.Providers.LocalLlm.LocalLlmSettings.BonsaiModelPath	100	2	0
+Property	AIKernel.Providers.LocalLlm.LocalLlmSettings.ContextTokens	100	2	0
+Property	AIKernel.Providers.LocalLlm.LocalLlmSettings.CpuThreads	100	2	0
+Property	AIKernel.Providers.LocalLlm.LocalLlmSettings.MaxNewTokens	100	2	0
+Property	AIKernel.Providers.LocalLlm.LocalLlmSettings.MaxPromptCharacters	100	2	0
+Property	AIKernel.Providers.LocalLlm.LocalLlmSettings.Name	100	2	0
+Property	AIKernel.Providers.LocalLlm.LocalLlmSettings.ProviderId	100	2	0
+Property	AIKernel.Providers.LocalLlm.LocalLlmSettings.Runtime	100	2	0
+Property	AIKernel.Providers.LocalLlm.LocalLlmSettings.RuntimeUri	100	2	0
+Property	AIKernel.Providers.LocalLlm.LocalLlmSettings.SystemPrompt	100	2	0
+Property	AIKernel.Providers.LocalLlm.LocalLlmSettings.Version	100	2	1
+Property	AIKernel.Providers.LocalLlm.RegisteredLocalLlmSettings.RegistrationFile	100	2	0
+Property	AIKernel.Providers.LocalLlm.RegisteredLocalLlmSettings.WeightMemory	100	2	1

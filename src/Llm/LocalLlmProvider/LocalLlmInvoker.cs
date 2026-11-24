@@ -1,6 +1,4 @@
 using System.Globalization;
-using System.Security.Cryptography;
-using System.Text;
 using AIKernel.Abstractions.Capabilities;
 using AIKernel.Dtos.Capabilities;
 using AIKernel.Kernel.Inference;
@@ -73,7 +71,7 @@ public sealed class LocalLlmInvoker : ICapabilityModuleInvoker, IDisposable
             cancellationToken.ThrowIfCancellationRequested();
             try
             {
-                _model ??= new Qwen3CpuModel(_modelPath, _settings.CpuThreads, _settings.ContextTokens, "auto");
+                _model ??= LocalModelReader.Open(_modelPath, _settings, cancellationToken);
             }
             catch (Exception error) when (error is FileNotFoundException or DirectoryNotFoundException)
             {
@@ -103,18 +101,7 @@ public sealed class LocalLlmInvoker : ICapabilityModuleInvoker, IDisposable
             if (string.IsNullOrWhiteSpace(generation.Text))
                 return Failure("LOCAL_LLM_EMPTY_OUTPUT", "The model returned no reply text.");
 
-            var metadata = new Dictionary<string, string>(StringComparer.Ordinal)
-            {
-                ["provider"] = "LocalLlmProvider",
-                ["operation"] = ChatOperation,
-                ["text"] = generation.Text,
-                ["input_tokens"] = generation.InputTokens.ToString(CultureInfo.InvariantCulture),
-                ["output_tokens"] = generation.OutputTokens.ToString(CultureInfo.InvariantCulture),
-                ["finish_reason"] = generation.FinishReason,
-                ["cpu_backend"] = generation.CpuBackend
-            };
-            string hash = "sha256:" + Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(generation.Text)));
-            return new(request.InvocationId, request.CapabilityId, true, hash, null, null, request.ReplayLogHash, metadata);
+            return LocalLlmResponse.Success(request, generation);
         }
         finally
         {

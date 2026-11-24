@@ -8,12 +8,12 @@ import xml.etree.ElementTree as ET
 from zipfile import ZipFile
 
 
-# Published historical versions retained for verification of existing source.
-HISTORICAL_VERSIONS = {
+# Module-specific versions explicitly approved outside the 0.1.4 release line.
+MODULE_VERSIONS = {
     "AIKernel.Providers.Image": {"0.2.0", "0.3.0"},
     "AIKernel.Providers.Flux": {"0.1.5"},
     "AIKernel.Providers.Flux.Cuda": {"0.1.5"},
-    "AIKernel.Providers.LocalLlm": {"0.1.5", "0.1.6"},
+    "AIKernel.Providers.LocalLlm": {"0.1.5", "0.1.6", "0.3.0"},
 }
 
 
@@ -25,7 +25,7 @@ def check_package(path: Path) -> None:
         version = metadata.findtext("{*}version")
         if not version or not (
             re.fullmatch(r"0\.1\.4(?:\.[1-9]\d*|-dev\d+)?", version)
-            or version in HISTORICAL_VERSIONS.get(package_id, ())
+            or version in MODULE_VERSIONS.get(package_id, ())
         ):
             raise ValueError(f"{package_id} {version}: expected a version in the 0.1.4 line")
         for name in archive.namelist():

@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AIKernel dense profile v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "modelId",
+    "version",
+    "readerId",
+    "tokenizerVersion",
+    "weightsSha256",
+    "tokenizerSha256",
+    "shape"
+  ],
+  "properties": {
+    "modelId": {
+      "const": "bonsai-1.7b"
+    },
+    "version": {
+      "const": "Q1_0-1"
+    },
+    "readerId": {
+      "const": "gguf"
+    },
+    "tokenizerVersion": {
+      "const": "qwen2-bpe-1"
+    },
+    "weightsSha256": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{64}$"
+    },
+    "tokenizerSha256": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{64}$"
+    },
+    "shape": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "width",
+        "hidden",
+        "heads",
+        "kvHeads",
+        "headSize",
+        "layers",
+        "epsilon"
+      ],
+      "properties": {
+        "width": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "hidden": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "heads": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "kvHeads": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "headSize": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "layers": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "epsilon": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      }
+    }
+  }
+}

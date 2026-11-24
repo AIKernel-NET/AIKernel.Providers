@@ -14,6 +14,7 @@ jobs:
     name: .NET (${{ matrix.os }})
     env:
       AIKernelCommonSourceProject: ${{ github.workspace }}/.ci-core/src/AIKernel.Common/AIKernel.Common.csproj
+      AIKernelKernelSourceProject: ${{ github.workspace }}/.ci-core/src/AIKernel.Kernel/AIKernel.Kernel.csproj
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -26,7 +27,7 @@ jobs:
       - uses: actions/checkout@v7
         with:
           repository: AIKernel-NET/AIKernel.Core
-          ref: dbeeb83de95454ea9fbb23243942fa0ebb98d58c
+          ref: fe829bda7a6acfaf3874b32bb97e6f9b524c0693
           path: .ci-core
           persist-credentials: false
       - uses: actions/setup-dotnet@v6
@@ -34,16 +35,16 @@ jobs:
           global-json-file: global.json
 
       - name: Restore
-        run: dotnet restore AIKernel.Providers.slnx
+        run: dotnet restore AIKernel.Providers.slnx -p:StablePackageVersion=0.1.4
       - name: Build
         id: build
-        run: dotnet build AIKernel.Providers.slnx -c Release --no-restore
+        run: dotnet build AIKernel.Providers.slnx -c Release -p:StablePackageVersion=0.1.4 --no-restore
       - name: Test
-        run: dotnet test AIKernel.Providers.slnx -c Release --no-build --no-restore
+        run: dotnet test AIKernel.Providers.slnx -c Release -p:StablePackageVersion=0.1.4 --no-build --no-restore
       - name: Pack
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         env:
           PROVIDER_PACKAGE_DIRECTORY: ${{ runner.temp }}/aikernel-provider-packages
         run: |
-          dotnet pack AIKernel.Providers.slnx -c Release --no-build --no-restore -p:PackageOutputPath="${{ env.PROVIDER_PACKAGE_DIRECTORY }}"
+          dotnet pack AIKernel.Providers.slnx -c Release -p:StablePackageVersion=0.1.4 --no-build --no-restore -p:PackageOutputPath="${{ env.PROVIDER_PACKAGE_DIRECTORY }}"
           python tools/check_package_metadata.py "${{ env.PROVIDER_PACKAGE_DIRECTORY }}"
