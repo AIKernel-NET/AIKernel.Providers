@@ -4,11 +4,11 @@ namespace AIKernel.Providers.LocalLlm;
 
 internal static class LocalModelReader
 {
-    internal static Qwen3CpuModel Open(string path, LocalLlmSettings settings, CancellationToken cancellation)
+    internal static DenseModelSession Open(string path, LocalLlmSettings settings, CancellationToken cancellation)
     {
         var options = settings as RegisteredLocalLlmSettings;
         var registration = ReadRegistration(options?.RegistrationFile);
-        var model = registration.Open(path, settings.CpuThreads, settings.ContextTokens, options?.WeightMemory);
+        var model = registration.OpenSession(path, settings.CpuThreads, settings.ContextTokens, options?.WeightMemory);
         if (cancellation.IsCancellationRequested)
         {
             model.Dispose();

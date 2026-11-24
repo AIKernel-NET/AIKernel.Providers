@@ -1,78 +1,167 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "AIKernel dense profile v1",
-  "type": "object",
-  "additionalProperties": false,
-  "required": [
-    "modelId",
-    "version",
-    "readerId",
-    "tokenizerVersion",
-    "weightsSha256",
-    "tokenizerSha256",
-    "shape"
-  ],
-  "properties": {
-    "modelId": {
-      "const": "bonsai-1.7b"
+  "oneOf": [
+    {
+      "$ref": "#/$defs/complete"
     },
-    "version": {
-      "const": "Q1_0-1"
-    },
-    "readerId": {
-      "const": "gguf"
-    },
-    "tokenizerVersion": {
-      "const": "qwen2-bpe-1"
-    },
-    "weightsSha256": {
-      "type": "string",
-      "pattern": "^[0-9a-fA-F]{64}$"
-    },
-    "tokenizerSha256": {
-      "type": "string",
-      "pattern": "^[0-9a-fA-F]{64}$"
-    },
-    "shape": {
+    {
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "width",
-        "hidden",
-        "heads",
-        "kvHeads",
-        "headSize",
-        "layers",
-        "epsilon"
+        "profile",
+        "profiles"
       ],
       "properties": {
-        "width": {
-          "type": "integer",
-          "minimum": 1
+        "profile": {
+          "type": "string",
+          "minLength": 1
         },
-        "hidden": {
-          "type": "integer",
-          "minimum": 1
+        "profiles": {
+          "type": "object",
+          "minProperties": 1,
+          "propertyNames": {
+            "type": "string",
+            "minLength": 1
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/layer"
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "complete": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "modelId",
+        "version",
+        "readerId",
+        "tokenizerVersion",
+        "weightsSha256",
+        "tokenizerSha256",
+        "shape"
+      ],
+      "properties": {
+        "modelId": {
+          "const": "bonsai-1.7b"
         },
-        "heads": {
-          "type": "integer",
-          "minimum": 1
+        "version": {
+          "const": "Q1_0-1"
         },
-        "kvHeads": {
-          "type": "integer",
-          "minimum": 1
+        "readerId": {
+          "const": "gguf"
         },
-        "headSize": {
-          "type": "integer",
-          "minimum": 1
+        "tokenizerVersion": {
+          "const": "qwen2-bpe-1"
         },
-        "layers": {
-          "type": "integer",
-          "minimum": 1
+        "weightsSha256": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{64}$"
         },
-        "epsilon": {
-          "type": "number",
-          "exclusiveMinimum": 0
+        "tokenizerSha256": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F]{64}$"
+        },
+        "shape": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "width",
+            "hidden",
+            "heads",
+            "kvHeads",
+            "headSize",
+            "layers",
+            "epsilon"
+          ],
+          "properties": {
+            "width": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "hidden": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "heads": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "kvHeads": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "headSize": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "layers": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "epsilon": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            }
+          }
+        }
+      }
+    },
+    "layer": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "modelId": {
+          "$ref": "#/$defs/complete/properties/modelId"
+        },
+        "version": {
+          "$ref": "#/$defs/complete/properties/version"
+        },
+        "readerId": {
+          "$ref": "#/$defs/complete/properties/readerId"
+        },
+        "tokenizerVersion": {
+          "$ref": "#/$defs/complete/properties/tokenizerVersion"
+        },
+        "weightsSha256": {
+          "$ref": "#/$defs/complete/properties/weightsSha256"
+        },
+        "tokenizerSha256": {
+          "$ref": "#/$defs/complete/properties/tokenizerSha256"
+        },
+        "shape": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "width": {
+              "$ref": "#/$defs/complete/properties/shape/properties/width"
+            },
+            "hidden": {
+              "$ref": "#/$defs/complete/properties/shape/properties/hidden"
+            },
+            "heads": {
+              "$ref": "#/$defs/complete/properties/shape/properties/heads"
+            },
+            "kvHeads": {
+              "$ref": "#/$defs/complete/properties/shape/properties/kvHeads"
+            },
+            "headSize": {
+              "$ref": "#/$defs/complete/properties/shape/properties/headSize"
+            },
+            "layers": {
+              "$ref": "#/$defs/complete/properties/shape/properties/layers"
+            },
+            "epsilon": {
+              "$ref": "#/$defs/complete/properties/shape/properties/epsilon"
+            }
+          }
+        },
+        "extends": {
+          "type": "string",
+          "minLength": 1
         }
       }
     }

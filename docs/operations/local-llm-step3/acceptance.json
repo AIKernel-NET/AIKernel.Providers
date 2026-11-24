@@ -1,0 +1,122 @@
+{
+  "coreRevision": "cadea595e0e21a7899f85f36fe856b807f0a415a",
+  "providersBase": "ea1540c683209b69f7bd66e6944ed6e5e1ab8def",
+  "sdkVersion": "10.0.404",
+  "environment": "Windows x64, CPU AVX2",
+  "testPassCounts": {
+    "kernel": 1717,
+    "candidate": 22,
+    "probe": 1,
+    "official": 11,
+    "binary": 11
+  },
+  "skipped": 0,
+  "gate": {
+    "result": "Passed all 593 baseline symbols and the thresholds for new methods.",
+    "historicalSymbols": 593,
+    "candidateSymbols": 763,
+    "moves": 212,
+    "providerAssembly": {
+      "MI": 85,
+      "CC": 125,
+      "coupling": 68
+    }
+  },
+  "bonsai": {
+    "english": {
+      "backend": "avx2",
+      "ids16": "1e7c12b0b0028ee049d1fb333b996b8bda072247ef78d8feca5d4b49ef538605",
+      "replyUtf8": "sha256:24a866f4940f1b00083a71ba4df7323bac1486f28dc81d500bbc4bb02c6e0e16",
+      "finish": "stop",
+      "replyTokens": 1
+    },
+    "japanese": {
+      "backend": "avx2",
+      "ids16": "e3d9d8100b72b170c15371f77a07c8412368de46e2c4b656798876734fddc731",
+      "replyUtf8": "sha256:439e44a82b28f76c2661e4e65537f0f3963df49beaed16276f0938471f86a7d2",
+      "finish": "stop",
+      "replyTokens": 2
+    }
+  },
+  "gemma": {
+    "tokens": [
+      31414,
+      3652,
+      236924,
+      106,
+      106,
+      106,
+      1,
+      106,
+      1,
+      1,
+      106,
+      106
+    ],
+    "referenceStages": 228,
+    "maxAbsoluteError": 0.0008544921875,
+    "maxLogitError": 9.965896606445312e-05,
+    "identicalFp32DumpCount": 229
+  },
+  "gptOss": [
+    {
+      "input": "What is 2+2? Answer with one digit.",
+      "tokens": [
+        19,
+        200002
+      ],
+      "promptTokensMatched": true,
+      "generationMatched": true,
+      "peakRssBytes": 5203595264,
+      "residentLimitBytes": 7000000000,
+      "weightCacheBytes": 5000000000
+    },
+    {
+      "input": "What is the capital of France? Answer with the city name.",
+      "tokens": [
+        72782,
+        13,
+        200002
+      ],
+      "promptTokensMatched": true,
+      "generationMatched": true,
+      "peakRssBytes": 5203668992,
+      "residentLimitBytes": 7000000000,
+      "weightCacheBytes": 5000000000
+    }
+  ],
+  "sha256": {
+    "core.tsv": "39d93b9ca28474d0819d9a9c4b62153c37aa4b5f68e1a2adbe4b10a7a6243f62",
+    "providers.tsv": "a8f2d588bc5e612c70a383065973520ce46dfd537c450b42a4faeefcbb8cd41e",
+    "responsibility-moves.tsv": "2b916c822ae7bf51f786e6a2e743b218ce1e3389a34ebb6ca4600470eceb6f19",
+    "AIKernel.Kernel.dll": "b45d725398d7f9519525aa348a6c7c8778ef4aa84d6585c3c27d57a920238346",
+    "LocalLlmProvider.dll": "5ba9f575d8e4a5bc1b0d3f1335774e8c8cb232f44ee139eda2048241237e3f80"
+  },
+  "legacyPublicSignatures": [
+    {
+      "type": "Qwen3CpuModel",
+      "publishedSignatures": 13,
+      "missing": []
+    },
+    {
+      "type": "Qwen3GpuModel",
+      "publishedSignatures": 13,
+      "missing": []
+    },
+    {
+      "type": "Qwen3VulkanModel",
+      "publishedSignatures": 11,
+      "missing": []
+    },
+    {
+      "type": "Gemma4E2BCpuModel",
+      "publishedSignatures": 11,
+      "missing": []
+    },
+    {
+      "type": "GptOss20BCpuModel",
+      "publishedSignatures": 6,
+      "missing": []
+    }
+  ]
+}

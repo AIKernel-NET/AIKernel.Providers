@@ -5,7 +5,7 @@ using AIKernel.Kernel.Inference;
 
 namespace AIKernel.Providers.LocalLlm;
 
-/// <summary>Generates local replies through the AIKernel Kernel CPU engine for a host-registered model.</summary>
+/// <summary>Generates local replies through the AIKernel Kernel inference engine for a host-registered model.</summary>
 public sealed class LocalLlmInvoker : ICapabilityModuleInvoker, IDisposable
 {
     private const string ChatOperation = "chat.local";
@@ -13,7 +13,7 @@ public sealed class LocalLlmInvoker : ICapabilityModuleInvoker, IDisposable
     private readonly LocalLlmSettings _settings;
     private readonly string? _modelPath;
     private readonly SemaphoreSlim _gate = new(1, 1);
-    private Qwen3CpuModel? _model;
+    private DenseModelSession? _model;
     private bool _disposed;
 
     /// <summary>Uses the model registered through the AIKERNEL_LOCAL_LLM_MODEL_PATH environment variable.</summary>

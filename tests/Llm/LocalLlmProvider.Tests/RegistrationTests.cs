@@ -97,4 +97,41 @@ public sealed class RegistrationTests
         }
         finally { directory.Delete(true); }
     }
+
+    [Fact(SkipUnless = nameof(HasModel), Skip = "Requires the registered Bonsai GGUF.")]
+    public async Task InheritedRegistrationVerifiesTheResolvedArtifactsOnOpen()
+    {
+        var stop = TestContext.Current.CancellationToken;
+        var catalog = new JsonObject
+        {
+            ["profile"] = "release",
+            ["profiles"] = new JsonObject
+            {
+                ["base"] = JsonNode.Parse(Profile()),
+                ["release"] = JsonNode.Parse("""{"extends":"base","shape":{"layers":28}}""")
+            }
+        };
+        var file = Path.GetTempFileName();
+        try
+        {
+            using var invoker = new LocalLlmInvoker(new RegisteredLocalLlmSettings
+            {
+                RegistrationFile = file, BonsaiModelPath = Environment.GetEnvironmentVariable("AIKERNEL_TEST_BONSAI_GGUF"),
+                CpuThreads = 2, ContextTokens = 256, MaxNewTokens = 16, SystemPrompt = "Follow the user's formatting request."
+            });
+            var request = new CapabilityInvocationRequest("catalog", "local-llm", "chat.local",
+                new Dictionary<string, string> { ["prompt"] = "Reply with exactly the word BLUE." }, null, null,
+                new Dictionary<string, string>());
+            var delta = catalog["profiles"]!["release"]!.AsObject();
+            delta["tokenizerSha256"] = new string('0', 64);
+            await File.WriteAllTextAsync(file, catalog.ToJsonString(), stop);
+            Assert.Equal("LOCAL_LLM_MODEL_UNAVAILABLE", (await invoker.InvokeAsync(request, stop)).ErrorCode);
+            delta.Remove("tokenizerSha256");
+            await File.WriteAllTextAsync(file, catalog.ToJsonString(), stop);
+            var reply = await invoker.InvokeAsync(request, stop);
+            Assert.True(reply.Succeeded, reply.ErrorMessage);
+            Assert.Equal("sha256:24a866f4940f1b00083a71ba4df7323bac1486f28dc81d500bbc4bb02c6e0e16", reply.OutputHash);
+        }
+        finally { File.Delete(file); }
+    }
 }

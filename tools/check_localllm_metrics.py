@@ -41,13 +41,31 @@ def regressions(baseline, current):
             yield f"{kind} {name}: MI/CC/coupling {value}, required >= {limit[0]} / <= {limit[1]} / <= {limit[2]}"
 
 
+def moved_baseline(baseline, path):
+    """Compare each approved limit against exactly one current responsibility."""
+    targets = {}
+    with path.open(encoding="utf-8", newline="") as stream:
+        for kind, previous, current in csv.reader(stream, delimiter="\t"):
+            key = (kind, previous)
+            if key not in baseline or key in targets:
+                raise ValueError(f"Unknown or repeated source responsibility: {key}")
+            targets[key] = (kind, current)
+    result = {targets.get(key, key): value for key, value in baseline.items()}
+    if len(result) != len(baseline):
+        raise ValueError("Multiple baseline responsibilities map to the same measurement")
+    return result
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("measurements", nargs="+", type=Path, help="Roslyn metric TSV for Core and Providers")
+    parser.add_argument("--moves", type=Path, help="TSV with kind, old symbol, new symbol for responsibility moves")
     args = parser.parse_args()
     baseline = measurements([BASELINE])
     if not any(kind == "Assembly" and name.startswith("LocalLlmProvider,") for kind, name in baseline):
         parser.error("missing LocalLlmProvider assembly baseline")
+    if args.moves:
+        baseline = moved_baseline(baseline, args.moves)
     errors = list(regressions(baseline, measurements(args.measurements)))
     for error in errors:
         print(error, file=sys.stderr)
