@@ -1,62 +1,147 @@
+using System.Globalization;
+using System.Security.Cryptography;
+using System.Text;
 using AIKernel.Abstractions.Capabilities;
-using AIKernel.Common.Results;
 using AIKernel.Dtos.Capabilities;
+using AIKernel.Kernel.Inference;
 
 namespace AIKernel.Providers.LocalLlm;
 
-/// <summary>
-/// [EN] Capability module invoker for local LLM provider operations.
-/// [JA] Local LLM Provider operation 用の capability module invoker です。
-/// </summary>
-public sealed class LocalLlmInvoker : ICapabilityModuleInvoker
+/// <summary>Generates local replies through the AIKernel Kernel CPU engine for a host-registered model.</summary>
+public sealed class LocalLlmInvoker : ICapabilityModuleInvoker, IDisposable
 {
-    /// <summary>
-    /// [EN] Invokes a local LLM capability module operation.
-    /// [JA] Local LLM capability module operation を実行します。
-    /// </summary>
-    public ValueTask<CapabilityInvocationResult> InvokeAsync(
-        CapabilityInvocationRequest request,
-        CancellationToken cancellationToken = default)
+    private const string ChatOperation = "chat.local";
+    private const string ModelNotRegistered = "provider.model_not_registered";
+    private readonly LocalLlmSettings _settings;
+    private readonly string? _modelPath;
+    private readonly SemaphoreSlim _gate = new(1, 1);
+    private Qwen3CpuModel? _model;
+    private bool _disposed;
+
+    /// <summary>Uses the model registered through the AIKERNEL_LOCAL_LLM_MODEL_PATH environment variable.</summary>
+    public LocalLlmInvoker() : this(new LocalLlmSettings
+    {
+        BonsaiModelPath = Environment.GetEnvironmentVariable("AIKERNEL_LOCAL_LLM_MODEL_PATH")
+    })
+    {
+    }
+
+    /// <summary>Uses host settings and opens the registered model on the first valid request.</summary>
+    public LocalLlmInvoker(LocalLlmSettings settings)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+        if (settings.CpuThreads is < 1 or > 6 || settings.ContextTokens is < 64 or > 2048
+            || settings.MaxPromptCharacters is < 1 or > 4096 || settings.MaxNewTokens is < 1 or > 256
+            || settings.MaxNewTokens >= settings.ContextTokens || settings.SystemPrompt is null
+            || settings.SystemPrompt.Length > 8192)
+            throw new ArgumentException("The local LLM limits or system prompt are invalid.", nameof(settings));
+
+        _settings = settings;
+        _modelPath = string.IsNullOrWhiteSpace(settings.BonsaiModelPath) ? null : Path.GetFullPath(settings.BonsaiModelPath);
+    }
+
+    /// <inheritdoc />
+    public async ValueTask<CapabilityInvocationResult> InvokeAsync(
+        CapabilityInvocationRequest request, CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
         ArgumentNullException.ThrowIfNull(request);
 
         if (request.Operation == "embedding.local")
-            return ValueTask.FromResult(new CapabilityInvocationResult(
-                request.InvocationId,
-                request.CapabilityId,
-                Succeeded: false,
-                OutputHash: null,
-                ErrorCode: "provider.model_not_registered",
-                ErrorMessage: "No embedding model is registered in this provider.",
-                ReplayLogHash: request.ReplayLogHash,
-                Metadata: new Dictionary<string, string>(StringComparer.Ordinal) { ["provider"] = "LocalLlmProvider" }));
+            return Failure(ModelNotRegistered, "Register an embedding model with AIKernel.Providers.Embedding.");
+        if (request.Operation != ChatOperation)
+            return Failure("LOCAL_LLM_OPERATION_NOT_SUPPORTED", "Use the chat.local operation.");
+        if (_modelPath is null)
+            return Failure(ModelNotRegistered, "The host has not registered a local chat model.");
 
-        var supported = request.Operation == "chat.local";
-        var metadata = new SortedDictionary<string, string>(StringComparer.Ordinal);
-        foreach (var item in request.Metadata.OrderBy(x => x.Key, StringComparer.Ordinal))
+        var arguments = request.Arguments;
+        if (arguments.Keys.Any(key => key is not ("prompt" or "max_new_tokens")))
+            return Failure("LOCAL_LLM_INVALID_ARGUMENT", "Only prompt and max_new_tokens are accepted.");
+        if (!arguments.TryGetValue("prompt", out var prompt) || string.IsNullOrWhiteSpace(prompt)
+            || prompt.Length > _settings.MaxPromptCharacters)
+            return Failure("LOCAL_LLM_INVALID_ARGUMENT", "Provide a non-empty prompt within the configured limit.");
+        int maxNewTokens = _settings.MaxNewTokens;
+        if (arguments.TryGetValue("max_new_tokens", out var requested)
+            && (!int.TryParse(requested, NumberStyles.None, CultureInfo.InvariantCulture, out maxNewTokens)
+                || maxNewTokens < 1 || maxNewTokens > _settings.MaxNewTokens))
+            return Failure("LOCAL_LLM_INVALID_ARGUMENT", "max_new_tokens exceeds the configured limit or is invalid.");
+
+        await _gate.WaitAsync(cancellationToken).ConfigureAwait(false);
+        try
         {
-            metadata[item.Key] = item.Value;
+            ObjectDisposedException.ThrowIf(_disposed, this);
+            cancellationToken.ThrowIfCancellationRequested();
+            try
+            {
+                _model ??= new Qwen3CpuModel(_modelPath, _settings.CpuThreads, _settings.ContextTokens, "auto");
+            }
+            catch (Exception error) when (error is FileNotFoundException or DirectoryNotFoundException)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                return Failure(ModelNotRegistered, "The registered local chat model file is missing.");
+            }
+            catch (Exception error) when (error is IOException or UnauthorizedAccessException
+                or InvalidDataException or NotSupportedException or ArgumentException)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                return Failure("LOCAL_LLM_MODEL_UNAVAILABLE", "The registered local chat model could not be opened.");
+            }
+
+            CpuGeneration generation;
+            try
+            {
+                generation = await _model.GenerateAsync(_settings.SystemPrompt, prompt, maxNewTokens, cancellationToken)
+                    .ConfigureAwait(false);
+            }
+            catch (ArgumentException)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                return Failure("LOCAL_LLM_INVALID_ARGUMENT", "The prompt and reply exceed the model context budget.");
+            }
+
+            cancellationToken.ThrowIfCancellationRequested();
+            if (string.IsNullOrWhiteSpace(generation.Text))
+                return Failure("LOCAL_LLM_EMPTY_OUTPUT", "The model returned no reply text.");
+
+            var metadata = new Dictionary<string, string>(StringComparer.Ordinal)
+            {
+                ["provider"] = "LocalLlmProvider",
+                ["operation"] = ChatOperation,
+                ["text"] = generation.Text,
+                ["input_tokens"] = generation.InputTokens.ToString(CultureInfo.InvariantCulture),
+                ["output_tokens"] = generation.OutputTokens.ToString(CultureInfo.InvariantCulture),
+                ["finish_reason"] = generation.FinishReason,
+                ["cpu_backend"] = generation.CpuBackend
+            };
+            string hash = "sha256:" + Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(generation.Text)));
+            return new(request.InvocationId, request.CapabilityId, true, hash, null, null, request.ReplayLogHash, metadata);
+        }
+        finally
+        {
+            _gate.Release();
         }
 
-        metadata["provider"] = "LocalLlmProvider";
-        metadata["operation"] = request.Operation;
-        var unsupported = UnsupportedOperation(supported, request.Operation);
-
-        return ValueTask.FromResult(new CapabilityInvocationResult(
-            request.InvocationId,
-            request.CapabilityId,
-            Succeeded: supported,
-            OutputHash: null,
-            ErrorCode: unsupported.Match<string?>(() => null, error => error.Code),
-            ErrorMessage: unsupported.Match<string?>(() => null, error => error.Message),
-            ReplayLogHash: request.ReplayLogHash,
-            Metadata: metadata));
+        CapabilityInvocationResult Failure(string code, string message)
+            => new(request.InvocationId, request.CapabilityId, false, null, code, message, request.ReplayLogHash,
+                new Dictionary<string, string>(StringComparer.Ordinal) { ["provider"] = "LocalLlmProvider" });
     }
 
-    private static Option<MonadicError> UnsupportedOperation(bool supported, string operation)
-        => MonadicDecision.ErrorUnless(
-            supported,
-            "LOCAL_LLM_OPERATION_NOT_SUPPORTED",
-            $"Unsupported local LLM operation: {operation}.");
+    /// <summary>Waits for any active generation and releases the registered model.</summary>
+    public void Dispose()
+    {
+        _gate.Wait();
+        try
+        {
+            if (_disposed)
+                return;
+
+            _disposed = true;
+            _model?.Dispose();
+            _model = null;
+        }
+        finally
+        {
+            _gate.Release();
+        }
+    }
 }

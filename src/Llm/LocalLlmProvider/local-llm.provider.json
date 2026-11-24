@@ -1,14 +1,13 @@
 {
   "providerId": "local-llm",
   "name": "Local LLM",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "assembly": "LocalLlmProvider.dll",
   "capabilities": [
     "chat.local"
   ],
   "metadata": {
-    "runtime": "ollama",
-    "runtimeUri": "ollama://localhost",
+    "runtime": "aikernel-bonsai",
     "providerType": "AIKernel.Providers.LocalLlm.LocalLlmProvider",
     "invokerType": "AIKernel.Providers.LocalLlm.LocalLlmInvoker"
   },
@@ -20,6 +19,6 @@
       "runtimeUri",
       "artifactHash"
     ],
-    "requiredEnvironment": []
+    "requiredEnvironment": ["AIKERNEL_LOCAL_LLM_MODEL_PATH"]
   }
 }

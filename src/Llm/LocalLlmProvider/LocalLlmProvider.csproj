@@ -2,21 +2,23 @@
   <PropertyGroup>
     <Title>AIKernel.Providers.LocalLlm</Title>
     <PackageId>AIKernel.Providers.LocalLlm</PackageId>
-    <PackageVersion>0.1.5</PackageVersion>
+    <PackageVersion>0.1.6</PackageVersion>
     <Version>$(PackageVersion)</Version>
     <AssemblyVersion>0.1.4.0</AssemblyVersion>
-    <FileVersion>0.1.5.0</FileVersion>
+    <FileVersion>0.1.6.0</FileVersion>
     <InformationalVersion>$(PackageVersion)</InformationalVersion>
-    <PackageValidationBaselineVersion>0.1.4</PackageValidationBaselineVersion>
-    <PackageReleaseNotes>Returns a typed failure for unregistered embeddings. Register an embedding model with AIKernel.Providers.Embedding for real local embeddings.</PackageReleaseNotes>
-    <Description>EN: Official AIKernel.NET extension provider for local LLM runtimes such as Ollama, llama.cpp, and vLLM.
+    <PackageValidationBaselineVersion>0.1.5</PackageValidationBaselineVersion>
+    <PackageReadmeFile>LOCAL-LLM.md</PackageReadmeFile>
+    <PackageReleaseNotes>Connects chat.local to the AIKernel Kernel CPU engine for host-registered Bonsai GGUF weights.</PackageReleaseNotes>
+    <Description>EN: Runs local Bonsai chat through the CPU inference engine in AIKernel 0.1.4.
 
-JA: Ollama、llama.cpp、vLLM などの local LLM runtime を AIKernel 上で扱うための AIKernel.NET 公式拡張 Provider です。</Description>
+JA: AIKernel 0.1.4のCPU推論エンジンでBonsaiとのローカルチャットを実行するProviderです。</Description>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="AIKernel.Common" Version="[0.1.4]" />
     <PackageReference Include="AIKernel.Core" Version="[0.1.4]" />
+    <PackageReference Include="AIKernel.Kernel" Version="[0.1.4]" />
     <PackageReference Include="AIKernel.Abstractions" Version="0.1.4" />
     <PackageReference Include="AIKernel.Dtos" Version="0.1.4" />
     <PackageReference Include="AIKernel.Enums" Version="0.1.4" />
@@ -24,5 +26,7 @@ JA: Ollama、llama.cpp、vLLM などの local LLM runtime を AIKernel 上で扱
 
   <ItemGroup>
     <None Include="local-llm.provider.json" CopyToOutputDirectory="PreserveNewest" Pack="true" PackagePath="providers\" />
+    <None Include="docs/README.md" Pack="true" PackagePath="LOCAL-LLM.md" />
+    <None Include="docs/README-ja.md" Pack="true" PackagePath="LOCAL-LLM-ja.md" />
   </ItemGroup>
 </Project>

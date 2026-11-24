@@ -1,41 +1,31 @@
-# LocalLlmProvider
+# Local LLM Provider
 
-[日本語](README-ja.md)
+`chat.local` generates a reply using the CPU inference engine in AIKernel.Kernel 0.1.4. The host supplies a local Bonsai 1.7B Q1_0 GGUF file. The provider opens the weights on the first valid request and reuses the model within that invoker. Use one invoker per registered model and dispose it at host shutdown.
 
-LocalLlmProvider exposes local LLM runtimes through the AIKernel provider
-boundary.
+```csharp
+using AIKernel.Dtos.Capabilities;
+using AIKernel.Providers.LocalLlm;
 
-## Role
+using var invoker = new LocalLlmInvoker(new LocalLlmSettings
+{
+    BonsaiModelPath = "/models/Bonsai-1.7B-Q1_0.gguf",
+    CpuThreads = 4,
+    ContextTokens = 1024,
+    MaxPromptCharacters = 4096,
+    MaxNewTokens = 128
+});
 
-The provider gives AIKernel hosts a stable capability surface for local model
-runtimes such as Ollama, llama.cpp, and vLLM. Runtime-specific details remain
-outside Core and Tools.
+var request = new CapabilityInvocationRequest(
+    "example-1", "local-llm", "chat.local",
+    new Dictionary<string, string> { ["prompt"] = "Write a one-sentence greeting." },
+    InputHash: null, ReplayLogHash: null, Metadata: new Dictionary<string, string>());
 
-## Capability Surface
+var result = await invoker.InvokeAsync(request);
+Console.WriteLine(result.Succeeded ? result.Metadata["text"] : result.ErrorCode);
+```
 
-The provider exposes:
+For a manifest loader using the parameterless constructor, set `AIKERNEL_LOCAL_LLM_MODEL_PATH` in the host process before constructing the invoker. The model file is supplied by the host. `SystemPrompt` is host configuration. A request can supply `prompt` and optionally `max_new_tokens` within the host-configured cap. The cap is used when the argument is omitted.
 
-- `chat.local`
-- `embedding.local`
+The successful result includes `text`, token counts, `finish_reason`, `cpu_backend`, and a SHA-256 digest of the UTF-8 reply in `OutputHash`. Treat the text and digest as response data when deciding what to log. Missing models, unreadable or unsupported model files, invalid arguments, and empty replies return explicit failures. Cancellation raises `OperationCanceledException`.
 
-Default provider identity:
-
-- Provider id: `providers.local-llm`
-- Manifest id: `local-llm`
-- Manifest file: `local-llm.provider.json`
-
-## Manifest Metadata
-
-The manifest and settings record:
-
-- local runtime name
-- optional local runtime URI
-- optional runtime artifact hash
-
-These values allow a host to describe which local runtime it intends to bind
-without making AIKernel.Core depend on that runtime.
-
-## Dependency Boundary
-
-LocalLlmProvider must not call external remote model services by itself and
-must not move local runtime implementation details into Tools.
+For local embeddings, register an embedding model with `AIKernel.Providers.Embedding` and call its `IEmbeddingRequestProvider` contract. Requests for `embedding.local` to this invoker return `provider.model_not_registered`.

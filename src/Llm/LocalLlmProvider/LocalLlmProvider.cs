@@ -99,6 +99,8 @@ public sealed class LocalLlmProvider(
                 _settings.Runtime,
                 _settings.ToMetadata()));
 
+    /// <summary>Creates a disposable chat invoker using this provider's host settings.</summary>
+    public LocalLlmInvoker CreateInvoker() => new(_settings);
 }
 
 internal sealed class LocalLlmProviderCapabilities : IProviderCapabilities

@@ -1,40 +1,31 @@
-# LocalLlmProvider
+# Local LLM Provider
 
-[English](README.md)
+`chat.local` は `AIKernel.Kernel 0.1.4` のCPU推論エンジンで応答を生成します。ホストがローカルの `Bonsai-1.7B-Q1_0.gguf` を指定します。最初の有効なリクエストで重みを開き、同じinvokerで再利用します。登録したモデルごとにinvokerを1つ保持し、ホスト終了時に破棄してください。
 
-LocalLlmProvider は local LLM runtime を AIKernel Provider boundary から公開します。
+```csharp
+using AIKernel.Dtos.Capabilities;
+using AIKernel.Providers.LocalLlm;
 
-## Role
+using var invoker = new LocalLlmInvoker(new LocalLlmSettings
+{
+    BonsaiModelPath = "/models/Bonsai-1.7B-Q1_0.gguf",
+    CpuThreads = 4,
+    ContextTokens = 1024,
+    MaxPromptCharacters = 4096,
+    MaxNewTokens = 128
+});
 
-この Provider は、Ollama、llama.cpp、vLLM などの local model runtime に対して、
-AIKernel host が安定した capability surface を持てるようにします。
-runtime-specific detail は Core と Tools の外に残ります。
+var request = new CapabilityInvocationRequest(
+    "example-1", "local-llm", "chat.local",
+    new Dictionary<string, string> { ["prompt"] = "一文で挨拶してください。" },
+    InputHash: null, ReplayLogHash: null, Metadata: new Dictionary<string, string>());
 
-## Capability Surface
+var result = await invoker.InvokeAsync(request);
+Console.WriteLine(result.Succeeded ? result.Metadata["text"] : result.ErrorCode);
+```
 
-Provider は以下を公開します。
+マニフェスト経由で引数なしのコンストラクターを使う場合は、インスタンス生成前にホストの環境変数 `AIKERNEL_LOCAL_LLM_MODEL_PATH` にモデルファイルのパスを設定してください。`SystemPrompt` はホスト設定です。利用者は `prompt` と、必要に応じてホスト上限以内の `max_new_tokens` を指定できます。省略時の生成上限にはホスト設定を使います。
 
-- `chat.local`
-- `embedding.local`
+成功時は `text`、トークン数、`finish_reason`、`cpu_backend` に加え、UTF-8の応答に対するSHA-256を `OutputHash` に返します。本文とハッシュは応答データとして扱い、ログへ保存する項目を決めてください。モデル未登録、ファイルの読み込み失敗や未対応形式、無効な引数、空の応答は失敗として返します。キャンセルは `OperationCanceledException` で通知します。
 
-default provider identity:
-
-- Provider id: `providers.local-llm`
-- Manifest id: `local-llm`
-- Manifest file: `local-llm.provider.json`
-
-## Manifest Metadata
-
-manifest と settings は以下を記録します。
-
-- local runtime name
-- optional local runtime URI
-- optional runtime artifact hash
-
-これらの値により、host は AIKernel.Core を local runtime に依存させず、bind
-予定の runtime を記述できます。
-
-## Dependency Boundary
-
-LocalLlmProvider はそれ自体で外部 remote model service を呼び出してはいけません。
-また、local runtime implementation detail を Tools へ移してはいけません。
+ローカル埋め込みには `AIKernel.Providers.Embedding` にモデルを登録し、`IEmbeddingRequestProvider` を使用します。このinvokerが `embedding.local` を受け取ると `provider.model_not_registered` を返します。
