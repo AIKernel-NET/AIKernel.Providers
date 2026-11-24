@@ -33,7 +33,15 @@
 Providersリポジトリのルートで実行する。対応表は旧シンボルと移行先を1対1で結び、Step 2で承認された閾値を適用する。
 
 ```console
-python tools/check_localllm_metrics.py --moves docs/operations/local-llm-step3/responsibility-moves.tsv docs/operations/local-llm-step3/core.tsv docs/operations/local-llm-step3/providers.tsv
+python tools/check_localllm_metrics.py --baseline-step 2 --moves docs/operations/local-llm-step3/responsibility-moves.tsv docs/operations/local-llm-step3/core.tsv docs/operations/local-llm-step3/providers.tsv
 ```
 
 [責務対応表](responsibility-moves.tsv) · [Core測定](core.tsv) · [Providers測定](providers.tsv) · [Step 2の固定基準](../local-llm-step2/quality-baseline.tsv)
+
+## Step 4 以降の品質基準
+
+著者がStep 3を受け入れたため、Core `cadea59`・Providers `d171af8` をdevに早送りで統合した。統合先で再測定した763シンボルのMI・CC・結合型数は、全行でStep 3の記録に一致した。これを[次回の固定基準](quality-baseline.tsv)とする。Provider全体の閾値はMI 85以上・CC 125以下・結合型数68以下、新規メソッドはそれぞれ60以上・10以下・10以下。追加の例外は0件。
+
+```console
+python tools/check_localllm_metrics.py core.tsv providers.tsv
+```

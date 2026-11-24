@@ -18,7 +18,7 @@ Step 2 の実測値を次回の基準とする。アセンブリ総計は MI 85 
 Microsoft.CodeAnalysis.Metrics 5.6.0 の同じ測定条件で取得した Core と Providers の TSV を使い、Providers のルートで比較する。列順は種別、完全修飾シンボル名、MI、CC、結合型数。測定器が出力する6列目のソース行数も受理する。
 
 ```console
-python tools/check_localllm_metrics.py core.tsv providers.tsv
+python tools/check_localllm_metrics.py --baseline-step 2 core.tsv providers.tsv
 ```
 
 ## 実機で照合した範囲
