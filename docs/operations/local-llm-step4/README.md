@@ -38,7 +38,11 @@ ONNX Runtime 1.32.0、CPUExecutionProvider、greedy、最大16生成トークン
 5. Providersリポジトリのルートで固定基準と今回の測定を比較する。
 
 ```console
-python tools/check_localllm_metrics.py --moves docs/operations/local-llm-step4/responsibility-moves.tsv docs/operations/local-llm-step4/core.tsv docs/operations/local-llm-step4/providers.tsv docs/operations/local-llm-step4/tokenizer.tsv
+python tools/check_localllm_metrics.py --baseline-step 3 --moves docs/operations/local-llm-step4/responsibility-moves.tsv docs/operations/local-llm-step4/core.tsv docs/operations/local-llm-step4/providers.tsv docs/operations/local-llm-step4/tokenizer.tsv
 ```
 
 GPU・Linux実機、NuGet公開、プリフェッチは後続工程で扱う。
+
+## Step 5 の固定基準
+
+統合したStep 4のCore・Providers・トークナイザーの測定を再実行し、全行のMI、CC、結合型数が一致した。従来の763シンボルを含む911シンボルを [quality-baseline.tsv](quality-baseline.tsv) に固定する。Providerの集合値はMI 85、CC 124、結合型数68。比較スクリプトの既定はStep 4。

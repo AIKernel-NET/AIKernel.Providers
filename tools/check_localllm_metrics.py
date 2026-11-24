@@ -60,7 +60,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("measurements", nargs="+", type=Path, help="Roslyn metric TSV for Core and Providers")
     parser.add_argument("--moves", type=Path, help="TSV with kind, old symbol, new symbol for responsibility moves")
-    parser.add_argument("--baseline-step", choices=("2", "3"), default="3", help="Approved step used for regression limits (default: 3)")
+    parser.add_argument("--baseline-step", choices=("2", "3", "4"), default="4", help="Approved step used for regression limits (default: 4)")
     args = parser.parse_args()
     baseline = measurements([BASELINES / f"local-llm-step{args.baseline_step}" / "quality-baseline.tsv"])
     if not any(kind == "Assembly" and name.startswith("LocalLlmProvider,") for kind, name in baseline):

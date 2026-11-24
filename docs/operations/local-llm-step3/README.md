@@ -43,5 +43,5 @@ python tools/check_localllm_metrics.py --baseline-step 2 --moves docs/operations
 著者がStep 3を受け入れたため、Core `cadea59`・Providers `d171af8` をdevに早送りで統合した。統合先で再測定した763シンボルのMI・CC・結合型数は、全行でStep 3の記録に一致した。これを[次回の固定基準](quality-baseline.tsv)とする。Provider全体の閾値はMI 85以上・CC 125以下・結合型数68以下、新規メソッドはそれぞれ60以上・10以下・10以下。追加の例外は0件。
 
 ```console
-python tools/check_localllm_metrics.py core.tsv providers.tsv
+python tools/check_localllm_metrics.py --baseline-step 3 core.tsv providers.tsv
 ```
