@@ -1,0 +1,22 @@
+{
+  "unknown-onnx-operator": {
+    "rejected": true,
+    "reason": "digest mismatch"
+  },
+  "missing-tokenizer-config": {
+    "rejected": true,
+    "reason": "FileNotFoundException"
+  },
+  "missing-second-shard": {
+    "rejected": true,
+    "reason": "FileNotFoundException"
+  },
+  "corrupt-second-shard": {
+    "rejected": true,
+    "reason": "digest mismatch"
+  },
+  "self-consistent-lock-wrong-revision": {
+    "rejected": true,
+    "reason": "differs from the pinned revision"
+  }
+}

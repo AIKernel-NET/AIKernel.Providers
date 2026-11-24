@@ -46,16 +46,20 @@
       ],
       "properties": {
         "modelId": {
-          "const": "bonsai-1.7b"
+          "type": "string",
+          "minLength": 1
         },
         "version": {
-          "const": "Q1_0-1"
+          "type": "string",
+          "minLength": 1
         },
         "readerId": {
-          "const": "gguf"
+          "type": "string",
+          "minLength": 1
         },
         "tokenizerVersion": {
-          "const": "qwen2-bpe-1"
+          "type": "string",
+          "minLength": 1
         },
         "weightsSha256": {
           "type": "string",
@@ -108,7 +112,57 @@
             }
           }
         }
-      }
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "modelId": {
+              "const": "bonsai-1.7b"
+            },
+            "version": {
+              "const": "Q1_0-1"
+            },
+            "readerId": {
+              "const": "gguf"
+            },
+            "tokenizerVersion": {
+              "const": "qwen2-bpe-1"
+            }
+          }
+        },
+        {
+          "properties": {
+            "modelId": {
+              "const": "qwen3-0.6b"
+            },
+            "version": {
+              "const": "79346d370dfae34801d26993fda9ae2372900fd0"
+            },
+            "readerId": {
+              "const": "onnx"
+            },
+            "tokenizerVersion": {
+              "const": "79346d370dfae34801d26993fda9ae2372900fd0"
+            }
+          }
+        },
+        {
+          "properties": {
+            "modelId": {
+              "const": "qwen3-0.6b"
+            },
+            "version": {
+              "const": "c1899de289a04d12100db370d81485cdf75e47ca"
+            },
+            "readerId": {
+              "const": "safetensors"
+            },
+            "tokenizerVersion": {
+              "const": "c1899de289a04d12100db370d81485cdf75e47ca"
+            }
+          }
+        }
+      ]
     },
     "layer": {
       "type": "object",

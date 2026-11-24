@@ -44,7 +44,5 @@ public static class LocalLlmCapabilityContracts
         IReadOnlyDictionary<string, string> metadata,
         string key,
         string fallback)
-        => metadata.TryGetValue(key, out var value) && !string.IsNullOrWhiteSpace(value)
-            ? value
-            : fallback;
+        => GetMetadataValue(metadata, key, fallback)!;
 }

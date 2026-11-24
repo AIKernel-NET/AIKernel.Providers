@@ -30,8 +30,7 @@ public sealed class LocalLlmInvoker : ICapabilityModuleInvoker, IDisposable
         ArgumentNullException.ThrowIfNull(settings);
         if (settings.CpuThreads is < 1 or > 6 || settings.ContextTokens is < 64 or > 2048
             || settings.MaxPromptCharacters is < 1 or > 4096 || settings.MaxNewTokens is < 1 or > 256
-            || settings.MaxNewTokens >= settings.ContextTokens || settings.SystemPrompt is null
-            || settings.SystemPrompt.Length > 8192)
+            || settings.MaxNewTokens >= settings.ContextTokens || settings.SystemPrompt is not { Length: <= 8192 })
             throw new ArgumentException("The local LLM limits or system prompt are invalid.", nameof(settings));
 
         _settings = settings;

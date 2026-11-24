@@ -1,6 +1,6 @@
 # Local LLM Provider
 
-`chat.local` generates a reply using the CPU inference engine in AIKernel.Kernel 0.1.4. The host supplies a local Bonsai 1.7B Q1_0 GGUF file. The provider opens the weights on the first valid request and reuses the model within that invoker. Use one invoker per registered model and dispose it at host shutdown.
+`chat.local` generates a reply using the AIKernel.Kernel CPU inference engine. The host supplies a registered checkpoint. The example uses Bonsai 1.7B Q1_0 GGUF. The provider opens the weights on the first valid request and reuses the model within that invoker. Use one invoker per registered model and dispose it at host shutdown.
 
 ```csharp
 using AIKernel.Dtos.Capabilities;
@@ -29,3 +29,7 @@ For a manifest loader using the parameterless constructor, set `AIKERNEL_LOCAL_L
 The successful result includes `text`, token counts, `finish_reason`, `cpu_backend`, and a SHA-256 digest of the UTF-8 reply in `OutputHash`. Treat the text and digest as response data when deciding what to log. Missing models, unreadable or unsupported model files, invalid arguments, and empty replies return explicit failures. Cancellation raises `OperationCanceledException`.
 
 For local embeddings, register an embedding model with `AIKernel.Providers.Embedding` and call its `IEmbeddingRequestProvider` contract. Requests for `embedding.local` to this invoker return `provider.model_not_registered`.
+
+## Using Qwen3-0.6B
+
+Set the same host path setting to `onnx/model.onnx` or `model.safetensors`. Keep the original tokenizer, configuration and external weights alongside the model. The built-in profiles pin ONNX to `onnx-community/Qwen3-0.6B-ONNX@79346d370dfae34801d26993fda9ae2372900fd0` (FP32 graph) and SafeTensors to `Qwen/Qwen3-0.6B@c1899de289a04d12100db370d81485cdf75e47ca`. Allow approximately 2.4 GB of temporary disk space per open session. For a sharded repack, supply the index path, its SHA-256 lock and an external profile through `RegisteredLocalLlmSettings.RegistrationFile`. See the Kernel guide `docs/local-model-registration-0.3.md` for the lock format. The request and response for `chat.local` are identical for all three formats.

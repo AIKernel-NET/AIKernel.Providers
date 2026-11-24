@@ -1,0 +1,6 @@
+Method	AIKernel.Kernel.Inference.GgufByteBpe.GgufByteBpe(AIKernel.Kernel.Inference.GgufWeights)	93	1	1	1
+Method	AIKernel.Kernel.Inference.GgufByteBpe.ReadTokens(AIKernel.Kernel.Inference.GgufWeights)	81	2	6	6
+Method	AIKernel.Kernel.Inference.GgufByteBpe.GgufByteBpe(string[], string[])	61	5	4	12
+Method	AIKernel.Kernel.Inference.GgufByteBpe.BuildAlphabet()	67	3	1	11
+Method	AIKernel.Kernel.Inference.GgufByteBpe.RegisterMerge(string, int)	67	5	6	8
+Method	AIKernel.Kernel.Inference.QwenTokenizer.QwenTokenizer(AIKernel.Kernel.Inference.GgufByteBpe, int)	79	1	4	6

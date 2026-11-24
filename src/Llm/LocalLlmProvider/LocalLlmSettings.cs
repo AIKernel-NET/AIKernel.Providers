@@ -24,7 +24,7 @@ public record LocalLlmSettings
     /// <summary>[EN] Optional runtime artifact hash. [JA] 任意の runtime artifact hash です。</summary>
     public string? ArtifactHash { get; init; }
 
-    /// <summary>Host-configured path to the local Bonsai 1.7B Q1_0 GGUF file.</summary>
+    /// <summary>Host-configured path to the registered local model file or SafeTensors shard index.</summary>
     public string? BonsaiModelPath { get; init; }
 
     /// <summary>CPU worker count, from 1 to 6.</summary>

@@ -9,10 +9,10 @@
     <InformationalVersion>$(PackageVersion)</InformationalVersion>
     <PackageValidationBaselineVersion>0.1.6</PackageValidationBaselineVersion>
     <PackageReadmeFile>LOCAL-LLM.md</PackageReadmeFile>
-    <PackageReleaseNotes>Connects chat.local to the AIKernel Kernel CPU engine for host-registered Bonsai GGUF weights.</PackageReleaseNotes>
-    <Description>EN: Runs local Bonsai chat through the CPU inference engine in AIKernel 0.1.4.
+    <PackageReleaseNotes>Supports registered Bonsai GGUF and pinned Qwen3-0.6B ONNX and SafeTensors checkpoints through chat.local.</PackageReleaseNotes>
+    <Description>EN: Runs local chat with host-registered Bonsai and Qwen3 weights using AIKernel.Kernel.
 
-JA: AIKernel 0.1.4のCPU推論エンジンでBonsaiとのローカルチャットを実行するProviderです。</Description>
+JA: ホストが登録したBonsaiとQwen3の重みをAIKernel.Kernelで実行するローカルチャットProviderです。</Description>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,7 +21,8 @@ JA: AIKernel 0.1.4のCPU推論エンジンでBonsaiとのローカルチャッ�
     <ProjectReference Include="$(AIKernelKernelSourceProject)" Condition="'$(AIKernelKernelSourceProject)' != ''" />
     <PackageReference Include="AIKernel.Kernel" Version="[0.3.0]" Condition="'$(AIKernelKernelSourceProject)' == ''" />
     <PackageReference Include="Roslynator.Analyzers" Version="[5.0.1]" PrivateAssets="all" />
-    <None Update="bonsai-1.7b.json;dense-profile-v1.schema.json" Pack="true" PackagePath="profiles/" />
+    <None Update="bonsai-1.7b.json;qwen3-06b-*.json;dense-profile-v1.schema.json" Pack="true" PackagePath="profiles/" />
+    <EmbeddedResource Include="qwen3-06b-*.json" LogicalName="AIKernel.LocalLlm.%(Filename)" />
     <EmbeddedResource Include="bonsai-1.7b.json" LogicalName="AIKernel.LocalLlm.BonsaiRegistration" />
     <PackageReference Include="AIKernel.Abstractions" Version="0.1.4" />
     <PackageReference Include="AIKernel.Dtos" Version="0.1.4" />

@@ -1,0 +1,17 @@
+{
+  "modelId": "qwen3-0.6b",
+  "version": "79346d370dfae34801d26993fda9ae2372900fd0",
+  "readerId": "onnx",
+  "tokenizerVersion": "79346d370dfae34801d26993fda9ae2372900fd0",
+  "weightsSha256": "0a8f1cfe531fc7b15d26db55090f0667863f0c62c952dff128cf23cd421e3fbc",
+  "tokenizerSha256": "e7a95fce95bf5b0946d0ddb3f9d7caa030b7e850bbe92b0edb26bcf563e9f3d5",
+  "shape": {
+    "width": 1024,
+    "hidden": 3072,
+    "heads": 16,
+    "kvHeads": 8,
+    "headSize": 128,
+    "layers": 28,
+    "epsilon": 1e-06
+  }
+}
