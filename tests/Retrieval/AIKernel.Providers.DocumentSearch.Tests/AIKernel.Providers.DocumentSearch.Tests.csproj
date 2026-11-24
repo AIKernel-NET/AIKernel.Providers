@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <IsPackable>false</IsPackable>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Using Include="Xunit" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.6.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5" PrivateAssets="all" />
+    <PackageReference Include="xunit.v3" Version="3.2.2" />
+    <ProjectReference Include="../../../src/Retrieval/AIKernel.Providers.DocumentSearch/AIKernel.Providers.DocumentSearch.csproj"
+        Condition="'$(DocumentSearchPackageVersion)' == ''" />
+    <PackageReference Include="AIKernel.Providers.DocumentSearch" Version="[$(DocumentSearchPackageVersion)]"
+        Condition="'$(DocumentSearchPackageVersion)' != ''" />
+  </ItemGroup>
+</Project>

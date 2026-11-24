@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <PackageVersion>0.1.4</PackageVersion>
+    <Version>$(PackageVersion)</Version>
+    <AssemblyVersion>0.1.4.0</AssemblyVersion>
+    <FileVersion>0.1.4.0</FileVersion>
+    <InformationalVersion>$(PackageVersion)</InformationalVersion>
+    <PackageValidationBaselineVersion></PackageValidationBaselineVersion>
+    <PackageReadmeFile>DOCUMENT-SEARCH.md</PackageReadmeFile>
+    <PackageTags>aikernel;rag;document-search;markdown;provenance</PackageTags>
+    <Description>Read-only local keyword search for Markdown and text, with reproducible document and excerpt references.</Description>
+    <PackageReleaseNotes>Adds bounded local document search using the existing IRagSearchProvider contract.</PackageReleaseNotes>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="AIKernel.Abstractions" Version="[0.1.4]" />
+    <PackageReference Include="AIKernel.Dtos" Version="[0.1.4]" />
+    <None Update="DOCUMENT-SEARCH.md" Pack="true" PackagePath="/" />
+    <None Update="DOCUMENT-SEARCH-ja.md" Pack="true" PackagePath="/" />
+  </ItemGroup>
+</Project>

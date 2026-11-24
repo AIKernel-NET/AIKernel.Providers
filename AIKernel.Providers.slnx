@@ -49,6 +49,9 @@
   <Folder Name="/src/ProviderSubstrate/">
     <Project Path="src/ProviderSubstrate/AIKernel.Providers.Substrate/AIKernel.Providers.Substrate.csproj" />
   </Folder>
+  <Folder Name="/src/Retrieval/">
+    <Project Path="src/Retrieval/AIKernel.Providers.DocumentSearch/AIKernel.Providers.DocumentSearch.csproj" />
+  </Folder>
   <Folder Name="/src/Standard/">
     <Project Path="src/Standard/AIKernel.Providers.Standard/AIKernel.Providers.Standard.csproj" />
   </Folder>
@@ -89,6 +92,9 @@
   </Folder>
   <Folder Name="/tests/ProviderSubstrate/">
     <Project Path="tests/ProviderSubstrate/AIKernel.Providers.Substrate.Tests/AIKernel.Providers.Substrate.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tests/Retrieval/">
+    <Project Path="tests/Retrieval/AIKernel.Providers.DocumentSearch.Tests/AIKernel.Providers.DocumentSearch.Tests.csproj" />
   </Folder>
   <Folder Name="/tests/Standard/">
     <Project Path="tests/Standard/StandardProviders.Tests/StandardProviders.Tests.csproj" />
