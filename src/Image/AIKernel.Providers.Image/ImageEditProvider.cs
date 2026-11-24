@@ -46,29 +46,33 @@ public sealed class ImageEditProvider : IImageEditProvider, IDisposable
         if (style is not ("illustration" or "pencil" or "detail"))
             throw new NotSupportedException("Use illustration, pencil or detail for CPU stylization.");
 
-        return EditAsync(image, style, options?.Strength ?? 1d, cancellationToken);
+        return EditAsync(image, style, options?.Strength ?? 1d, null, cancellationToken);
     }
 
     /// <inheritdoc />
     public ValueTask<ReadOnlyMemory<byte>> RemoveBackgroundAsync(ReadOnlyMemory<byte> image,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default) => RemoveBackgroundAsync(image, null, cancellationToken);
+
+    /// <inheritdoc />
+    public ValueTask<ReadOnlyMemory<byte>> RemoveBackgroundAsync(ReadOnlyMemory<byte> image,
+        ImageMattingOptions? options, CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
         if (backgroundModelPath is null)
             throw new InvalidOperationException("No BiRefNet_lite checkpoint is registered.");
 
-        return EditAsync(image, style: null, strength: 1d, cancellationToken);
+        return EditAsync(image, style: null, strength: 1d, options, cancellationToken);
     }
 
     private async ValueTask<ReadOnlyMemory<byte>> EditAsync(ReadOnlyMemory<byte> bytes, string? style, double strength,
-        CancellationToken token)
+        ImageMattingOptions? options, CancellationToken token)
     {
         ImageInput.ValidateSize(bytes, maximumEncodedBytes);
         await execution.WaitAsync(token).ConfigureAwait(false);
         try
         {
             ObjectDisposedException.ThrowIf(disposed, this);
-            return await Task.Run(() => Edit(bytes, style, strength, token), token).ConfigureAwait(false);
+            return await Task.Run(() => Edit(bytes, style, strength, options, token), token).ConfigureAwait(false);
         }
         finally
         {
@@ -76,7 +80,8 @@ public sealed class ImageEditProvider : IImageEditProvider, IDisposable
         }
     }
 
-    private byte[] Edit(ReadOnlyMemory<byte> bytes, string? style, double strength, CancellationToken token)
+    private byte[] Edit(ReadOnlyMemory<byte> bytes, string? style, double strength, ImageMattingOptions? options,
+        CancellationToken token)
     {
         token.ThrowIfCancellationRequested();
         using var source = ImageInput.Decode(bytes, maximumPixels);
@@ -94,6 +99,10 @@ public sealed class ImageEditProvider : IImageEditProvider, IDisposable
         {
             matting ??= new BiRefNetMatting(backgroundModelPath!, inferenceThreads, token);
             using var matte = matting.Predict(bgr, token);
+            if (options is { MaskRefineRadius: > 0 }) MatteEdges.Refine(bgr, matte, options.MaskRefineRadius, token);
+            if (options is { MaskErodePx: > 0 }) MatteEdges.Erode(matte, options.MaskErodePx);
+            if (options is { DecontaminateEdge: true })
+                MatteEdges.Decontaminate(bgr, matte, sourceAlpha, token);
             if (!sourceAlpha.Empty())
                 Cv2.Multiply(matte, sourceAlpha, matte, scale: 1d / 255d);
 
