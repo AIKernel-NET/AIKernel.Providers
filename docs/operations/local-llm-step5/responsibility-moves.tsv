@@ -1,0 +1,7 @@
+Field	AIKernel.Kernel.Inference.TensorPageStore.loaded	AIKernel.Kernel.Inference.WeightPageFile.loaded
+Property	AIKernel.Kernel.Inference.TensorPageStore.BackingBytesRead	AIKernel.Kernel.Inference.WeightPageFile.BackingBytesRead
+Method	AIKernel.Kernel.Inference.TensorPageStore.BackingBytesRead.get	AIKernel.Kernel.Inference.WeightPageFile.BackingBytesRead.get
+Method	AIKernel.Kernel.Inference.TensorPageStore.BackingBytesRead.set	AIKernel.Kernel.Inference.WeightPageFile.BackingBytesRead.set
+Property	AIKernel.Kernel.Inference.TensorPageStore.DistinctPagesRead	AIKernel.Kernel.Inference.WeightPageFile.DistinctPagesRead
+Method	AIKernel.Kernel.Inference.TensorPageStore.DistinctPagesRead.get	AIKernel.Kernel.Inference.WeightPageFile.DistinctPagesRead.get
+Method	AIKernel.Kernel.Inference.TensorPageStore.DistinctPagesRead.set	AIKernel.Kernel.Inference.WeightPageFile.DistinctPagesRead.set

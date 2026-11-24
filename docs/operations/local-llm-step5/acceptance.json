@@ -1,0 +1,881 @@
+{
+  "coreRevision": "1c179aa4e9899cc1d5b66edb487fb6444e2066fd",
+  "providersBase": "5f8639919b0137836d32d9637148621f3e2f72f6",
+  "quality": "Passed all 911 baseline symbols and the thresholds for new methods.",
+  "tests": {
+    "kernel": 1728,
+    "candidate": 24,
+    "probe": 1,
+    "official": 11,
+    "binary": 11
+  },
+  "environment": "Windows x64 AVX2, four workers, independent processes, OS cache not flushed",
+  "gptOrder": [
+    "0/off",
+    "0/on",
+    "1/on",
+    "1/off"
+  ],
+  "gptOss": {
+    "0": {
+      "off": {
+        "digest": "27cd6c432c7672cb812a92f611cf3ba7bbc35928262bb1e1253ff4ee6ae35901",
+        "passed": true,
+        "rows": [
+          {
+            "user": "What is 2+2? Answer with one digit.",
+            "inputMatch": true,
+            "matches": true,
+            "generatedTokens": [
+              19,
+              200002
+            ],
+            "logitHashes": [
+              "1daf4f3bc0cbbf254b2c69c9746ba598387f0fc89554460562dec9d35c388777",
+              "78e61b98bc77324e33529fdce597bf48754909c1a8463c30ecba00e7827ab0ca"
+            ],
+            "textHash": "4b227777d4dd1fc61c6f884f48641d02b4d121d3fd328cb08b5531fcacdabf8a",
+            "responseMilliseconds": 257576.8545,
+            "linuxStorageReadBytes": null,
+            "actual": {
+              "Text": "4",
+              "InputTokens": 21,
+              "OutputTokens": 1,
+              "FinishReason": "stop",
+              "ElapsedMilliseconds": 257530,
+              "CpuBackend": "gpt-oss-mxfp4-cpu-paged",
+              "ActivationPrecision": "fp32",
+              "Profile": null,
+              "GeneratedTokenSha256": "eba09f2f48f209cfa2dfbf19fc678d755d05559671eceda0164f3e080cb49765",
+              "PrefillMilliseconds": 245707,
+              "DecodeMilliseconds": 11823,
+              "PrefillForwardTokens": 21,
+              "DecodeForwardTokens": 1,
+              "PrefillThreads": 4,
+              "DecodeThreads": 4
+            }
+          }
+        ],
+        "coldFileCache": false,
+        "initializationMilliseconds": 2027.7281,
+        "peakRssBytes": 5204914176,
+        "maximumResidentBytes": 7000000000,
+        "weightCacheBytes": 5000000000,
+        "statistics": {
+          "RamBlocks": 4768,
+          "VramBlocks": 0,
+          "SwapBlocks": 3966,
+          "SwapReads": 0,
+          "DevicePageIns": 0,
+          "BackingReads": 12337
+        },
+        "prefetch": {
+          "Issued": 0,
+          "Hits": 0,
+          "Misses": 0,
+          "Cancelled": 0,
+          "Failures": 0,
+          "WaitedForInFlight": 0,
+          "DemandReads": 12337
+        },
+        "BackingBytesRead": 11043935640,
+        "DistinctPagesRead": 8734,
+        "WeightCacheCapacityBytes": 4999610368
+      },
+      "1": {
+        "digest": "27cd6c432c7672cb812a92f611cf3ba7bbc35928262bb1e1253ff4ee6ae35901",
+        "passed": true,
+        "rows": [
+          {
+            "user": "What is 2+2? Answer with one digit.",
+            "inputMatch": true,
+            "matches": true,
+            "generatedTokens": [
+              19,
+              200002
+            ],
+            "logitHashes": [
+              "1daf4f3bc0cbbf254b2c69c9746ba598387f0fc89554460562dec9d35c388777",
+              "78e61b98bc77324e33529fdce597bf48754909c1a8463c30ecba00e7827ab0ca"
+            ],
+            "textHash": "4b227777d4dd1fc61c6f884f48641d02b4d121d3fd328cb08b5531fcacdabf8a",
+            "responseMilliseconds": 225246.9821,
+            "linuxStorageReadBytes": null,
+            "actual": {
+              "Text": "4",
+              "InputTokens": 21,
+              "OutputTokens": 1,
+              "FinishReason": "stop",
+              "ElapsedMilliseconds": 225212,
+              "CpuBackend": "gpt-oss-mxfp4-cpu-paged",
+              "ActivationPrecision": "fp32",
+              "Profile": null,
+              "GeneratedTokenSha256": "eba09f2f48f209cfa2dfbf19fc678d755d05559671eceda0164f3e080cb49765",
+              "PrefillMilliseconds": 208316,
+              "DecodeMilliseconds": 16897,
+              "PrefillForwardTokens": 21,
+              "DecodeForwardTokens": 1,
+              "PrefillThreads": 4,
+              "DecodeThreads": 4
+            }
+          }
+        ],
+        "coldFileCache": false,
+        "initializationMilliseconds": 1573.4475,
+        "peakRssBytes": 5205725184,
+        "maximumResidentBytes": 7000000000,
+        "weightCacheBytes": 5000000000,
+        "statistics": {
+          "RamBlocks": 4768,
+          "VramBlocks": 0,
+          "SwapBlocks": 3966,
+          "SwapReads": 0,
+          "DevicePageIns": 0,
+          "BackingReads": 12337
+        },
+        "prefetch": {
+          "Issued": 2,
+          "Hits": 0,
+          "Misses": 2,
+          "Cancelled": 0,
+          "Failures": 0,
+          "WaitedForInFlight": 0,
+          "DemandReads": 12337
+        },
+        "BackingBytesRead": 11046031740,
+        "DistinctPagesRead": 8734,
+        "WeightCacheCapacityBytes": 4999610368
+      }
+    },
+    "1": {
+      "off": {
+        "digest": "27cd6c432c7672cb812a92f611cf3ba7bbc35928262bb1e1253ff4ee6ae35901",
+        "passed": true,
+        "rows": [
+          {
+            "user": "What is the capital of France? Answer with the city name.",
+            "inputMatch": true,
+            "matches": true,
+            "generatedTokens": [
+              72782,
+              13,
+              200002
+            ],
+            "logitHashes": [
+              "4c7babbd99b0bfd53b90a6d277e18f6dd031abeaeeda59cbed20e26af61b55d7",
+              "65a6514e1ddd7a37bf3ef5c2e9a518c005af362f07812eac2ada9b506573dbca",
+              "587e2d783581f963c0198b1fc2c34369ab78f6853405ff54e5bee75d2255ca6b"
+            ],
+            "textHash": "bdff8c417ab50e95e95cce16035a3799c7e00104de4a7b3453f06728c620faf7",
+            "responseMilliseconds": 220423.643,
+            "linuxStorageReadBytes": null,
+            "actual": {
+              "Text": "Paris.",
+              "InputTokens": 22,
+              "OutputTokens": 2,
+              "FinishReason": "stop",
+              "ElapsedMilliseconds": 220389,
+              "CpuBackend": "gpt-oss-mxfp4-cpu-paged",
+              "ActivationPrecision": "fp32",
+              "Profile": null,
+              "GeneratedTokenSha256": "a91e52b42386e2ecd9e733187a4306dbb99f73a156fcc858265f5bf23e24af67",
+              "PrefillMilliseconds": 187735,
+              "DecodeMilliseconds": 32654,
+              "PrefillForwardTokens": 22,
+              "DecodeForwardTokens": 2,
+              "PrefillThreads": 4,
+              "DecodeThreads": 4
+            }
+          }
+        ],
+        "coldFileCache": false,
+        "initializationMilliseconds": 1269.5503,
+        "peakRssBytes": 5205483520,
+        "maximumResidentBytes": 7000000000,
+        "weightCacheBytes": 5000000000,
+        "statistics": {
+          "RamBlocks": 4768,
+          "VramBlocks": 0,
+          "SwapBlocks": 4043,
+          "SwapReads": 0,
+          "DevicePageIns": 0,
+          "BackingReads": 14365
+        },
+        "prefetch": {
+          "Issued": 0,
+          "Hits": 0,
+          "Misses": 0,
+          "Cancelled": 0,
+          "Failures": 0,
+          "WaitedForInFlight": 0,
+          "DemandReads": 14365
+        },
+        "BackingBytesRead": 12831667200,
+        "DistinctPagesRead": 8811,
+        "WeightCacheCapacityBytes": 4999610368
+      },
+      "1": {
+        "digest": "27cd6c432c7672cb812a92f611cf3ba7bbc35928262bb1e1253ff4ee6ae35901",
+        "passed": true,
+        "rows": [
+          {
+            "user": "What is the capital of France? Answer with the city name.",
+            "inputMatch": true,
+            "matches": true,
+            "generatedTokens": [
+              72782,
+              13,
+              200002
+            ],
+            "logitHashes": [
+              "4c7babbd99b0bfd53b90a6d277e18f6dd031abeaeeda59cbed20e26af61b55d7",
+              "65a6514e1ddd7a37bf3ef5c2e9a518c005af362f07812eac2ada9b506573dbca",
+              "587e2d783581f963c0198b1fc2c34369ab78f6853405ff54e5bee75d2255ca6b"
+            ],
+            "textHash": "bdff8c417ab50e95e95cce16035a3799c7e00104de4a7b3453f06728c620faf7",
+            "responseMilliseconds": 234913.4794,
+            "linuxStorageReadBytes": null,
+            "actual": {
+              "Text": "Paris.",
+              "InputTokens": 22,
+              "OutputTokens": 2,
+              "FinishReason": "stop",
+              "ElapsedMilliseconds": 234812,
+              "CpuBackend": "gpt-oss-mxfp4-cpu-paged",
+              "ActivationPrecision": "fp32",
+              "Profile": null,
+              "GeneratedTokenSha256": "a91e52b42386e2ecd9e733187a4306dbb99f73a156fcc858265f5bf23e24af67",
+              "PrefillMilliseconds": 206108,
+              "DecodeMilliseconds": 28705,
+              "PrefillForwardTokens": 22,
+              "DecodeForwardTokens": 2,
+              "PrefillThreads": 4,
+              "DecodeThreads": 4
+            }
+          }
+        ],
+        "coldFileCache": false,
+        "initializationMilliseconds": 2664.2225,
+        "peakRssBytes": 5205753856,
+        "maximumResidentBytes": 7000000000,
+        "weightCacheBytes": 5000000000,
+        "statistics": {
+          "RamBlocks": 4768,
+          "VramBlocks": 0,
+          "SwapBlocks": 4043,
+          "SwapReads": 0,
+          "DevicePageIns": 0,
+          "BackingReads": 14365
+        },
+        "prefetch": {
+          "Issued": 2,
+          "Hits": 0,
+          "Misses": 2,
+          "Cancelled": 0,
+          "Failures": 0,
+          "WaitedForInFlight": 0,
+          "DemandReads": 14365
+        },
+        "BackingBytesRead": 12833763300,
+        "DistinctPagesRead": 8811,
+        "WeightCacheCapacityBytes": 4999610368
+      }
+    }
+  },
+  "bonsai": {
+    "off": {
+      "rows": [
+        {
+          "user": "Reply with exactly the word BLUE.",
+          "Text": "BLUE",
+          "textHash": "24a866f4940f1b00083a71ba4df7323bac1486f28dc81d500bbc4bb02c6e0e16",
+          "GeneratedTokenSha256": "1e7c12b0b0028ee049d1fb333b996b8bda072247ef78d8feca5d4b49ef538605",
+          "normalMilliseconds": 27291,
+          "fixedMilliseconds": 34517,
+          "logits": [
+            "b7b407475ed15221795bc23874dedbe1b7f430510d2185a56544c51bff955416",
+            "50af1aa911645f4f0eab96a698c4d1b742cd162f9335880a8fc36a18cf66ed12",
+            "b7b407475ed15221795bc23874dedbe1b7f430510d2185a56544c51bff955416",
+            "50af1aa911645f4f0eab96a698c4d1b742cd162f9335880a8fc36a18cf66ed12",
+            "7bb44196a2926b3ed62d85168a8d44f7a6a37f116746e96c6145231b0f22cbb3",
+            "ab252a3deb7c6c146ba78c6bef136fef2ea02753fac1431162bea7925b0b3455",
+            "4785d6dedf53ff942ddd94e3569c0b215bd5da9f618634198c5649c375b2b58e",
+            "9974784db82650e3edfb5740cfff99dcbfc6a3f4f94c7c8f7f1c186bde9ed4da",
+            "f3612333abbad45efcdebde0c4008282b3a68d871a397bca3a55ba3387d414f6",
+            "bc584decdd9a0cee3830966712ced49e4702d77ee4ddb6a1a6217f86525b6539",
+            "73e6a0fcfda2cd28078a79dd2f0e182585e7e03b0ab31ab8fe8228af64656987",
+            "ae93502584513ce9a5c0e619bbad283eb072d12eb8cbce9f282e697179fa70dd",
+            "b9292c2aba5896c921362105c3a0a3647e87bc36d57cd77be593af31379d0715",
+            "36a792a677e06e717a5db7c3e2c37a8e5b49f78964ac0ef40ee3539192fbdbd7",
+            "abacaafddc403a94b124d3824b37806468068bba25b8315920c9141da080ccf9",
+            "f1d5987625bfa7ecabc6efdc6ebe67e3b25c85989f5790a1ddf00201f80c9d4d",
+            "06e25c69ec1b7852956d92932f023a8db1e91a8db04245eda09f991b1249b250",
+            "9d3ff973a691f207067e89922180b92afbc2eda6fdb4f13190547cdda993594c"
+          ]
+        },
+        {
+          "user": "「こんにちは」とだけ答えてください。",
+          "Text": "こんにちは。",
+          "textHash": "439e44a82b28f76c2661e4e65537f0f3963df49beaed16276f0938471f86a7d2",
+          "GeneratedTokenSha256": "e3d9d8100b72b170c15371f77a07c8412368de46e2c4b656798876734fddc731",
+          "normalMilliseconds": 50266,
+          "fixedMilliseconds": 41327,
+          "logits": [
+            "358cd82d9b05e6228192de7a0fad91a404f19779d62e33b3aeca8630f20fdf42",
+            "6419a45dd06a6a8a7e8155af827c01c0fea8066089faccae134241ff54987d5d",
+            "5ecfed4c1853f4d670f22ded15533ec8b8e182ea38ca7c17a0290edb61a2723f",
+            "358cd82d9b05e6228192de7a0fad91a404f19779d62e33b3aeca8630f20fdf42",
+            "6419a45dd06a6a8a7e8155af827c01c0fea8066089faccae134241ff54987d5d",
+            "5ecfed4c1853f4d670f22ded15533ec8b8e182ea38ca7c17a0290edb61a2723f",
+            "9c3b7c2574dd765de6e5f01e8c467408a6bc6bdf196ffc1f68753b775b481632",
+            "a6e4f0cf0cac6fbda93655131bef5a19edb1b5bab4cbd130d9e7bb260a2ad32f",
+            "e76f268800efcce4f753b7ccd831116b34b3e5d846b139e233b30b10555ca3d5",
+            "39d72ddf860a0acbe6aecfd642158a86285adf48543e653161d6fd339310f2d8",
+            "45b9f8ff235b201a5cd4951483dc261ae78cbab2991f98e811b13c9d471126af",
+            "d1c8314419e1a62c75f587f57759a4adb60f0b1e21ead64821771ba37e9f99d8",
+            "ec5f537e54fd02f32d98222c6634352523fb72fb4d66997ff08c2b52779eed65",
+            "9d6f584bcf0bedfbd870b4d5c9c6e2cf2fafce05367fa5b7adda45b4ba6ee596",
+            "4ba3d49fde025c4a483d86a78057cbca0816f0e82d325a6c96be6e40b2862103",
+            "ebc0980e6cc0d4fb2421d8c609907220b4ac46a349d4916c421bc10583ff7e28",
+            "65de70a3c2c878f49e14af05dd723793615537181649c4bd089b80a1d811b004",
+            "3ffa4b112391ccc4f84e329afae096a3250e8b119ded6c067f122301dc6950a6",
+            "9d1ba22a9061d50f77e380b9bbbf92b1c547d3b9beed387e348c6a4d3d2026a1"
+          ]
+        }
+      ],
+      "recoveredAfterCancel": null,
+      "start": {
+        "Issued": 0,
+        "Hits": 0,
+        "Misses": 0,
+        "Cancelled": 0,
+        "Failures": 0,
+        "WaitedForInFlight": 0,
+        "DemandReads": 0
+      },
+      "prefetch": {
+        "Issued": 0,
+        "Hits": 0,
+        "Misses": 0,
+        "Cancelled": 0,
+        "Failures": 0,
+        "WaitedForInFlight": 0,
+        "DemandReads": 27754
+      }
+    },
+    "1": {
+      "rows": [
+        {
+          "user": "Reply with exactly the word BLUE.",
+          "Text": "BLUE",
+          "textHash": "24a866f4940f1b00083a71ba4df7323bac1486f28dc81d500bbc4bb02c6e0e16",
+          "GeneratedTokenSha256": "1e7c12b0b0028ee049d1fb333b996b8bda072247ef78d8feca5d4b49ef538605",
+          "normalMilliseconds": 30785,
+          "fixedMilliseconds": 38425,
+          "logits": [
+            "b7b407475ed15221795bc23874dedbe1b7f430510d2185a56544c51bff955416",
+            "50af1aa911645f4f0eab96a698c4d1b742cd162f9335880a8fc36a18cf66ed12",
+            "b7b407475ed15221795bc23874dedbe1b7f430510d2185a56544c51bff955416",
+            "50af1aa911645f4f0eab96a698c4d1b742cd162f9335880a8fc36a18cf66ed12",
+            "7bb44196a2926b3ed62d85168a8d44f7a6a37f116746e96c6145231b0f22cbb3",
+            "ab252a3deb7c6c146ba78c6bef136fef2ea02753fac1431162bea7925b0b3455",
+            "4785d6dedf53ff942ddd94e3569c0b215bd5da9f618634198c5649c375b2b58e",
+            "9974784db82650e3edfb5740cfff99dcbfc6a3f4f94c7c8f7f1c186bde9ed4da",
+            "f3612333abbad45efcdebde0c4008282b3a68d871a397bca3a55ba3387d414f6",
+            "bc584decdd9a0cee3830966712ced49e4702d77ee4ddb6a1a6217f86525b6539",
+            "73e6a0fcfda2cd28078a79dd2f0e182585e7e03b0ab31ab8fe8228af64656987",
+            "ae93502584513ce9a5c0e619bbad283eb072d12eb8cbce9f282e697179fa70dd",
+            "b9292c2aba5896c921362105c3a0a3647e87bc36d57cd77be593af31379d0715",
+            "36a792a677e06e717a5db7c3e2c37a8e5b49f78964ac0ef40ee3539192fbdbd7",
+            "abacaafddc403a94b124d3824b37806468068bba25b8315920c9141da080ccf9",
+            "f1d5987625bfa7ecabc6efdc6ebe67e3b25c85989f5790a1ddf00201f80c9d4d",
+            "06e25c69ec1b7852956d92932f023a8db1e91a8db04245eda09f991b1249b250",
+            "9d3ff973a691f207067e89922180b92afbc2eda6fdb4f13190547cdda993594c"
+          ]
+        },
+        {
+          "user": "「こんにちは」とだけ答えてください。",
+          "Text": "こんにちは。",
+          "textHash": "439e44a82b28f76c2661e4e65537f0f3963df49beaed16276f0938471f86a7d2",
+          "GeneratedTokenSha256": "e3d9d8100b72b170c15371f77a07c8412368de46e2c4b656798876734fddc731",
+          "normalMilliseconds": 53998,
+          "fixedMilliseconds": 49100,
+          "logits": [
+            "358cd82d9b05e6228192de7a0fad91a404f19779d62e33b3aeca8630f20fdf42",
+            "6419a45dd06a6a8a7e8155af827c01c0fea8066089faccae134241ff54987d5d",
+            "5ecfed4c1853f4d670f22ded15533ec8b8e182ea38ca7c17a0290edb61a2723f",
+            "358cd82d9b05e6228192de7a0fad91a404f19779d62e33b3aeca8630f20fdf42",
+            "6419a45dd06a6a8a7e8155af827c01c0fea8066089faccae134241ff54987d5d",
+            "5ecfed4c1853f4d670f22ded15533ec8b8e182ea38ca7c17a0290edb61a2723f",
+            "9c3b7c2574dd765de6e5f01e8c467408a6bc6bdf196ffc1f68753b775b481632",
+            "a6e4f0cf0cac6fbda93655131bef5a19edb1b5bab4cbd130d9e7bb260a2ad32f",
+            "e76f268800efcce4f753b7ccd831116b34b3e5d846b139e233b30b10555ca3d5",
+            "39d72ddf860a0acbe6aecfd642158a86285adf48543e653161d6fd339310f2d8",
+            "45b9f8ff235b201a5cd4951483dc261ae78cbab2991f98e811b13c9d471126af",
+            "d1c8314419e1a62c75f587f57759a4adb60f0b1e21ead64821771ba37e9f99d8",
+            "ec5f537e54fd02f32d98222c6634352523fb72fb4d66997ff08c2b52779eed65",
+            "9d6f584bcf0bedfbd870b4d5c9c6e2cf2fafce05367fa5b7adda45b4ba6ee596",
+            "4ba3d49fde025c4a483d86a78057cbca0816f0e82d325a6c96be6e40b2862103",
+            "ebc0980e6cc0d4fb2421d8c609907220b4ac46a349d4916c421bc10583ff7e28",
+            "65de70a3c2c878f49e14af05dd723793615537181649c4bd089b80a1d811b004",
+            "3ffa4b112391ccc4f84e329afae096a3250e8b119ded6c067f122301dc6950a6",
+            "9d1ba22a9061d50f77e380b9bbbf92b1c547d3b9beed387e348c6a4d3d2026a1"
+          ]
+        }
+      ],
+      "recoveredAfterCancel": true,
+      "start": {
+        "Issued": 1,
+        "Hits": 0,
+        "Misses": 0,
+        "Cancelled": 1,
+        "Failures": 0,
+        "WaitedForInFlight": 0,
+        "DemandReads": 1
+      },
+      "prefetch": {
+        "Issued": 3893,
+        "Hits": 3861,
+        "Misses": 0,
+        "Cancelled": 32,
+        "Failures": 0,
+        "WaitedForInFlight": 17,
+        "DemandReads": 23893
+      }
+    },
+    "2": {
+      "rows": [
+        {
+          "user": "Reply with exactly the word BLUE.",
+          "Text": "BLUE",
+          "textHash": "24a866f4940f1b00083a71ba4df7323bac1486f28dc81d500bbc4bb02c6e0e16",
+          "GeneratedTokenSha256": "1e7c12b0b0028ee049d1fb333b996b8bda072247ef78d8feca5d4b49ef538605",
+          "normalMilliseconds": 33129,
+          "fixedMilliseconds": 52207,
+          "logits": [
+            "b7b407475ed15221795bc23874dedbe1b7f430510d2185a56544c51bff955416",
+            "50af1aa911645f4f0eab96a698c4d1b742cd162f9335880a8fc36a18cf66ed12",
+            "b7b407475ed15221795bc23874dedbe1b7f430510d2185a56544c51bff955416",
+            "50af1aa911645f4f0eab96a698c4d1b742cd162f9335880a8fc36a18cf66ed12",
+            "7bb44196a2926b3ed62d85168a8d44f7a6a37f116746e96c6145231b0f22cbb3",
+            "ab252a3deb7c6c146ba78c6bef136fef2ea02753fac1431162bea7925b0b3455",
+            "4785d6dedf53ff942ddd94e3569c0b215bd5da9f618634198c5649c375b2b58e",
+            "9974784db82650e3edfb5740cfff99dcbfc6a3f4f94c7c8f7f1c186bde9ed4da",
+            "f3612333abbad45efcdebde0c4008282b3a68d871a397bca3a55ba3387d414f6",
+            "bc584decdd9a0cee3830966712ced49e4702d77ee4ddb6a1a6217f86525b6539",
+            "73e6a0fcfda2cd28078a79dd2f0e182585e7e03b0ab31ab8fe8228af64656987",
+            "ae93502584513ce9a5c0e619bbad283eb072d12eb8cbce9f282e697179fa70dd",
+            "b9292c2aba5896c921362105c3a0a3647e87bc36d57cd77be593af31379d0715",
+            "36a792a677e06e717a5db7c3e2c37a8e5b49f78964ac0ef40ee3539192fbdbd7",
+            "abacaafddc403a94b124d3824b37806468068bba25b8315920c9141da080ccf9",
+            "f1d5987625bfa7ecabc6efdc6ebe67e3b25c85989f5790a1ddf00201f80c9d4d",
+            "06e25c69ec1b7852956d92932f023a8db1e91a8db04245eda09f991b1249b250",
+            "9d3ff973a691f207067e89922180b92afbc2eda6fdb4f13190547cdda993594c"
+          ]
+        },
+        {
+          "user": "「こんにちは」とだけ答えてください。",
+          "Text": "こんにちは。",
+          "textHash": "439e44a82b28f76c2661e4e65537f0f3963df49beaed16276f0938471f86a7d2",
+          "GeneratedTokenSha256": "e3d9d8100b72b170c15371f77a07c8412368de46e2c4b656798876734fddc731",
+          "normalMilliseconds": 64696,
+          "fixedMilliseconds": 40203,
+          "logits": [
+            "358cd82d9b05e6228192de7a0fad91a404f19779d62e33b3aeca8630f20fdf42",
+            "6419a45dd06a6a8a7e8155af827c01c0fea8066089faccae134241ff54987d5d",
+            "5ecfed4c1853f4d670f22ded15533ec8b8e182ea38ca7c17a0290edb61a2723f",
+            "358cd82d9b05e6228192de7a0fad91a404f19779d62e33b3aeca8630f20fdf42",
+            "6419a45dd06a6a8a7e8155af827c01c0fea8066089faccae134241ff54987d5d",
+            "5ecfed4c1853f4d670f22ded15533ec8b8e182ea38ca7c17a0290edb61a2723f",
+            "9c3b7c2574dd765de6e5f01e8c467408a6bc6bdf196ffc1f68753b775b481632",
+            "a6e4f0cf0cac6fbda93655131bef5a19edb1b5bab4cbd130d9e7bb260a2ad32f",
+            "e76f268800efcce4f753b7ccd831116b34b3e5d846b139e233b30b10555ca3d5",
+            "39d72ddf860a0acbe6aecfd642158a86285adf48543e653161d6fd339310f2d8",
+            "45b9f8ff235b201a5cd4951483dc261ae78cbab2991f98e811b13c9d471126af",
+            "d1c8314419e1a62c75f587f57759a4adb60f0b1e21ead64821771ba37e9f99d8",
+            "ec5f537e54fd02f32d98222c6634352523fb72fb4d66997ff08c2b52779eed65",
+            "9d6f584bcf0bedfbd870b4d5c9c6e2cf2fafce05367fa5b7adda45b4ba6ee596",
+            "4ba3d49fde025c4a483d86a78057cbca0816f0e82d325a6c96be6e40b2862103",
+            "ebc0980e6cc0d4fb2421d8c609907220b4ac46a349d4916c421bc10583ff7e28",
+            "65de70a3c2c878f49e14af05dd723793615537181649c4bd089b80a1d811b004",
+            "3ffa4b112391ccc4f84e329afae096a3250e8b119ded6c067f122301dc6950a6",
+            "9d1ba22a9061d50f77e380b9bbbf92b1c547d3b9beed387e348c6a4d3d2026a1"
+          ]
+        }
+      ],
+      "recoveredAfterCancel": true,
+      "start": {
+        "Issued": 2,
+        "Hits": 0,
+        "Misses": 0,
+        "Cancelled": 2,
+        "Failures": 0,
+        "WaitedForInFlight": 0,
+        "DemandReads": 2
+      },
+      "prefetch": {
+        "Issued": 3894,
+        "Hits": 3868,
+        "Misses": 0,
+        "Cancelled": 26,
+        "Failures": 0,
+        "WaitedForInFlight": 14,
+        "DemandReads": 23886
+      }
+    }
+  },
+  "qwen3": {
+    "en": {
+      "formats": [
+        "onnx",
+        "safetensors",
+        "sharded",
+        "fp32shard"
+      ],
+      "tokens": [
+        785,
+        6722,
+        315,
+        9625,
+        374,
+        12095,
+        13,
+        151645
+      ],
+      "textSha256": "a1b7eb2ee7a6aded8dda4e6cf30826f5afffb28a5597ee9389e91eb326d4e319",
+      "logits": [
+        "87402bab0770e514528a46bac895c316cdc65693f4e5da07360b00a9c4386a40",
+        "c157105cf2cbcd9ba3e1e32cc19b9ce16c29ff28d3f2afffe418d68d175040bf",
+        "6ef2f467d61c90d4ae1d98ded9eba4a994cb1089393f8103d67ae1c5b3b7820a",
+        "ad0278cc17308a5e855af37b262255238fefc782605d2503a136a9837dd827ac",
+        "134fa26a46b2310ee34e5a015023e76a6abdcd50cfdd2d4bc0fa236117b5035c",
+        "59281651106ddc2f92bc1faa2fd5d17ab3acdead4b25cb150036b458c72de53e",
+        "9b65e76516f4bc34046c4ca975bde32ee422b358e80ab98d2434734cb3fdedee",
+        "f37067a6469bef45eab7687140c80fe916b4c455ae0b59eedd2af0d276939bd8"
+      ]
+    },
+    "ja": {
+      "formats": [
+        "onnx",
+        "safetensors",
+        "sharded",
+        "fp32shard"
+      ],
+      "tokens": [
+        131888,
+        106114,
+        15322,
+        5373,
+        118983,
+        22697,
+        37541,
+        1773,
+        151645
+      ],
+      "textSha256": "42e3513e5b7bceac9db5cba4b756178dfe99eb2b7e384f56b775f4a3032f8d4e",
+      "logits": [
+        "b2325ab6a50a2eee4f4c03e7bfa674603c5a277a6367a26f6db8018251cc574d",
+        "4ad35b84e3cba947b8bc6e7bc5c76e88281553629f54b898faaa2e4be0b047c4",
+        "0473efc06f2dddbd930dea75eb85fd0aba2f25ef4228bf5bbf2b668252646aba",
+        "c8e619a9547a18de5dbdd3be150d1ad3df659edb1c8c8e344da3020a63e4966e",
+        "06a475993967475837a034dd2e15f260da8cf9f6f952b515da5b62fbbc37de33",
+        "2b91f4fc8c7c97e01bfcf728e84bdbbe0fdd2a43055b9a75cdf826f04efda274",
+        "26a10b6a69f8f3a900a58e9f7255719ad51dcff6c2e1833ab1c57c08e662a94b",
+        "94883968ab4b90a4ca69b02ad74cdad29649edd8f283a57072f02f9ba77e0314",
+        "b88b68ea141f60302b704128f878b092a9ec53cb7d41235540dee22bcbd6f1b4"
+      ]
+    }
+  },
+  "gemma": {
+    "tokensEqual": true,
+    "referenceComparisons": 228,
+    "unchangedFloatDumps": 229
+  },
+  "invalidRegistrations": {
+    "unknown-onnx-operator": {
+      "rejected": true,
+      "reason": "digest mismatch"
+    },
+    "missing-tokenizer-config": {
+      "rejected": true,
+      "reason": "FileNotFoundException"
+    },
+    "missing-second-shard": {
+      "rejected": true,
+      "reason": "FileNotFoundException"
+    },
+    "corrupt-second-shard": {
+      "rejected": true,
+      "reason": "digest mismatch"
+    },
+    "self-consistent-lock-wrong-revision": {
+      "rejected": true,
+      "reason": "differs from the pinned revision"
+    }
+  },
+  "wrongPredictions": {
+    "PageSize": 1048576,
+    "Pages": 64,
+    "Iterations": 256,
+    "runs": [
+      {
+        "Enabled": false,
+        "Milliseconds": 65.1566,
+        "BackingBytesRead": 268435456,
+        "Counts": {
+          "Issued": 0,
+          "Hits": 0,
+          "Misses": 0,
+          "Cancelled": 0,
+          "Failures": 0,
+          "WaitedForInFlight": 0,
+          "DemandReads": 256
+        },
+        "Digest": "81ba71174ea932b4e132237982cf48036aaefe71f3fc0b167467ad1076209b9b"
+      },
+      {
+        "Enabled": true,
+        "Milliseconds": 74.136,
+        "BackingBytesRead": 268435456,
+        "Counts": {
+          "Issued": 5,
+          "Hits": 0,
+          "Misses": 5,
+          "Cancelled": 0,
+          "Failures": 0,
+          "WaitedForInFlight": 0,
+          "DemandReads": 256
+        },
+        "Digest": "81ba71174ea932b4e132237982cf48036aaefe71f3fc0b167467ad1076209b9b"
+      },
+      {
+        "Enabled": true,
+        "Milliseconds": 82.906,
+        "BackingBytesRead": 268435456,
+        "Counts": {
+          "Issued": 5,
+          "Hits": 0,
+          "Misses": 5,
+          "Cancelled": 0,
+          "Failures": 0,
+          "WaitedForInFlight": 0,
+          "DemandReads": 256
+        },
+        "Digest": "81ba71174ea932b4e132237982cf48036aaefe71f3fc0b167467ad1076209b9b"
+      },
+      {
+        "Enabled": false,
+        "Milliseconds": 84.1615,
+        "BackingBytesRead": 268435456,
+        "Counts": {
+          "Issued": 0,
+          "Hits": 0,
+          "Misses": 0,
+          "Cancelled": 0,
+          "Failures": 0,
+          "WaitedForInFlight": 0,
+          "DemandReads": 256
+        },
+        "Digest": "81ba71174ea932b4e132237982cf48036aaefe71f3fc0b167467ad1076209b9b"
+      },
+      {
+        "Enabled": true,
+        "Milliseconds": 76.6272,
+        "BackingBytesRead": 268435456,
+        "Counts": {
+          "Issued": 5,
+          "Hits": 0,
+          "Misses": 5,
+          "Cancelled": 0,
+          "Failures": 0,
+          "WaitedForInFlight": 0,
+          "DemandReads": 256
+        },
+        "Digest": "81ba71174ea932b4e132237982cf48036aaefe71f3fc0b167467ad1076209b9b"
+      },
+      {
+        "Enabled": false,
+        "Milliseconds": 65.4076,
+        "BackingBytesRead": 268435456,
+        "Counts": {
+          "Issued": 0,
+          "Hits": 0,
+          "Misses": 0,
+          "Cancelled": 0,
+          "Failures": 0,
+          "WaitedForInFlight": 0,
+          "DemandReads": 256
+        },
+        "Digest": "81ba71174ea932b4e132237982cf48036aaefe71f3fc0b167467ad1076209b9b"
+      },
+      {
+        "Enabled": false,
+        "Milliseconds": 81.1078,
+        "BackingBytesRead": 268435456,
+        "Counts": {
+          "Issued": 0,
+          "Hits": 0,
+          "Misses": 0,
+          "Cancelled": 0,
+          "Failures": 0,
+          "WaitedForInFlight": 0,
+          "DemandReads": 256
+        },
+        "Digest": "81ba71174ea932b4e132237982cf48036aaefe71f3fc0b167467ad1076209b9b"
+      },
+      {
+        "Enabled": true,
+        "Milliseconds": 93.2938,
+        "BackingBytesRead": 268435456,
+        "Counts": {
+          "Issued": 5,
+          "Hits": 0,
+          "Misses": 5,
+          "Cancelled": 0,
+          "Failures": 0,
+          "WaitedForInFlight": 0,
+          "DemandReads": 256
+        },
+        "Digest": "81ba71174ea932b4e132237982cf48036aaefe71f3fc0b167467ad1076209b9b"
+      }
+    ]
+  },
+  "beforeBackoff": {
+    "PageSize": 1048576,
+    "Pages": 64,
+    "Iterations": 256,
+    "runs": [
+      {
+        "Enabled": false,
+        "Milliseconds": 69.9037,
+        "BackingBytesRead": 268435456,
+        "Counts": {
+          "Issued": 0,
+          "Hits": 0,
+          "Misses": 0,
+          "Cancelled": 0,
+          "Failures": 0,
+          "WaitedForInFlight": 0,
+          "DemandReads": 256
+        },
+        "Digest": "81ba71174ea932b4e132237982cf48036aaefe71f3fc0b167467ad1076209b9b"
+      },
+      {
+        "Enabled": true,
+        "Milliseconds": 111.314,
+        "BackingBytesRead": 279969792,
+        "Counts": {
+          "Issued": 256,
+          "Hits": 0,
+          "Misses": 256,
+          "Cancelled": 0,
+          "Failures": 0,
+          "WaitedForInFlight": 0,
+          "DemandReads": 256
+        },
+        "Digest": "81ba71174ea932b4e132237982cf48036aaefe71f3fc0b167467ad1076209b9b"
+      },
+      {
+        "Enabled": true,
+        "Milliseconds": 101.0361,
+        "BackingBytesRead": 273678336,
+        "Counts": {
+          "Issued": 256,
+          "Hits": 0,
+          "Misses": 256,
+          "Cancelled": 0,
+          "Failures": 0,
+          "WaitedForInFlight": 0,
+          "DemandReads": 256
+        },
+        "Digest": "81ba71174ea932b4e132237982cf48036aaefe71f3fc0b167467ad1076209b9b"
+      },
+      {
+        "Enabled": false,
+        "Milliseconds": 94.276,
+        "BackingBytesRead": 268435456,
+        "Counts": {
+          "Issued": 0,
+          "Hits": 0,
+          "Misses": 0,
+          "Cancelled": 0,
+          "Failures": 0,
+          "WaitedForInFlight": 0,
+          "DemandReads": 256
+        },
+        "Digest": "81ba71174ea932b4e132237982cf48036aaefe71f3fc0b167467ad1076209b9b"
+      },
+      {
+        "Enabled": true,
+        "Milliseconds": 152.4243,
+        "BackingBytesRead": 288358400,
+        "Counts": {
+          "Issued": 256,
+          "Hits": 0,
+          "Misses": 256,
+          "Cancelled": 0,
+          "Failures": 0,
+          "WaitedForInFlight": 0,
+          "DemandReads": 256
+        },
+        "Digest": "81ba71174ea932b4e132237982cf48036aaefe71f3fc0b167467ad1076209b9b"
+      },
+      {
+        "Enabled": false,
+        "Milliseconds": 92.308,
+        "BackingBytesRead": 268435456,
+        "Counts": {
+          "Issued": 0,
+          "Hits": 0,
+          "Misses": 0,
+          "Cancelled": 0,
+          "Failures": 0,
+          "WaitedForInFlight": 0,
+          "DemandReads": 256
+        },
+        "Digest": "81ba71174ea932b4e132237982cf48036aaefe71f3fc0b167467ad1076209b9b"
+      },
+      {
+        "Enabled": false,
+        "Milliseconds": 123.2133,
+        "BackingBytesRead": 268435456,
+        "Counts": {
+          "Issued": 0,
+          "Hits": 0,
+          "Misses": 0,
+          "Cancelled": 0,
+          "Failures": 0,
+          "WaitedForInFlight": 0,
+          "DemandReads": 256
+        },
+        "Digest": "81ba71174ea932b4e132237982cf48036aaefe71f3fc0b167467ad1076209b9b"
+      },
+      {
+        "Enabled": true,
+        "Milliseconds": 158.0598,
+        "BackingBytesRead": 298844160,
+        "Counts": {
+          "Issued": 256,
+          "Hits": 0,
+          "Misses": 256,
+          "Cancelled": 0,
+          "Failures": 0,
+          "WaitedForInFlight": 0,
+          "DemandReads": 256
+        },
+        "Digest": "81ba71174ea932b4e132237982cf48036aaefe71f3fc0b167467ad1076209b9b"
+      }
+    ]
+  },
+  "metrics": {
+    "core": "f6bf5dd68beabc7f94c9946b486190330e40a0275102fe3f6ada2c63a6387fcc",
+    "providers": "7972233f50331b3febc07a2bb46555eed228639d16673031d6dfd0346a97ec1a",
+    "tokenizer": "dcf4d0c7189e7b18359c3575970ee7b261b53ed74c0e9f3f049764942235f570",
+    "host": "7297311455ac412aa84893f8e1113d9facc118c78ebd960ab342b2fb032cfe4f"
+  },
+  "qwenWeights": {
+    "compared": 310,
+    "maximumDifference": 0,
+    "mismatchedElements": 0
+  }
+}

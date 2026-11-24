@@ -1,0 +1,8 @@
+Method	AIKernel.Kernel.Inference.CpuKernelTuner.AddFloatCandidates(System.Collections.Generic.List<string>)	82	4	4	5
+Method	AIKernel.Kernel.Inference.GgufMemoryOptions.OpenDense(string, System.Collections.Generic.IEnumerable<AIKernel.Kernel.Inference.ModelTensor>, AIKernel.Kernel.Inference.GgufWeights)	91	1	6	2
+Method	AIKernel.Kernel.Inference.GgufMemoryOptions.OpenSnapshot(System.IO.FileStream, System.Collections.Generic.IEnumerable<AIKernel.Kernel.Inference.ModelTensor>)	91	1	6	2
+Method	AIKernel.Kernel.Inference.GgufMemoryOptions.OpenExperts(string, System.Collections.Generic.IEnumerable<AIKernel.Kernel.Inference.GgufWeights.Tensor>, AIKernel.Kernel.Inference.GgufWeights)	91	1	6	2
+Property	AIKernel.Kernel.Inference.GgufMemoryOptions.Prefetch	100	2	1	2
+Method	AIKernel.Kernel.Inference.GgufMemoryOptions.Prefetch.get	100	1	1	1
+Method	AIKernel.Kernel.Inference.GgufMemoryOptions.Prefetch.init	100	1	1	1
+Method	AIKernel.Kernel.Inference.InferenceVectorMath.SwiGlu(float[], float[], int, bool)	74	3	3	5
