@@ -57,3 +57,7 @@ Providersリポジトリでは次のコマンドで指標を照合できる。
 ```console
 python tools/check_localllm_metrics.py --baseline-step 4 --moves docs/operations/local-llm-step5/responsibility-moves.tsv docs/operations/local-llm-step5/core.tsv docs/operations/local-llm-step5/providers.tsv docs/operations/local-llm-step5/tokenizer.tsv docs/operations/local-llm-step5/host.tsv
 ```
+
+## Step 6 の比較基準
+
+統合後に測定した 1061 シンボルの MI・CC・結合型数は受け入れ記録と一致した。[品質基準](quality-baseline.tsv) は比較ツールの既定値。Providers の集合値は 85 / 124 / 68。
